@@ -7,7 +7,7 @@ interface DomainOverviewProps {
 }
 
 export const DomainOverview: React.FC<DomainOverviewProps> = ({ onSelectDomainFilter }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   const domains = [
     {
@@ -69,21 +69,13 @@ export const DomainOverview: React.FC<DomainOverviewProps> = ({ onSelectDomainFi
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mb-12">
           <div className="text-xs font-mono text-[#70706B] uppercase tracking-wider mb-2">
-            {language === 'pt' ? 'DOMÍNIOS DE ENGENHARIA' : language === 'es' ? 'DOMINIOS DE INGENIERÍA' : 'ENGINEERING DOMAINS'}
+            {t('domains.kicker', 'DOMÍNIOS DE ENGENHARIA')}
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1A1A] [text-wrap:balance]">
-            {language === 'pt' 
-              ? 'Quatro áreas de engenharia focadas em resolver problemas reais.'
-              : language === 'es'
-              ? 'Cuatro áreas de ingeniería enfocadas en resolver problemas reales.'
-              : 'Four engineering domains engineered for mission-critical reliability.'}
+            {t('domains.title', 'Quatro áreas de engenharia focadas em resolver problemas reais.')}
           </h2>
           <p className="mt-3 text-base text-[#555550]">
-            {language === 'pt'
-              ? 'Cada sistema responde a desafios concretos onde a precisão, a segurança e a rastreabilidade são pré-requisitos absolutos.'
-              : language === 'es'
-              ? 'Cada sistema responde a retos concretos donde la precisión, la seguridad y la trazabilidad son requisitos indispensables.'
-              : 'Every platform answers specific operational bottlenecks where accuracy, compliance, and deterministic execution are non-negotiable.'}
+            {t('domains.subtitle', 'Cada sistema responde a desafios concretos onde a precisão, a segurança e a rastreabilidade são pré-requisitos absolutos.')}
           </p>
         </div>
 

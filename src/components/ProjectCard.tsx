@@ -70,7 +70,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelectProje
         {/* Practical Problem Solved */}
         <div className="mt-4">
           <div className="text-xs font-mono text-[#70706B] uppercase mb-1 font-semibold">
-            {language === 'pt' ? 'Problema que resolve:' : language === 'es' ? 'Problema que resuelve:' : 'Problem addressed:'}
+            {t('projects.problemTitle', 'Problema que resolve:')}
           </div>
           <p className="text-xs text-[#555550] line-clamp-2 leading-relaxed">
             {project.problem}
@@ -110,10 +110,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelectProje
           <button
             onClick={() => onSelectProject(project, 'technical')}
             className="inline-flex items-center justify-center gap-1 px-2.5 py-2 text-xs font-mono text-[#555550] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] border border-[#E2E8F0] rounded-md transition-colors cursor-pointer"
-            title="Acessar Especificação de Engenharia"
+            title={t('projects.architectureTitle', 'Acessar Especificação de Engenharia')}
           >
             <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-            <span className="hidden sm:inline">Arquitetura</span>
+            <span className="hidden sm:inline">{t('projects.architectureBtn', 'Arquitetura')}</span>
           </button>
         </div>
       </div>

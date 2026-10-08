@@ -26,6 +26,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('triminds_lang', lang);
   };
 
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
   const t = (key: string, fallback?: string): string => {
     const langDict = (TRANSLATIONS as Record<string, Record<string, string>>)[language];
     if (langDict && langDict[key]) {

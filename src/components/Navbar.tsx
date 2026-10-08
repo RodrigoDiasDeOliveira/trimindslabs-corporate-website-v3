@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
                     ? 'bg-[#1A1A1A] text-[#F4F4F1] font-semibold'
                     : 'text-[#70706B] hover:text-[#1A1A1A]'
                 }`}
-                title={`Mudar para ${lang.toUpperCase()}`}
+                title={`${t('nav.switchLang', 'Mudar para')} ${lang.toUpperCase()}`}
               >
                 {lang}
               </button>
@@ -77,7 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
           <button
             onClick={onOpenGates}
             className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium text-[#1A1A1A] bg-white border border-[#D1D1CD] hover:border-[#1A1A1A] rounded transition-colors whitespace-nowrap shadow-xs cursor-pointer"
-            title="Verificar os 11 Gates de Produção"
+            title={t('nav.auditTooltip', 'Verificar os 11 Gates de Produção')}
           >
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
             <span>11 Gates</span>
@@ -125,7 +125,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
               className="w-full py-2.5 text-xs font-mono text-center border border-[#D1D1CD] rounded bg-white text-[#1A1A1A] flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Auditoria dos 11 Gates de Produção</span>
+              <span>{t('nav.gatesMobile', 'Auditoria dos 11 Gates de Produção')}</span>
             </button>
             <button
               onClick={() => {

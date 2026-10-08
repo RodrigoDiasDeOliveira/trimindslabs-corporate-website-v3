@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Project, PROJECTS } from '../data/trimindsData';
+import { Project, getProjects } from '../data/trimindsData';
 import { ProjectCard } from './ProjectCard';
 import { useLanguage } from '../context/LanguageContext';
 import { Search, Filter } from 'lucide-react';
@@ -33,7 +33,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
     { id: 'platform', label: t('projects.filterPlatform', 'Plataforma & Nuvem') },
   ];
 
-  const filteredProjects = PROJECTS.filter((p) => {
+  const allProjects = getProjects(language);
+
+  const filteredProjects = allProjects.filter((p) => {
     // Category match
     if (selectedCategory !== 'all') {
       if (p.domain !== selectedCategory) {
@@ -128,7 +130,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         {filteredProjects.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-xl border border-[#E2E8F0]">
             <p className="text-sm text-[#70706B] font-mono">
-              {language === 'pt' ? 'Nenhum sistema encontrado com os filtros selecionados.' : language === 'es' ? 'Ningún sistema encontrado con los filtros seleccionados.' : 'No systems matched the selected filters.'}
+              {t('projects.noResults', 'Nenhum sistema encontrado com os filtros selecionados.')}
             </p>
             <button
               onClick={() => {
@@ -138,7 +140,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               }}
               className="mt-3 text-xs text-[#1A1A1A] underline font-medium cursor-pointer"
             >
-              {language === 'pt' ? 'Limpar filtros' : language === 'es' ? 'Limpiar filtros' : 'Clear filters'}
+              {t('projects.clearFilters', 'Limpar filtros')}
             </button>
           </div>
         ) : (

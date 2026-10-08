@@ -25,7 +25,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   initialTab = 'overview',
   onClose,
 }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'overview' | 'technical'>(initialTab);
 
   React.useEffect(() => {
@@ -59,10 +59,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 }`}
               >
                 {project.truthStatus === 'implemented'
-                  ? (language === 'pt' ? 'Operacional em Produção' : language === 'es' ? 'Operativo en Producción' : 'Operational in Production')
+                  ? t('projects.statusOperational', 'Operacional em Produção')
                   : project.truthStatus === 'partial'
-                  ? (language === 'pt' ? 'Em Validação Contínua' : language === 'es' ? 'En Validación Continua' : 'Active Validation')
-                  : (language === 'pt' ? 'Especificação / RFC' : language === 'es' ? 'Especificación / RFC' : 'RFC Specification')}
+                  ? t('projects.statusValidation', 'Em Validação Contínua')
+                  : t('projects.statusSpecification', 'Especificação / RFC')}
               </span>
             </div>
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
@@ -90,7 +90,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 : 'text-[#555550] hover:text-[#1A1A1A] hover:bg-[#F4F4F1]'
             }`}
           >
-            {language === 'pt' ? '1. Estudo de Caso & Solução' : language === 'es' ? '1. Caso de Estudio y Solución' : '1. Case Study & Solution'}
+            {t('projectModal.tabCaseStudy', '1. Estudo de Caso & Solução')}
           </button>
 
           <button
@@ -102,7 +102,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             }`}
           >
             <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-            <span>{language === 'pt' ? '2. Especificação de Engenharia & Arquitetura' : language === 'es' ? '2. Especificación de Ingeniería y Arquitectura' : '2. Engineering Specification & Architecture'}</span>
+            <span>{t('projectModal.tabTechnical', '2. Especificação de Engenharia & Arquitetura')}</span>
           </button>
         </div>
 
@@ -115,14 +115,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
                 <div className="text-xs font-mono text-[#70706B] uppercase mb-1 flex items-center gap-1.5 font-semibold">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{language === 'pt' ? 'Escopo Operacional & Propósito' : language === 'es' ? 'Alcance Operativo y Propósito' : 'Operational Scope & Purpose'}</span>
+                  <span>{t('projectModal.scopeTitle', 'Escopo Operacional & Propósito')}</span>
                 </div>
                 <p className="text-sm text-[#1A1A1A] leading-relaxed">
                   {project.honestScope}
                 </p>
                 {project.whatItProves && (
                   <p className="text-xs text-[#555550] mt-2.5 pt-2.5 border-t border-[#F0EFEA] leading-relaxed">
-                    <strong className="text-[#1A1A1A]">{language === 'pt' ? 'O que este sistema comprova: ' : language === 'es' ? 'Lo que demuestra este sistema: ' : 'What it proves: '}</strong>
+                    <strong className="text-[#1A1A1A]">{t('projectModal.whatItProves', 'O que este sistema comprova: ')}</strong>
                     {project.whatItProves}
                   </p>
                 )}
@@ -133,7 +133,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-2 flex items-center gap-1.5 font-semibold">
                     <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
-                    <span>{language === 'pt' ? 'O Problema' : language === 'es' ? 'El Problema' : 'The Problem'}</span>
+                    <span>{t('projectModal.problemTitle', 'O Problema')}</span>
                   </div>
                   <p className="text-sm text-[#4A4A45] leading-relaxed">
                     {project.problem}
@@ -143,7 +143,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-2 flex items-center gap-1.5 font-semibold">
                     <Layers className="w-3.5 h-3.5 text-blue-600" />
-                    <span>{language === 'pt' ? 'Contexto de Aplicação' : language === 'es' ? 'Contexto de Aplicación' : 'Operational Context'}</span>
+                    <span>{t('projectModal.contextTitle', 'Contexto de Aplicação')}</span>
                   </div>
                   <p className="text-sm text-[#4A4A45] leading-relaxed">
                     {project.context}
@@ -156,7 +156,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-4 flex items-center gap-1.5 font-semibold">
                     <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>{language === 'pt' ? 'Capacidades & Validações de Sistema' : language === 'es' ? 'Capacidades y Validaciones del Sistema' : 'System Capabilities & Validations'}</span>
+                    <span>{t('projectModal.capabilitiesTitle', 'Capacidades & Validações de Sistema')}</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {project.results.map((res, i) => (
@@ -176,7 +176,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               {project.decisions && project.decisions.length > 0 && (
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-3 font-semibold">
-                    {language === 'pt' ? 'Decisões Críticas de Engenharia' : language === 'es' ? 'Decisiones Críticas de Ingeniería' : 'Critical Engineering Decisions'}
+                    {t('projectModal.decisionsTitle', 'Decisões Críticas de Engenharia')}
                   </div>
                   <div className="space-y-3">
                     {project.decisions.map((dec, i) => (
@@ -196,7 +196,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-mono font-medium text-[#1A1A1A] bg-white border border-[#D1D1CD] hover:border-[#1A1A1A] rounded-lg transition-colors shadow-xs cursor-pointer"
                 >
                   <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{language === 'pt' ? 'Avançar para Especificação de Engenharia →' : language === 'es' ? 'Avanzar a Especificación de Ingeniería →' : 'Expand to Engineering Specification →'}</span>
+                  <span>{t('projectModal.advanceToTechnical', 'Avançar para Especificação de Engenharia →')}</span>
                 </button>
               </div>
             </div>
@@ -207,7 +207,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               {project.architecture && (
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-2 font-semibold">
-                    Topologia e Fluxo de Execução
+                    {t('projectModal.topologyTitle', 'Topologia e Fluxo de Execução')}
                   </div>
                   <p className="text-xs text-[#555550] mb-3 leading-relaxed">
                     {project.architecture.overview}
@@ -233,7 +233,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
                   <div className="flex items-center justify-between mb-3">
                     <div className="text-xs font-mono text-[#70706B] uppercase font-semibold">
-                      Auditoria de Coerência Arquitetural
+                      {t('projectModal.auditTitle', 'Auditoria de Coerência Arquitetural')}
                     </div>
                     <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                       {project.realArchitectureVerification.coherenceScore}
@@ -242,15 +242,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
                   <div className="space-y-2.5 text-xs">
                     <div className="p-3 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
-                      <span className="font-semibold text-[#1A1A1A]">Documentado: </span>
+                      <span className="font-semibold text-[#1A1A1A]">{t('projectModal.documentedLabel', 'Documentado: ')}</span>
                       <span className="text-[#555550]">{project.realArchitectureVerification.documented}</span>
                     </div>
                     <div className="p-3 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
-                      <span className="font-semibold text-[#1A1A1A]">Implementado em Código: </span>
+                      <span className="font-semibold text-[#1A1A1A]">{t('projectModal.implementedLabel', 'Implementado em Código: ')}</span>
                       <span className="text-[#555550]">{project.realArchitectureVerification.implemented}</span>
                     </div>
                     <div className="p-3 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
-                      <span className="font-semibold text-[#1A1A1A]">Declaração Pública: </span>
+                      <span className="font-semibold text-[#1A1A1A]">{t('projectModal.presentedLabel', 'Declaração Pública: ')}</span>
                       <span className="text-[#555550]">{project.realArchitectureVerification.presentedOnSite}</span>
                     </div>
                   </div>
@@ -261,23 +261,23 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               {project.repository && (
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-3 font-semibold">
-                    Validação e Governança Técnica
+                    {t('projectModal.governanceTitle', 'Validação e Governança Técnica')}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
                     <div className="p-3 bg-[#FAF9F6] rounded-lg border border-[#F0EFEA]">
-                      <div className="text-[#70706B] mb-1">Status da Suíte de Testes:</div>
+                      <div className="text-[#70706B] mb-1">{t('projectModal.testSuiteLabel', 'Status da Suíte de Testes:')}</div>
                       <div className="text-emerald-700 font-semibold flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>{project.repository.testSuiteStatus || 'Suíte Automatizada Validada'}</span>
+                        <span>{project.repository.testSuiteStatus || t('projectModal.testSuiteDefault', 'Suíte Automatizada Validada')}</span>
                       </div>
                     </div>
 
                     <div className="p-3 bg-[#FAF9F6] rounded-lg border border-[#F0EFEA]">
-                      <div className="text-[#70706B] mb-1">Pipeline de Integração Contínua:</div>
+                      <div className="text-[#70706B] mb-1">{t('projectModal.ciPipelineLabel', 'Pipeline de Integração Contínua:')}</div>
                       <div className="text-[#1A1A1A] font-semibold flex items-center gap-1.5">
                         <Server className="w-3.5 h-3.5 text-blue-600" />
-                        <span>{project.repository.ciCdPipeline || 'Pipelines de CI Ativas'}</span>
+                        <span>{project.repository.ciCdPipeline || t('projectModal.ciPipelineDefault', 'Pipelines de CI Ativas')}</span>
                       </div>
                     </div>
                   </div>
@@ -285,7 +285,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   {project.repository.adrReferences && project.repository.adrReferences.length > 0 && (
                     <div className="mt-4 pt-3 border-t border-[#F0EFEA]">
                       <div className="text-xs font-mono text-[#70706B] mb-2 font-semibold">
-                        Architecture Decision Records (ADRs):
+                        {t('projectModal.adrLabel', 'Architecture Decision Records (ADRs):')}
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {project.repository.adrReferences.map((adr, i) => (
@@ -307,43 +307,43 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-4 flex items-center gap-1.5 font-semibold">
                     <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Stack de Tecnologias em Produção</span>
+                    <span>{t('projectModal.techStackTitle', 'Stack de Tecnologias em Produção')}</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
                     {project.realTechnologies.languages && (
                       <div>
-                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">Linguagens</div>
+                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">{t('projectModal.languagesLabel', 'Linguagens')}</div>
                         <div className="font-semibold text-[#1A1A1A]">{project.realTechnologies.languages.join(', ')}</div>
                       </div>
                     )}
                     {project.realTechnologies.frameworks && (
                       <div>
-                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">Frameworks</div>
+                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">{t('projectModal.frameworksLabel', 'Frameworks')}</div>
                         <div className="font-semibold text-[#1A1A1A]">{project.realTechnologies.frameworks.join(', ')}</div>
                       </div>
                     )}
                     {project.realTechnologies.databases && (
                       <div>
-                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">Bancos de Dados</div>
+                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">{t('projectModal.databasesLabel', 'Bancos de Dados')}</div>
                         <div className="font-semibold text-[#1A1A1A]">{project.realTechnologies.databases.join(', ')}</div>
                       </div>
                     )}
                     {project.realTechnologies.cloud && (
                       <div>
-                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">Nuvem &amp; Runtime</div>
+                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">{t('projectModal.cloudLabel', 'Nuvem & Runtime')}</div>
                         <div className="font-semibold text-[#1A1A1A]">{project.realTechnologies.cloud.join(', ')}</div>
                       </div>
                     )}
                     {project.realTechnologies.ciCd && (
                       <div>
-                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">CI/CD &amp; Build</div>
+                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">{t('projectModal.cicdLabel', 'CI/CD & Build')}</div>
                         <div className="font-semibold text-[#1A1A1A]">{project.realTechnologies.ciCd.join(', ')}</div>
                       </div>
                     )}
                     {project.realTechnologies.observability && (
                       <div>
-                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">Observabilidade</div>
+                        <div className="font-mono text-[#70706B] uppercase text-[11px] mb-1">{t('projectModal.observabilityLabel', 'Observabilidade')}</div>
                         <div className="font-semibold text-[#1A1A1A]">{project.realTechnologies.observability.join(', ')}</div>
                       </div>
                     )}
@@ -353,7 +353,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
               {/* Concrete Evidence Statement */}
               <div className="p-4 bg-[#FAF9F6] border border-[#E2E8F0] rounded-xl text-xs text-[#555550]">
-                <strong className="text-[#1A1A1A] font-mono">Fonte de Evidência: </strong>
+                <strong className="text-[#1A1A1A] font-mono">{t('projectModal.evidenceSource', 'Fonte de Evidência: ')}</strong>
                 <span>{project.evidence}</span>
               </div>
             </div>
@@ -372,7 +372,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             onClick={onClose}
             className="px-4 py-2 text-xs font-medium text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-md transition-colors cursor-pointer"
           >
-            Fechar
+            {t('projectModal.closeBtn', 'Fechar')}
           </button>
         </div>
       </div>

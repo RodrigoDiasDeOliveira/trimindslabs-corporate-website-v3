@@ -1,6 +1,7 @@
 import React from 'react';
 import { Article } from '../data/trimindsData';
-import { X, BookOpen, Clock, Calendar, ExternalLink, Code } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { X } from 'lucide-react';
 
 interface ArticleModalProps {
   article: Article | null;
@@ -8,7 +9,10 @@ interface ArticleModalProps {
 }
 
 export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) => {
+  const { language, t } = useLanguage();
   if (!article) return null;
+
+  const isLab = article.id.includes('detector') || article.id.includes('eye-guardian');
 
   return (
     <div
@@ -23,9 +27,13 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
         <div className="p-6 bg-white border-b border-[#E2E8F0] flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-[#70706B] uppercase mb-1">
-              <span>{article.category || 'Engineering Whitepaper'}</span>
+              <span>
+                {isLab
+                  ? (language === 'pt' ? 'Laboratório de Pesquisa' : language === 'es' ? 'Laboratorio de Investigación' : 'Research Lab')
+                  : 'Engineering Whitepaper'}
+              </span>
               <span aria-hidden="true">·</span>
-              <span>{article.readTime || article.readingTime || '8 min read'}</span>
+              <span>{article.readTime || article.readingTime || (language === 'pt' ? '8 min de leitura' : language === 'es' ? '8 min de lectura' : '8 min read')}</span>
               {article.publishedDate && (
                 <>
                   <span aria-hidden="true">·</span>
@@ -40,7 +48,8 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
 
           <button
             onClick={onClose}
-            className="p-2 text-[#70706B] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-lg transition-colors"
+            className="p-2 text-[#70706B] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-lg transition-colors cursor-pointer"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
@@ -51,7 +60,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
           {/* Abstract */}
           <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
             <div className="text-xs font-mono text-[#70706B] uppercase mb-1 font-semibold">
-              Resumo do Whitepaper
+              {t('articleModal.abstractTitle', 'Resumo do Whitepaper')}
             </div>
             <p className="text-[#1A1A1A] leading-relaxed">
               {article.abstract}
@@ -62,7 +71,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
           {article.keyTakeaways && article.keyTakeaways.length > 0 && (
             <div className="p-4 bg-[#FAF9F6] border border-[#E2E8F0] rounded-xl">
               <div className="text-xs font-mono text-[#70706B] uppercase mb-2 font-semibold">
-                Principais Conclusões de Engenharia
+                {t('articleModal.takeawaysTitle', 'Principais Conclusões de Engenharia')}
               </div>
               <ul className="space-y-1.5 text-xs text-[#1A1A1A]">
                 {article.keyTakeaways.map((item, i) => (
@@ -96,7 +105,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
           {article.conclusions && (
             <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
               <div className="text-xs font-mono text-[#70706B] uppercase mb-1 font-semibold">
-                Conclusão &amp; Recomendação de Produção
+                {t('articleModal.conclusionTitle', 'Conclusão & Recomendação de Produção')}
               </div>
               <p className="text-xs text-[#555550]">
                 {article.conclusions}
@@ -106,7 +115,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
 
           {article.doiOrReference && (
             <div className="text-xs font-mono text-[#70706B] p-3 bg-white rounded border border-[#E2E8F0]">
-              <span className="font-semibold">Referência: </span>
+              <span className="font-semibold">{t('articleModal.referenceLabel', 'Referência: ')}</span>
               <span>{article.doiOrReference}</span>
             </div>
           )}
@@ -117,9 +126,9 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
           <span>Trimindslabs Research Specification</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-md transition-colors"
+            className="px-4 py-2 text-xs font-medium text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-md transition-colors cursor-pointer"
           >
-            Fechar
+            {t('articleModal.closeBtn', 'Fechar')}
           </button>
         </div>
       </div>

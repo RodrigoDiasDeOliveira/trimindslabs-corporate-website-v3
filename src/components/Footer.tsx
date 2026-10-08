@@ -25,17 +25,17 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGates, onOpenDashboard }) 
             <div className="flex items-center gap-3 text-xs font-mono text-[#70706B] pt-1">
               <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>11 Gates Auditados</span>
+                <span>{t('footer.gatesAudited', '11 Gates Auditados')}</span>
               </span>
               <span>·</span>
-              <span>Soberania de Dados EU</span>
+              <span>{t('footer.dataSovereignty', 'Soberania de Dados EU')}</span>
             </div>
           </div>
 
           {/* Col 2: Navigation & Engineering State */}
           <div>
             <div className="font-mono text-xs text-[#70706B] uppercase mb-3 font-semibold">
-              {language === 'pt' ? 'Navegação Corporativa' : language === 'es' ? 'Navegación Corporativa' : 'Corporate Navigation'}
+              {t('footer.corpNav', 'Navegação Corporativa')}
             </div>
             <ul className="space-y-2 text-xs font-mono text-[#4A4A45]">
               <li>
@@ -111,7 +111,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGates, onOpenDashboard }) 
               onClick={onOpenGates}
               className="hover:text-[#1A1A1A] transition-colors underline cursor-pointer"
             >
-              Auditoria de Release
+              {t('footer.releaseAudit', 'Auditoria de Release')}
             </button>
           </div>
         </div>

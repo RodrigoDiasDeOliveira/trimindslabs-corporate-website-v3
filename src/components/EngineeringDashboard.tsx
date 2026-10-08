@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PRODUCTION_GATES, VOCABULARY_TERMS, PROJECTS } from '../data/trimindsData';
+import { getProductionGates, getVocabularyTerms, getProjects, getOperationalSystems } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
 import {
   X,
@@ -12,7 +12,6 @@ import {
   ExternalLink,
   GitBranch,
   Terminal,
-  Cpu,
 } from 'lucide-react';
 
 interface EngineeringDashboardProps {
@@ -26,62 +25,15 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
   onClose,
   initialTab = 'telemetry',
 }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'telemetry' | 'gates' | 'vocab' | 'releases'>(initialTab);
 
   if (!isOpen) return null;
 
-  // Genuine operational systems state (Audited, no fake live telemetry)
-  const operationalSystems = [
-    {
-      name: 'Trimindslabs Geo-AI (V4)',
-      runtime: 'GCP Cloud Run (europe-west1) · GPUs NVIDIA L4',
-      stage: 'Operacional / Deployed',
-      version: 'v4.1.2',
-      stack: 'Python 3.11 · GDAL · PostGIS 3.4 · PyTorch',
-      evidenceSource: 'Imagens multiespectrais Sentinel-2 L2A com tiling quadkey e contêineres validados',
-    },
-    {
-      name: 'Trusted Compliance Agent',
-      runtime: 'GCP Cloud Run (europe-west3) · Qdrant Enclave',
-      stage: 'Operacional / Deployed',
-      version: 'v2.0.4',
-      stack: 'FastAPI · Pydantic V2 · BGE-Reranker-Large',
-      evidenceSource: 'Verificação por offset de caracteres e validação determinística de proveniência',
-    },
-    {
-      name: 'Trimindslabs Logistics Platform (TLP)',
-      runtime: 'Contêiner Docker Corporativo · Multi-Tenant',
-      stage: 'Operacional / Deployed',
-      version: 'v3.3.0',
-      stack: 'Java 17 · Spring Boot 3.3 · STOMP WebSockets · PostgreSQL',
-      evidenceSource: 'Ingestão de bateladas de telemetria RFID e integração com visão computacional móvel',
-    },
-    {
-      name: 'Trimindslabs Security Platform',
-      runtime: 'Enclave Docker Isolado · Zero Trust',
-      stage: 'Operacional / Deployed',
-      version: 'v1.4.1',
-      stack: 'Java 21 · Spring Boot · Open Policy Agent (OPA) · ArchUnit',
-      evidenceSource: 'Arquitetura hexagonal validada por regras ArchUnit sem vazamento de domínio',
-    },
-    {
-      name: 'Trimindslabs AI Cloud Administrator',
-      runtime: 'Servidor FastMCP Standard · CLI & JSON-RPC',
-      stage: 'Operacional / Deployed',
-      version: 'v1.0.0',
-      stack: 'Python 3.11+ · FastMCP · Keyring Cryptographic Vault',
-      evidenceSource: 'Implementação conforme especificações do Model Context Protocol (MCP)',
-    },
-    {
-      name: 'Integration Platform & Sovereign Mesh',
-      runtime: 'Hetzner Cloud / OVHcloud (Jurisdição EU)',
-      stage: 'Em Validação Contínua',
-      version: 'v0.9.0-rc',
-      stack: 'Java 21 · Python 3.12 · Redis Event Mesh · OpenTelemetry',
-      evidenceSource: 'Barramento de eventos assíncronos e contratos de dados sob validação contínua',
-    },
-  ];
+  const operationalSystems = getOperationalSystems(language);
+  const productionGates = getProductionGates(language);
+  const vocabularyTerms = getVocabularyTerms(language);
+  const projects = getProjects(language);
 
   return (
     <div
@@ -97,7 +49,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-[#70706B] uppercase mb-1">
               <Terminal className="w-4 h-4 text-emerald-600" />
-              <span>Camada de Transparência &amp; Evidência</span>
+              <span>{t('dashboard.kicker', 'Camada de Transparência & Evidência')}</span>
               <span aria-hidden="true">·</span>
               <span className="text-emerald-700 font-semibold">TRIMINDSLABS OPERATIONAL STATE</span>
             </div>
@@ -133,7 +85,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
             }`}
           >
             <Server className="w-3.5 h-3.5 text-purple-400" />
-            <span>1. Ambientes &amp; Estado Operacional</span>
+            <span>{t('dashboard.tabTelemetry', '1. Ambientes & Estado Operacional')}</span>
           </button>
 
           <button
@@ -145,7 +97,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>2. Matriz de Auditoria (11 Gates)</span>
+            <span>{t('dashboard.tabGates', '2. Matriz de Auditoria (11 Gates)')}</span>
           </button>
 
           <button
@@ -157,7 +109,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
             }`}
           >
             <GitBranch className="w-3.5 h-3.5 text-blue-500" />
-            <span>3. Releases &amp; Repositórios</span>
+            <span>{t('dashboard.tabReleases', '3. Releases & Repositórios')}</span>
           </button>
 
           <button
@@ -169,7 +121,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
             }`}
           >
             <BookOpen className="w-3.5 h-3.5 text-amber-500" />
-            <span>4. Vocabulário Formal</span>
+            <span>{t('dashboard.tabVocab', '4. Vocabulário Formal')}</span>
           </button>
         </div>
 
@@ -181,15 +133,15 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
               <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-0.5">
-                    Governança Operacional
+                    {t('dashboard.govHeader', 'Governança Operacional')}
                   </div>
                   <div className="font-serif text-lg font-bold text-[#1A1A1A]">
-                    Estado Declarado dos Ambientes em Produção
+                    {t('dashboard.declaredState', 'Estado Declarado dos Ambientes em Produção')}
                   </div>
                 </div>
                 <div className="text-xs font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded flex items-center gap-1.5 self-start sm:self-auto font-semibold">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>JURISDIÇÃO EUROPEIA QUALIFICADA</span>
+                  <span>{t('dashboard.euBadge', 'JURISDIÇÃO EUROPEIA QUALIFICADA')}</span>
                 </div>
               </div>
 
@@ -219,7 +171,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                     </div>
 
                     <div className="pt-3 border-t border-[#F0F0EC] text-xs text-[#555550]">
-                      <strong className="text-[#1A1A1A] font-mono">Evidência: </strong>
+                      <strong className="text-[#1A1A1A] font-mono">{t('dashboard.evidenceLabel', 'Evidência: ')}</strong>
                       <span>{sys.evidenceSource}</span>
                     </div>
                   </div>
@@ -234,15 +186,15 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
               <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-0.5">
-                    Referência Formal de Auditoria: TRIMINDSLABS-AUDIT-RELEASE-2026
+                    {t('dashboard.auditRef', 'Referência Formal de Auditoria: TRIMINDSLABS-AUDIT-RELEASE-2026')}
                   </div>
                   <div className="font-serif text-lg font-bold text-[#1A1A1A]">
-                    Separação Estrita entre Implementação, Validação e Evidência
+                    {t('dashboard.auditSeparation', 'Separação Estrita entre Implementação, Validação e Evidência')}
                   </div>
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-emerald-50 border border-emerald-200 text-xs font-mono text-emerald-800 font-semibold self-start sm:self-auto">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>11 GATES VERIFICADOS</span>
+                  <span>{t('dashboard.gatesBadge', '11 GATES VERIFICADOS')}</span>
                 </div>
               </div>
 
@@ -251,14 +203,14 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                   <table className="w-full text-left text-xs font-mono">
                     <thead className="bg-[#FAF9F6] text-[#70706B] border-b border-[#E2E8F0]">
                       <tr>
-                        <th className="py-3 px-6">Gate de Auditoria</th>
-                        <th className="py-3 px-6">Fase</th>
-                        <th className="py-3 px-6">Evidência Formal</th>
-                        <th className="py-3 px-6">Status</th>
+                        <th className="py-3 px-6">{t('dashboard.tableGate', 'Gate de Auditoria')}</th>
+                        <th className="py-3 px-6">{t('dashboard.tablePhase', 'Fase')}</th>
+                        <th className="py-3 px-6">{t('dashboard.tableEvidence', 'Evidência Formal')}</th>
+                        <th className="py-3 px-6">{t('dashboard.tableStatus', 'Status')}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#F0F0EC]">
-                      {PRODUCTION_GATES.map((gate) => (
+                      {productionGates.map((gate) => (
                         <tr key={gate.id} className="hover:bg-[#FAF9F6] transition-colors">
                           <td className="py-3.5 px-6 font-semibold text-[#1A1A1A] whitespace-nowrap">
                             {gate.name}
@@ -282,7 +234,13 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                               {gate.status === 'verified' && <CheckCircle2 className="w-3 h-3" />}
                               {gate.status === 'in-progress' && <Clock className="w-3 h-3" />}
                               {gate.status === 'pending' && <AlertTriangle className="w-3 h-3" />}
-                              <span className="capitalize">{gate.status}</span>
+                              <span>
+                                {gate.status === 'verified'
+                                  ? t('dashboard.statusVerified', 'Verificado')
+                                  : gate.status === 'in-progress'
+                                  ? t('dashboard.statusInProgress', 'Em Progresso')
+                                  : t('dashboard.statusPending', 'Pendente')}
+                              </span>
                             </span>
                           </td>
                         </tr>
@@ -298,14 +256,14 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
           {activeTab === 'releases' && (
             <div className="space-y-4">
               <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl text-xs text-[#555550]">
-                <strong className="text-[#1A1A1A] font-mono">Nota de Governança de Código: </strong>
+                <strong className="text-[#1A1A1A] font-mono">{t('dashboard.codeGovNote', 'Nota de Governança de Código: ')}</strong>
                 <span>
-                  O website corporativo prioriza produtos e sistemas. Abaixo consta o mapeamento interno entre os sistemas e seus respectivos artefatos de código.
+                  {t('dashboard.codeGovText', 'O website corporativo prioriza produtos e sistemas. Abaixo consta o mapeamento interno entre os sistemas e seus respectivos artefatos de código.')}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {PROJECTS.filter((p) => p.repository).map((project) => (
+                {projects.filter((p) => p.repository).map((project) => (
                   <div
                     key={project.id}
                     className="p-5 bg-white border border-[#E2E8F0] rounded-xl shadow-xs flex flex-col justify-between"
@@ -317,7 +275,11 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                           <h4 className="font-serif text-lg font-bold text-[#1A1A1A] mt-0.5">{project.title}</h4>
                         </div>
                         <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          {project.truthStatus}
+                          {project.truthStatus === 'implemented'
+                            ? t('projects.statusOperational', 'Operacional em Produção')
+                            : project.truthStatus === 'partial'
+                            ? t('projects.statusValidation', 'Em Validação Contínua')
+                            : t('projects.statusSpecification', 'Especificação / RFC')}
                         </span>
                       </div>
 
@@ -331,15 +293,15 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                         {project.repository?.name}
                       </span>
                       {project.repository?.isPrivate ? (
-                        <span className="text-[#70706B] italic">Repositório: Privado</span>
+                        <span className="text-[#70706B] italic">{t('dashboard.repoPrivate', 'Repositório: Privado')}</span>
                       ) : (
                         <a
                           href={project.repository?.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 font-medium text-[#1A1A1A] hover:underline"
+                          className="inline-flex items-center gap-1 font-medium text-[#1A1A1A] hover:underline cursor-pointer"
                         >
-                          <span>Inspecionar Repositório</span>
+                          <span>{t('dashboard.inspectRepo', 'Inspecionar Repositório')}</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       )}
@@ -353,10 +315,10 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
           {/* TAB 4: VOCABULARY SPECIFICATION */}
           {activeTab === 'vocab' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {VOCABULARY_TERMS.map((item, idx) => (
+              {vocabularyTerms.map((item, idx) => (
                 <div key={idx} className="p-5 bg-white border border-[#E2E8F0] rounded-xl shadow-xs">
                   <div className="text-xs font-mono text-emerald-700 font-semibold mb-1">
-                    0{idx + 1}. DEFINIÇÃO TÉCNICA FORMAL
+                    0{idx + 1}. {t('dashboard.vocabDefinition', 'DEFINIÇÃO TÉCNICA FORMAL')}
                   </div>
                   <h4 className="font-serif text-xl font-bold text-[#1A1A1A] mb-2">{item.term}</h4>
                   <p className="text-xs text-[#4A4A45] leading-relaxed mb-3">
@@ -364,7 +326,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                   </p>
                   {item.contrastingAntiPattern && (
                     <div className="p-2.5 bg-[#FAF9F6] border border-[#F0EFEA] rounded text-xs text-[#70706B]">
-                      <span className="font-semibold text-rose-700">Anti-padrão contrastado: </span>
+                      <span className="font-semibold text-rose-700">{t('dashboard.antiPatternLabel', 'Anti-padrão contrastado: ')}</span>
                       <span>{item.contrastingAntiPattern}</span>
                     </div>
                   )}
@@ -381,7 +343,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
             onClick={onClose}
             className="px-4 py-2 text-xs font-medium text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-md transition-colors cursor-pointer"
           >
-            Fechar
+            {t('dashboard.closeBtn', 'Fechar')}
           </button>
         </div>
       </div>

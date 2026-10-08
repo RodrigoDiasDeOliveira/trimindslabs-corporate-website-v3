@@ -22,7 +22,7 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="flex items-center gap-2 text-xs font-mono text-[#70706B] tracking-wider uppercase mb-4">
           <span>{t('hero.badge', 'ENGENHARIA DE SISTEMAS INTELIGENTES')}</span>
           <span aria-hidden="true">·</span>
-          <span>SOBERANIA EU &amp; VERIFICAÇÃO DETERMINÍSTICA</span>
+          <span>{t('hero.kickerSuffix', 'SOBERANIA EU & VERIFICAÇÃO DETERMINÍSTICA')}</span>
         </div>
 
         {/* Primary Headline */}
@@ -131,7 +131,7 @@ export const Hero: React.FC<HeroProps> = ({
               <span className="font-serif text-xl sm:text-2xl font-bold text-[#1A1A1A] group-hover:underline">
                 11 Gates
               </span>
-              <span className="text-xs text-emerald-600 font-mono font-medium">Auditados</span>
+              <span className="text-xs text-emerald-600 font-mono font-medium">{t('hero.auditedLabel', 'Auditados')}</span>
             </button>
             <p className="text-xs text-[#555550] mt-1 leading-snug">
               {t('hero.metric4Desc')}

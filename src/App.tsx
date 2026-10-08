@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { LanguageProvider } from './context/LanguageContext';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { DomainOverview } from './components/DomainOverview';
@@ -17,19 +17,30 @@ import { Footer } from './components/Footer';
 import { ProjectModal } from './components/ProjectModal';
 import { ArticleModal } from './components/ArticleModal';
 import { GatesModal } from './components/GatesModal';
-import { Project, Article } from './data/trimindsData';
+import { Project, Article, getProjects, getArticles } from './data/trimindsData';
 
 export function AppContent() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const { language } = useLanguage();
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [projectModalTab, setProjectModalTab] = useState<'overview' | 'technical'>('overview');
-  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const [isGatesModalOpen, setIsGatesModalOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [activeDomainFilter, setActiveDomainFilter] = useState<string>('all');
 
+  // Dynamically resolve the selected project and article based on current language
+  const currentProjects = getProjects(language);
+  const currentArticles = getArticles(language);
+  const selectedProject = selectedProjectId ? currentProjects.find(p => p.id === selectedProjectId) || null : null;
+  const selectedArticle = selectedArticleId ? currentArticles.find(a => a.id === selectedArticleId) || null : null;
+
   const handleSelectProject = (project: Project, initialTab: 'overview' | 'technical' = 'overview') => {
-    setSelectedProject(project);
+    setSelectedProjectId(project.id);
     setProjectModalTab(initialTab);
+  };
+
+  const handleSelectArticle = (article: Article) => {
+    setSelectedArticleId(article.id);
   };
 
   const handleSelectDomainFilter = (domain: string) => {
@@ -87,7 +98,7 @@ export function AppContent() {
         />
 
         {/* 6. Research Papers & Verification Labs */}
-        <ArticlesSection onSelectArticle={setSelectedArticle} />
+        <ArticlesSection onSelectArticle={handleSelectArticle} />
       </main>
 
       {/* Corporate Footer */}
@@ -100,12 +111,12 @@ export function AppContent() {
       <ProjectModal
         project={selectedProject}
         initialTab={projectModalTab}
-        onClose={() => setSelectedProject(null)}
+        onClose={() => setSelectedProjectId(null)}
       />
 
       <ArticleModal
         article={selectedArticle}
-        onClose={() => setSelectedArticle(null)}
+        onClose={() => setSelectedArticleId(null)}
       />
 
       <GatesModal

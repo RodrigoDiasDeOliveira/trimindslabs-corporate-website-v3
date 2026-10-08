@@ -1,5 +1,5 @@
 import React from 'react';
-import { PRODUCTION_GATES } from '../data/trimindsData';
+import { getProductionGates } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
 import { X, ShieldCheck, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 
@@ -9,9 +9,11 @@ interface GatesModalProps {
 }
 
 export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   if (!isOpen) return null;
+
+  const productionGates = getProductionGates(language);
 
   return (
     <div
@@ -26,21 +28,22 @@ export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-[#70706B] uppercase mb-1">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Auditoria Formal de Engenharia</span>
+              <span>{t('gatesModal.kicker', 'Auditoria Formal de Engenharia')}</span>
               <span aria-hidden="true">·</span>
               <span>TRIMINDSLABS-AUDIT-RELEASE-2026</span>
             </div>
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
-              Os 11 Gates de Produção
+              {t('gatesModal.title', 'Os 11 Gates de Produção')}
             </h2>
             <p className="text-xs text-[#555550] mt-1">
-              Critérios técnicos e operacionais obrigatórios que regem a separação entre implementação, validação contínua e evidência de produção.
+              {t('gatesModal.subtitle', 'Critérios técnicos e operacionais obrigatórios que regem a separação entre implementação, validação contínua e evidência de produção.')}
             </p>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-[#70706B] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-lg transition-colors"
+            className="p-2 text-[#70706B] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-lg transition-colors cursor-pointer"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
@@ -50,13 +53,13 @@ export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
           <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-mono text-emerald-900 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>11/11 GATES CATALOGADOS &amp; AUDITADOS NO REPOSITÓRIO</span>
+              <span>{t('gatesModal.cataloged', '11/11 GATES CATALOGADOS & AUDITADOS NO REPOSITÓRIO')}</span>
             </div>
-            <span className="font-semibold">RELEASE V3 READY</span>
+            <span className="font-semibold">{t('gatesModal.releaseReady', 'RELEASE V3 READY')}</span>
           </div>
 
           <div className="space-y-3">
-            {PRODUCTION_GATES.map((gate, idx) => (
+            {productionGates.map((gate, idx) => (
               <div
                 key={gate.id}
                 className="p-4 bg-white border border-[#E2E8F0] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
@@ -72,7 +75,7 @@ export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
                   </p>
                   {gate.details && (
                     <p className="text-[11px] text-[#70706B] font-mono">
-                      Regra: {gate.details}
+                      {t('gatesModal.ruleLabel', 'Regra: ')}{gate.details}
                     </p>
                   )}
                 </div>
@@ -90,7 +93,13 @@ export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
                     {gate.status === 'verified' && <CheckCircle2 className="w-3.5 h-3.5" />}
                     {gate.status === 'in-progress' && <Clock className="w-3.5 h-3.5" />}
                     {gate.status === 'pending' && <AlertTriangle className="w-3.5 h-3.5" />}
-                    <span className="capitalize">{gate.status}</span>
+                    <span>
+                      {gate.status === 'verified'
+                        ? t('dashboard.statusVerified', 'Verificado')
+                        : gate.status === 'in-progress'
+                        ? t('dashboard.statusInProgress', 'Em Progresso')
+                        : t('dashboard.statusPending', 'Pendente')}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -102,9 +111,9 @@ export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
           <span>Trimindslabs Governance Standard</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-md transition-colors"
+            className="px-4 py-2 text-xs font-medium text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-md transition-colors cursor-pointer"
           >
-            Fechar
+            {t('gatesModal.closeBtn', 'Fechar')}
           </button>
         </div>
       </div>
