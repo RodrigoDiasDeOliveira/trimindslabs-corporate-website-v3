@@ -284,101 +284,48 @@ const PROJECTS_PT: Project[] = [
   },
   {
     id: "triminds-logistics-platform",
-    title: "Trimindslabs Logistics Platform (TLP)",
-    subtitle: "Rastreabilidade em Tempo Real com Ingestão RFID & Visão na Borda",
-    tag: "Logistics SaaS / Event Ingestion",
-    sector: "Automação de Armazéns & Operações Industriais",
+    title: "TLP Next-Gen",
+    subtitle: "Plataforma Logística Cloud-Native para Operações, ePOD e Telemetria",
+    tag: "Logistics / Cloud Native",
+    sector: "Logística & Transporte",
     domain: "logistics",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "deployed",
-    honestScope: "Plataforma para operações logísticas multilocatárias, processamento de telemetria RFID em alta frequência e contagem de ativos via visão computacional móvel.",
-    whatItProves: "Demonstra capacidade de engenharia para construir backends corporativos escaláveis em Java 17 / Spring Boot 3.3 com interfaces web modernas e inteligência distribuída.",
-    problem: "Centros de distribuição enfrentam pontos cegos de inventário, perdas de rastreabilidade de cargas e discrepâncias entre registros fiscais e contagem física nos depósitos.",
-    context: "Desenvolvido com modelo multitenancy (companyId) para unificar eventos de leitores RFID fixos, esteiras e aplicativos móveis de contagem de materiais.",
+    honestScope: "Aplicação Java/Spring Boot + React/Vite implantada em Cloud Run, com PostgreSQL Cloud SQL, autenticação/RBAC, operações logísticas, ePOD e telemetria de frota.",
+    whatItProves: "Demonstra engenharia full-stack cloud-native aplicada a operações logísticas, persistência relacional, controle de acesso e integração de mapas.",
+    problem: "Operações de transporte precisam unificar CRM, cross-docking, entregas, frota e evidências de entrega.",
+    context: "A versão atual está implantada no projeto GCP sturdy-dogfish-460621-q7, com Cloud SQL PostgreSQL 16 e Google Maps com fallback OSM.",
     architecture: {
-      overview: "Arquitetura orientada a eventos: Gateway de Ingestão de Leitores RFID → Processador de eventos em Spring Boot 3.3 → Motor de regras e inferência de fluxo → Difusão via STOMP/SockJS WebSockets → Dashboard operacional em React.",
-      components: [
-        "Gateway de Ingestão de Eventos com suporte a bateladas de telemetria",
-        "Controlador de Regras de Negócio e Rastreamento em Spring Boot 3.3",
-        "Broadcaster WebSocket STOMP com autenticação segura JWT",
-        "Módulo de Borda com YOLOv8 para contagem visual rápida de embalagens"
-      ],
-      diagramText: "Sensores RFID / App Mobile ➔ Ingestão Spring ➔ Validação de Sessão ➔ Processamento de Eventos ➔ STOMP WebSockets ➔ Dashboard em Tempo Real"
+      overview: "React/Vite → Spring Boot → PostgreSQL/Cloud SQL, com autenticação, CRM, cross-docking, ePOD e telemetria.",
+      components: ["Spring Boot", "React/Vite", "Cloud SQL PostgreSQL 16", "Flyway", "Google Maps + OSM fallback", "RBAC/ePOD"],
+      diagramText: "React ➔ Spring Boot ➔ Cloud SQL PostgreSQL 16\n             ↘ Maps / OSM fallback\n             ↘ Auth / CRM / Cross-Docking / ePOD / Fleet"
     },
     realArchitectureVerification: {
-      documented: "Plataforma logística com backend Java 17 / Spring Boot 3.3 e interface web React.",
-      implemented: "Java 17, Spring Boot 3.3, Spring Data JPA, Spring Security, STOMP WebSockets, React 18, TypeScript, PostgreSQL.",
-      presentedOnSite: "Stack condizente com a implementação: Java, Spring Boot, React e WebSockets.",
-      coherenceScore: "100% Coerente"
+      documented: "Aplicação logística full-stack com deployment Cloud Run.",
+      implemented: "Java/Spring Boot + React/Vite + Cloud SQL PostgreSQL 16 + Flyway + RBAC e funcionalidades logísticas atuais.",
+      presentedOnSite: "Atualizado para a stack e deployment atuais, removendo tecnologias legadas não verificadas.",
+      coherenceScore: "Alinhado ao deployment atual"
     },
     realTechnologies: {
-      languages: ["Java 17", "TypeScript", "SQL (PostgreSQL)"],
-      frameworks: ["Spring Boot 3.3", "React 18 / Vite", "Spring Security"],
-      libraries: ["STOMP & SockJS WebSocket", "Deeplearning4j", "Axios", "Lombok"],
-      databases: ["PostgreSQL (Produção)", "H2 (Ambientes de teste integrados)"],
-      cloud: ["Docker Containerization", "Isolamento Multilocatário"],
-      iac: ["Docker Compose", "Multi-stage Dockerfile"],
-      apis: ["REST Endpoints", "WebSocket STOMP (/ws-rfid)"],
-      testing: ["JUnit 5", "Spring Boot Test"],
-      ciCd: ["GitHub Actions CI (Build Maven & Lint)"],
-      observability: ["Spring Actuator", "Micrometer Metrics"]
+      languages: ["Java", "TypeScript"],
+      frameworks: ["Spring Boot", "React", "Vite"],
+      libraries: ["@vis.gl/react-google-maps"],
+      databases: ["PostgreSQL 16 / Cloud SQL"],
+      cloud: ["Google Cloud Run", "Google Cloud SQL"],
+      apis: ["REST"],
+      testing: ["Validação da aplicação"],
+      ciCd: ["GitHub"]
     },
-    repository: {
-      name: "RodrigoDiasDeOliveira/TLP-Trimindslabs-Logistics-Platform",
-      isPrivate: false,
-      visibilityBadge: "Repositório Público",
-      testSuiteStatus: "Suíte de testes JUnit cobrindo controladores de evento e segurança",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Multi-tenant Data Separation", "ADR-003: WebSocket STOMP vs Server-Sent Events"]
-    },
-    engineering: [
-      "Implementação de canal de difusão de eventos de alta frequência com protocolo STOMP sobre WebSockets.",
-      "Integração com visão computacional móvel (ObjectScanner) para sincronização de contagens físicas no estoque.",
-      "Modelagem multitenant garantindo segregação lógica estrita entre operadoras logísticas distintas."
-    ],
-    technology: [
-      "Java 17 / Spring Boot 3.3",
-      "React 18 / TypeScript",
-      "STOMP WebSockets",
-      "PostgreSQL / JPA",
-      "Docker / Cloud Run",
-      "Visão na Borda (YOLOv8)"
-    ],
-    evolution: "Evoluiu de um protótipo de monitoramento de armazém para um ecossistema completo combinando telemetria RFID contínua e conferência visual de ativos industriais.",
-    challenges: [
-      "Prevenção de colisões e leituras duplicadas em passagens rápidas por portais RFID.",
-      "Manutenção de conexões WebSocket estáveis em ambientes fabris com alta interferência eletromagnética.",
-      "Sincronização bidirecional entre leituras locais no chão de fábrica e o servidor central."
-    ],
-    decisions: [
-      {
-        decision: "Adoção de WebSockets com STOMP para atualização de telas operacionais.",
-        rationale: "Garante atualização instantânea do status de conferência sem sobrecarga de polling HTTP."
-      },
-      {
-        decision: "Estruturação de persistência com segregação de locatário via chaves compostas e tenant resolver.",
-        rationale: "Permite operação multilocatária segura sem necessidade de clusters isolados por cliente inicial."
-      }
-    ],
-    results: [
-      {
-        metric: "Comunicação de Eventos",
-        value: "STOMP WebSocket",
-        description: "Transmissão contínua de status de conferência para operadores de terminal"
-      },
-      {
-        metric: "Arquitetura Corporativa",
-        value: "Spring Boot 3.3",
-        description: "Controle robusto de transações, segurança JWT e persistência com JPA"
-      },
-      {
-        metric: "Visão na Borda",
-        value: "Integração Mobile",
-        description: "Suporte à conferência física via câmera de terminal com processamento local"
-      }
-    ],
-    evidence: "Repositório público com código-fonte Java e React, configuração Maven e controladores documentados."
+    repository: { name: "RodrigoDiasDeOliveira/Trimindlabs-Logistic-plataform-next-gen", isPrivate: true, visibilityBadge: "Repositório Privado" },
+    engineering: ["RBAC com papéis ADMIN, OPERATOR, OPERATIONS e DRIVER.","ePOD com evidência e hashing SHA-256.","Flyway para evolução controlada do schema."],
+    technology: ["Java / Spring Boot", "React / Vite", "PostgreSQL 16", "Cloud Run", "Google Maps"],
+    evolution: "Evolução contínua dos módulos logísticos, telemetria e integrações regulatórias.",
+    evidence: "Deployment Cloud Run, Cloud SQL e runtime funcional da versão atual.",
+    evidenceSource: "TLP Next-Gen / deployment GCP",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Deployed e funcional em Cloud Run.",
+    deployment: { target: "Google Cloud Run / europe-west1", url: "https://tlp-nextgen-72mbkllrqa-ew.a.run.app", status: "Operational" }
   },
   {
     id: "triminds-security-layer",
@@ -599,101 +546,48 @@ const PROJECTS_PT: Project[] = [
   },
   {
     id: "triminds-logistics-platform",
-    title: "Trimindslabs Logistics Platform (TLP)",
-    subtitle: "Real-Time Logistics Operations with RFID Telemetry & Edge Vision",
-    tag: "Logistics SaaS / Event Ingestion",
-    sector: "Warehouse Automation & Industrial Operations",
+    title: "TLP Next-Gen",
+    subtitle: "Cloud-Native Logistics Platform for Operations, ePOD and Telemetry",
+    tag: "Logistics / Cloud Native",
+    sector: "Logistics & Transportation",
     domain: "logistics",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "deployed",
-    honestScope: "Multi-tenant enterprise logistics platform for high-frequency RFID telemetry ingestion, warehouse event streaming, and mobile edge asset counting.",
-    whatItProves: "Proves Trimindslabs builds production enterprise backends in Java 17, Spring Boot 3.3, and React 18, handling telemetry events with real-time WebSockets and edge AI.",
-    problem: "Distribution centers face inventory blindspots, RFID collision errors, and data discrepancies between enterprise ERP systems and physical warehouse floors.",
-    context: "Designed with multi-tenancy (companyId) to unify fixed RFID portal readers, automated conveyor streams, and mobile Android edge scanning devices.",
+    honestScope: "Java/Spring Boot + React/Vite application deployed on Cloud Run with PostgreSQL Cloud SQL, authentication/RBAC, logistics operations, ePOD and fleet telemetry.",
+    whatItProves: "Demonstrates full-stack cloud-native engineering applied to logistics operations, relational persistence, access control and mapping.",
+    problem: "Transport operations need a unified layer for CRM, cross-docking, deliveries, fleet and proof of delivery.",
+    context: "The current version is deployed in GCP project sturdy-dogfish-460621-q7 with Cloud SQL PostgreSQL 16 and Google Maps with OSM fallback.",
     architecture: {
-      overview: "Event-driven architecture: RFID Readers / Gateways ➔ Spring Boot 3.3 Event Processor ➔ Predictive Rules Engine ➔ STOMP/SockJS WebSockets Broadcasting ➔ React Operational Dashboard.",
-      components: [
-        "High-Throughput Batch & Real-Time Event Ingestion Gateway",
-        "Business Rules and Tracking Controller in Spring Boot 3.3",
-        "WebSocket STOMP Broadcaster with secure JWT authentication",
-        "Mobile Edge Vision Module with YOLOv8 for rapid asset verification"
-      ],
-      diagramText: "RFID Readers / Mobile App ➔ Spring Gateway ➔ Session Verification ➔ Event Processing ➔ STOMP WebSockets ➔ Real-Time Operational Dashboard"
+      overview: "React/Vite → Spring Boot → PostgreSQL/Cloud SQL, with authentication, CRM, cross-docking, ePOD and telemetry.",
+      components: ["Spring Boot", "React/Vite", "Cloud SQL PostgreSQL 16", "Flyway", "Google Maps + OSM fallback", "RBAC/ePOD"],
+      diagramText: "React ➔ Spring Boot ➔ Cloud SQL PostgreSQL 16\n             ↘ Maps / OSM fallback\n             ↘ Auth / CRM / Cross-Docking / ePOD / Fleet"
     },
     realArchitectureVerification: {
-      documented: "Real-time logistics platform using Java 17 / Spring Boot 3.3 backend and React web frontend.",
-      implemented: "Java 17, Spring Boot 3.3, Spring Data JPA, Spring Security + JWT, STOMP WebSockets, React 18, TypeScript, PostgreSQL.",
-      presentedOnSite: "Truthful stack matching codebase: Java, Spring Boot, React, and WebSockets.",
-      coherenceScore: "100% Coherent"
+      documented: "Full-stack logistics application with Cloud Run deployment.",
+      implemented: "Java/Spring Boot + React/Vite + Cloud SQL PostgreSQL 16 + Flyway + current RBAC and logistics capabilities.",
+      presentedOnSite: "Updated to the current stack and deployment, removing unverified legacy technologies.",
+      coherenceScore: "Aligned with current deployment"
     },
     realTechnologies: {
-      languages: ["Java 17", "TypeScript", "SQL (PostgreSQL)"],
-      frameworks: ["Spring Boot 3.3", "React 18 / Vite", "Spring Security"],
-      libraries: ["STOMP & SockJS WebSocket", "Deeplearning4j", "Axios", "Lombok"],
-      databases: ["PostgreSQL (Production)", "H2 (Integrated test suites)"],
-      cloud: ["Docker Containerization", "Multi-tenant isolation"],
-      iac: ["Docker Compose", "Multi-stage Dockerfile"],
-      apis: ["REST Endpoints", "WebSocket STOMP (/ws-rfid)"],
-      testing: ["JUnit 5", "Spring Boot Test"],
-      ciCd: ["GitHub Actions CI (Maven Build & Lint)"],
-      observability: ["Spring Actuator", "Micrometer Metrics"]
+      languages: ["Java", "TypeScript"],
+      frameworks: ["Spring Boot", "React", "Vite"],
+      libraries: ["@vis.gl/react-google-maps"],
+      databases: ["PostgreSQL 16 / Cloud SQL"],
+      cloud: ["Google Cloud Run", "Google Cloud SQL"],
+      apis: ["REST"],
+      testing: ["Application validation"],
+      ciCd: ["GitHub"]
     },
-    repository: {
-      name: "RodrigoDiasDeOliveira/TLP-Trimindslabs-Logistics-Platform",
-      isPrivate: false,
-      visibilityBadge: "Public Repository",
-      testSuiteStatus: "JUnit test suite covering event controllers and security authentication",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Multi-tenant Data Separation", "ADR-003: WebSocket STOMP vs Server-Sent Events"]
-    },
-    engineering: [
-      "Engineered high-frequency event broadcast channels using STOMP protocol over WebSockets.",
-      "Integrated mobile computer vision (ObjectScanner) for physical floor verification with centralized sync.",
-      "Enforced multi-tenant isolation guaranteeing logical data separation between enterprise clients."
-    ],
-    technology: [
-      "Java 17 / Spring Boot 3.3",
-      "React 18 / TypeScript",
-      "STOMP WebSockets",
-      "PostgreSQL / JPA",
-      "Docker / Cloud Run",
-      "Edge Vision (YOLOv8)"
-    ],
-    evolution: "Evolved from a warehouse telemetry prototype into a unified logistics operations suite combining continuous RFID feeds with mobile edge computer vision.",
-    challenges: [
-      "Handling tag collisions and de-duplicating multi-read passes across high-speed portal readers.",
-      "Maintaining resilient WebSocket reconnects in factory environments with electromagnetic interference.",
-      "Bi-directional synchronization between offline floor terminal counts and central ERP databases."
-    ],
-    decisions: [
-      {
-        decision: "Adopted WebSockets with STOMP for live terminal screen updates.",
-        rationale: "Provides instantaneous operational status updates without the overhead of HTTP polling."
-      },
-      {
-        decision: "Implemented tenant isolation via composite keys and programmatic tenant resolvers.",
-        rationale: "Enables secure multi-tenant SaaS operation without requiring isolated database clusters initially."
-      }
-    ],
-    results: [
-      {
-        metric: "Event Delivery",
-        value: "STOMP WebSocket",
-        description: "Continuous dispatch of verification telemetry to warehouse floor terminals"
-      },
-      {
-        metric: "Enterprise Backend",
-        value: "Spring Boot 3.3",
-        description: "Robust transaction governance, JWT security, and relational JPA persistence"
-      },
-      {
-        metric: "Mobile Edge AI",
-        value: "Floor Vision",
-        description: "Real-time physical asset counting directly via handheld mobile camera devices"
-      }
-    ],
-    evidence: "Public repository with Maven configuration, Java/React source code, and documented API controllers."
+    repository: { name: "RodrigoDiasDeOliveira/Trimindlabs-Logistic-plataform-next-gen", isPrivate: true, visibilityBadge: "Private Repository" },
+    engineering: ["RBAC roles: ADMIN, OPERATOR, OPERATIONS and DRIVER.","ePOD evidence with SHA-256 hashing.","Flyway for controlled schema evolution."],
+    technology: ["Java / Spring Boot", "React / Vite", "PostgreSQL 16", "Cloud Run", "Google Maps"],
+    evolution: "Continuous evolution of logistics modules, telemetry and regulatory integrations.",
+    evidence: "Cloud Run deployment, Cloud SQL and functional current runtime.",
+    evidenceSource: "TLP Next-Gen / GCP deployment",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Deployed and functional on Cloud Run.",
+    deployment: { target: "Google Cloud Run / europe-west1", url: "https://tlp-nextgen-72mbkllrqa-ew.a.run.app", status: "Operational" }
   },
   {
     id: "triminds-security-layer",
@@ -914,101 +808,48 @@ const PROJECTS_PT: Project[] = [
   },
   {
     id: "triminds-logistics-platform",
-    title: "Trimindslabs Logistics Platform (TLP)",
-    subtitle: "Operaciones Logísticas en Tiempo Real con RFID y Visión en el Borde",
-    tag: "Logistics SaaS / Event Ingestion",
-    sector: "Automatización de Almacenes y Operaciones Industriales",
+    title: "TLP Next-Gen",
+    subtitle: "Plataforma Logística Cloud-Native para Operaciones, ePOD y Telemetría",
+    tag: "Logistics / Cloud Native",
+    sector: "Logística y Transporte",
     domain: "logistics",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "deployed",
-    honestScope: "Plataforma para operaciones logísticas multinquilino, procesamiento de telemetría RFID en alta frecuencia y recuento de activos mediante visión artificial móvil.",
-    whatItProves: "Demuestra capacidad de ingeniería para construir backends empresariales escalables en Java 17 / Spring Boot 3.3 con interfaces web modernas e inteligencia distribuida.",
-    problem: "Los centros de distribución sufren puntos ciegos de inventario, pérdidas de trazabilidad de bultos y discrepancias entre registros de gestión y recuento físico en almacén.",
-    context: "Diseñado con arquitectura multitenancy (companyId) para unificar eventos de lectores RFID fijos, cintas de clasificación y aplicaciones móviles de conteo.",
+    honestScope: "Aplicación Java/Spring Boot + React/Vite desplegada en Cloud Run, con PostgreSQL Cloud SQL, autenticación/RBAC, operaciones logísticas, ePOD y telemetría de flota.",
+    whatItProves: "Demuestra ingeniería full-stack cloud-native aplicada a operaciones logísticas, persistencia relacional, control de acceso e integración de mapas.",
+    problem: "Las operaciones de transporte necesitan unificar CRM, cross-docking, entregas, flota y evidencias de entrega.",
+    context: "La versión actual está desplegada en el proyecto GCP sturdy-dogfish-460621-q7, con Cloud SQL PostgreSQL 16 y Google Maps con fallback OSM.",
     architecture: {
-      overview: "Arquitectura orientada a eventos: Pasarela de Ingesta RFID ➔ Procesador de Eventos Spring Boot 3.3 ➔ Motor de Reglas Predictivo ➔ Difusión WebSocket STOMP/SockJS ➔ Dashboard Operativo React.",
-      components: [
-        "Pasarela de Ingesta de Eventos con soporte para lotes de telemetría continua",
-        "Controlador de Reglas de Negocio y Trazabilidad en Spring Boot 3.3",
-        "Broadcaster WebSocket STOMP con autenticación segura JWT",
-        "Módulo de Borde con YOLOv8 para verificación visual rápida de embalajes"
-      ],
-      diagramText: "Lectores RFID / App Móvil ➔ Pasarela Spring ➔ Validación de Sesión ➔ Procesamiento de Eventos ➔ STOMP WebSockets ➔ Dashboard en Tiempo Real"
+      overview: "React/Vite → Spring Boot → PostgreSQL/Cloud SQL, con autenticación, CRM, cross-docking, ePOD y telemetría.",
+      components: ["Spring Boot", "React/Vite", "Cloud SQL PostgreSQL 16", "Flyway", "Google Maps + OSM fallback", "RBAC/ePOD"],
+      diagramText: "React ➔ Spring Boot ➔ Cloud SQL PostgreSQL 16\n             ↘ Maps / OSM fallback\n             ↘ Auth / CRM / Cross-Docking / ePOD / Fleet"
     },
     realArchitectureVerification: {
-      documented: "Plataforma logística con backend Java 17 / Spring Boot 3.3 y frontend web React.",
-      implemented: "Java 17, Spring Boot 3.3, Spring Data JPA, Spring Security, STOMP WebSockets, React 18, TypeScript, PostgreSQL.",
-      presentedOnSite: "Stack correspondiente con la implementación real: Java, Spring Boot, React y WebSockets.",
-      coherenceScore: "100% Coherente"
+      documented: "Aplicación logística full-stack con deployment Cloud Run.",
+      implemented: "Java/Spring Boot + React/Vite + Cloud SQL PostgreSQL 16 + Flyway + RBAC y capacidades logísticas actuales.",
+      presentedOnSite: "Actualizado a la stack y deployment actuales, eliminando tecnologías heredadas no verificadas.",
+      coherenceScore: "Alineado con el deployment actual"
     },
     realTechnologies: {
-      languages: ["Java 17", "TypeScript", "SQL (PostgreSQL)"],
-      frameworks: ["Spring Boot 3.3", "React 18 / Vite", "Spring Security"],
-      libraries: ["STOMP & SockJS WebSocket", "Deeplearning4j", "Axios", "Lombok"],
-      databases: ["PostgreSQL (Producción)", "H2 (Entornos de prueba integrados)"],
-      cloud: ["Contenedores Docker", "Aislamiento Multinquilino"],
-      iac: ["Docker Compose", "Multi-stage Dockerfile"],
-      apis: ["REST Endpoints", "WebSocket STOMP (/ws-rfid)"],
-      testing: ["JUnit 5", "Spring Boot Test"],
-      ciCd: ["GitHub Actions CI (Build Maven & Lint)"],
-      observability: ["Spring Actuator", "Micrometer Metrics"]
+      languages: ["Java", "TypeScript"],
+      frameworks: ["Spring Boot", "React", "Vite"],
+      libraries: ["@vis.gl/react-google-maps"],
+      databases: ["PostgreSQL 16 / Cloud SQL"],
+      cloud: ["Google Cloud Run", "Google Cloud SQL"],
+      apis: ["REST"],
+      testing: ["Validación de aplicación"],
+      ciCd: ["GitHub"]
     },
-    repository: {
-      name: "RodrigoDiasDeOliveira/TLP-Trimindslabs-Logistics-Platform",
-      isPrivate: false,
-      visibilityBadge: "Repositorio Público",
-      testSuiteStatus: "Suite de pruebas JUnit cubriendo controladores de eventos y seguridad",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Multi-tenant Data Separation", "ADR-003: WebSocket STOMP vs Server-Sent Events"]
-    },
-    engineering: [
-      "Implementación de canal de difusión de eventos de alta frecuencia con protocolo STOMP sobre WebSockets.",
-      "Integración con visión artificial móvil (ObjectScanner) para sincronización de conteos físicos en planta.",
-      "Modelado multinquilino garantizando segregación lógica estricta entre operadoras logísticas independientes."
-    ],
-    technology: [
-      "Java 17 / Spring Boot 3.3",
-      "React 18 / TypeScript",
-      "STOMP WebSockets",
-      "PostgreSQL / JPA",
-      "Docker / Cloud Run",
-      "Visión en el Borde (YOLOv8)"
-    ],
-    evolution: "Evolucionó de un prototipo de monitoreo de almacenes a un ecosistema logístico completo combinando telemetría RFID continua y verificación visual de activos.",
-    challenges: [
-      "Prevención de colisiones y lecturas duplicadas en pasos rápidos por arcos RFID.",
-      "Mantenimiento de conexiones WebSocket estables en entornos fabriles con interferencias electromagnéticas.",
-      "Sincronización bidireccional entre lecturas locales en planta y la base de datos central."
-    ],
-    decisions: [
-      {
-        decision: "Adopción de WebSockets con STOMP para actualización de terminales en planta.",
-        rationale: "Garantiza actualización instantánea del estado de verificación sin sobrecarga de polling HTTP."
-      },
-      {
-        decision: "Aislamiento de inquilinos mediante claves compuestas y tenant resolver programático.",
-        rationale: "Permite operación SaaS segura entre múltiples empresas sin exigir clústeres aislados por cliente inicial."
-      }
-    ],
-    results: [
-      {
-        metric: "Entrega de Eventos",
-        value: "STOMP WebSocket",
-        description: "Transmisión continua de telemetría a terminales de operarios en planta"
-      },
-      {
-        metric: "Backend Corporativo",
-        value: "Spring Boot 3.3",
-        description: "Gestión transaccional rigurosa, seguridad JWT y persistencia relacional con JPA"
-      },
-      {
-        metric: "Visión en el Borde",
-        value: "Integración Móvil",
-        description: "Recuento físico inmediato mediante cámara de terminal con procesamiento local"
-      }
-    ],
-    evidence: "Repositorio público con código fuente Java y React, configuración Maven y controladores documentados."
+    repository: { name: "RodrigoDiasDeOliveira/Trimindlabs-Logistic-plataform-next-gen", isPrivate: true, visibilityBadge: "Repositorio Privado" },
+    engineering: ["RBAC con roles ADMIN, OPERATOR, OPERATIONS y DRIVER.","ePOD con evidencia y hash SHA-256.","Flyway para evolución controlada del schema."],
+    technology: ["Java / Spring Boot", "React / Vite", "PostgreSQL 16", "Cloud Run", "Google Maps"],
+    evolution: "Evolución continua de los módulos logísticos, telemetría e integraciones regulatorias.",
+    evidence: "Deployment Cloud Run, Cloud SQL y runtime funcional actual.",
+    evidenceSource: "TLP Next-Gen / deployment GCP",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Desplegado y funcional en Cloud Run.",
+    deployment: { target: "Google Cloud Run / europe-west1", url: "https://tlp-nextgen-72mbkllrqa-ew.a.run.app", status: "Operational" }
   },
   {
     id: "triminds-security-layer",
