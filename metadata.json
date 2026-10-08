@@ -1,0 +1,6 @@
+{
+  "name": "Trimindslabs V3",
+  "description": "Trimindslabs Website V3 — Engineering intelligent systems with deterministic processing, verifiable architecture, and evidence-driven production readiness.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

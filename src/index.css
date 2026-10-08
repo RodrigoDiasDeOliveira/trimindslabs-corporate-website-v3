@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+:root {
+  color-scheme: light;
+  color: #1a1a1a;
+  background-color: #f4f4f1;
+}
+
+body {
+  color: #1a1a1a;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: #f4f4f1;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: #1a1a1a;
+  color: #f4f4f1;
+}
+
+/* Custom scrollbar matching Trimindslabs aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d1cd;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a2;
+}
