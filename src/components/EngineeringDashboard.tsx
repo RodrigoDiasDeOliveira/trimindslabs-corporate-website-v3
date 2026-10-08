@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getProductionGates, getVocabularyTerms, getProjects, getOperationalSystems } from '../data/trimindsData';
+import { getProductionGates, getVocabularyTerms, getOperationalSystems } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
 import {
   X,
@@ -9,15 +9,13 @@ import {
   CheckCircle2,
   AlertTriangle,
   Clock,
-  ExternalLink,
-  GitBranch,
-  Terminal,
+    Terminal,
 } from 'lucide-react';
 
 interface EngineeringDashboardProps {
   isOpen: boolean;
   onClose: () => void;
-  initialTab?: 'telemetry' | 'gates' | 'vocab' | 'releases';
+  initialTab?: 'telemetry' | 'gates' | 'vocab';
 }
 
 export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
@@ -26,14 +24,13 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
   initialTab = 'telemetry',
 }) => {
   const { language, t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'telemetry' | 'gates' | 'vocab' | 'releases'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'telemetry' | 'gates' | 'vocab'>(initialTab === 'releases' ? 'telemetry' : initialTab);
 
   if (!isOpen) return null;
 
   const operationalSystems = getOperationalSystems(language);
   const productionGates = getProductionGates(language);
   const vocabularyTerms = getVocabularyTerms(language);
-  const projects = getProjects(language);
 
   return (
     <div
@@ -98,18 +95,6 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
           >
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
             <span>{t('dashboard.tabGates', '2. Matriz de Auditoria (11 Gates)')}</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('releases')}
-            className={`px-3.5 py-2 text-xs font-mono font-medium rounded-md transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
-              activeTab === 'releases'
-                ? 'bg-[#1A1A1A] text-white shadow-xs'
-                : 'text-[#555550] hover:text-[#1A1A1A] hover:bg-[#F4F4F1]'
-            }`}
-          >
-            <GitBranch className="w-3.5 h-3.5 text-blue-500" />
-            <span>{t('dashboard.tabReleases', '3. Releases & Repositórios')}</span>
           </button>
 
           <button
@@ -252,67 +237,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
             </div>
           )}
 
-          {/* TAB 3: RELEASES & REPOSITORIES (SECONDARY ACCESS ONLY) */}
-          {activeTab === 'releases' && (
-            <div className="space-y-4">
-              <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl text-xs text-[#555550]">
-                <strong className="text-[#1A1A1A] font-mono">{t('dashboard.codeGovNote', 'Nota de Governança de Código: ')}</strong>
-                <span>
-                  {t('dashboard.codeGovText', 'O website corporativo prioriza produtos e sistemas. Abaixo consta o mapeamento interno entre os sistemas e seus respectivos artefatos de código.')}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {projects.filter((p) => p.repository).map((project) => (
-                  <div
-                    key={project.id}
-                    className="p-5 bg-white border border-[#E2E8F0] rounded-xl shadow-xs flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div>
-                          <div className="text-xs font-mono text-[#70706B] uppercase">{project.sector}</div>
-                          <h4 className="font-serif text-lg font-bold text-[#1A1A1A] mt-0.5">{project.title}</h4>
-                        </div>
-                        <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          {project.truthStatus === 'implemented'
-                            ? t('projects.statusOperational', 'Operacional em Produção')
-                            : project.truthStatus === 'partial'
-                            ? t('projects.statusValidation', 'Em Validação Contínua')
-                            : t('projects.statusSpecification', 'Especificação / RFC')}
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-[#555550] line-clamp-2 mb-3">
-                        {project.honestScope}
-                      </p>
-                    </div>
-
-                    <div className="pt-3 border-t border-[#F0F0EC] flex items-center justify-between text-xs font-mono">
-                      <span className="text-[#70706B] truncate max-w-[240px]">
-                        {project.repository?.name}
-                      </span>
-                      {project.repository?.isPrivate ? (
-                        <span className="text-[#70706B] italic">{t('dashboard.repoPrivate', 'Repositório: Privado')}</span>
-                      ) : (
-                        <a
-                          href={project.repository?.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 font-medium text-[#1A1A1A] hover:underline cursor-pointer"
-                        >
-                          <span>{t('dashboard.inspectRepo', 'Inspecionar Repositório')}</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 4: VOCABULARY SPECIFICATION */}
+  {/* TAB 3: VOCABULARY SPECIFICATION */}
           {activeTab === 'vocab' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {vocabularyTerms.map((item, idx) => (
