@@ -13,19 +13,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
 
   const navLinks = [
     { label: t('nav.home', 'Visão Geral'), href: '#overview' },
-    { label: t('nav.aiSystems', 'Sistemas & Projetos'), href: '#projects' },
+    { label: t('nav.aiSystems', 'Sistemas & Produtos'), href: '#projects' },
     { label: t('nav.engineering', 'Arquitetura'), href: '#architecture' },
-    { label: t('nav.research', 'Pesquisa & Artigos'), href: '#research' },
-    { label: 'Engineering Dashboard', href: '#dashboard', isHighlight: true },
+    { label: t('nav.research', 'Pesquisa & Labs'), href: '#research' },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href === '#dashboard') {
-      e.preventDefault();
-      onOpenDashboard();
-      setMobileMenuOpen(false);
-      return;
-    }
     const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
@@ -53,11 +46,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
               key={link.href}
               href={link.href}
               onClick={(e) => handleLinkClick(e, link.href)}
-              className={`transition-colors hover:text-[#1A1A1A] ${
-                link.isHighlight ? 'text-[#1A1A1A] font-semibold flex items-center gap-1.5' : ''
-              }`}
+              className="transition-colors hover:text-[#1A1A1A]"
             >
-              {link.isHighlight && <Terminal className="w-3.5 h-3.5 text-emerald-600" />}
               {link.label}
             </a>
           ))}
@@ -71,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
               <button
                 key={lang}
                 onClick={() => setLanguage(lang)}
-                className={`px-2 py-0.5 rounded transition-colors uppercase ${
+                className={`px-2 py-0.5 rounded transition-colors uppercase cursor-pointer ${
                   language === lang
                     ? 'bg-[#1A1A1A] text-[#F4F4F1] font-semibold'
                     : 'text-[#70706B] hover:text-[#1A1A1A]'
@@ -83,20 +73,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
             ))}
           </div>
 
-          {/* Quick Evidence Action */}
+          {/* Quick Gates Audit Button */}
           <button
             onClick={onOpenGates}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium text-[#1A1A1A] bg-white border border-[#D1D1CD] hover:border-[#1A1A1A] rounded transition-colors whitespace-nowrap shadow-xs"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium text-[#1A1A1A] bg-white border border-[#D1D1CD] hover:border-[#1A1A1A] rounded transition-colors whitespace-nowrap shadow-xs cursor-pointer"
             title="Verificar os 11 Gates de Produção"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
             <span>11 Gates</span>
           </button>
 
+          {/* Primary Action: Open Engineering Dashboard Overlay */}
+          <button
+            onClick={onOpenDashboard}
+            className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-mono font-medium text-white bg-[#1A1A1A] hover:bg-[#333330] rounded transition-colors whitespace-nowrap shadow-xs cursor-pointer"
+          >
+            <Terminal className="w-3.5 h-3.5 text-emerald-400" />
+            <span>{t('nav.dashboardCta')}</span>
+          </button>
+
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-[#1A1A1A] hover:bg-[#EAEAE6] rounded"
+            className="md:hidden p-2 text-[#1A1A1A] hover:bg-[#EAEAE6] rounded cursor-pointer"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -117,24 +116,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
               {link.label}
             </a>
           ))}
-          <div className="pt-2 border-t border-[#E2E8F0] flex gap-2">
+          <div className="pt-2 border-t border-[#E2E8F0] flex flex-col gap-2">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenGates();
               }}
-              className="flex-1 py-2 text-xs font-mono text-center border border-[#D1D1CD] rounded bg-white text-[#1A1A1A]"
+              className="w-full py-2.5 text-xs font-mono text-center border border-[#D1D1CD] rounded bg-white text-[#1A1A1A] flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              Auditoria: 11 Gates
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Auditoria dos 11 Gates de Produção</span>
             </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenDashboard();
               }}
-              className="flex-1 py-2 text-xs font-mono text-center bg-[#1A1A1A] rounded text-[#F4F4F1]"
+              className="w-full py-2.5 text-xs font-mono text-center bg-[#1A1A1A] rounded text-[#F4F4F1] flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              Dashboard
+              <Terminal className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{t('nav.dashboardCta')}</span>
             </button>
           </div>
         </div>

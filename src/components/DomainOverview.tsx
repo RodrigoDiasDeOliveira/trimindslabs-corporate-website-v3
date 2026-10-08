@@ -14,13 +14,13 @@ export const DomainOverview: React.FC<DomainOverviewProps> = ({ onSelectDomainFi
       id: 'compliance',
       icon: Scale,
       title: language === 'pt' ? 'Conformidade & IA Regulatória' : language === 'es' ? 'Cumplimiento e IA Regulatoria' : 'Regulatory AI & Compliance',
-      headline: language === 'pt' ? 'Auditoria jurídica sem alucinações' : language === 'es' ? 'Auditoría jurídica sin alucinaciones' : 'Legal Auditing with Zero Hallucination',
+      headline: language === 'pt' ? 'Auditoria jurídica sem alucinações' : language === 'es' ? 'Auditoría jurídica sin alucinaciones' : 'Legal Auditing with Provenance',
       description: language === 'pt' 
         ? 'Processamento de normas complexas com garantia criptográfica de citação exata de parágrafos legais, protegendo empresas sob o EU AI Act.'
         : language === 'es'
         ? 'Procesamiento de normas complejas con garantía criptográfica de citación exacta de artículos legales, protegiendo empresas bajo el EU AI Act.'
         : 'Processing multi-jurisdiction regulatory texts with mathematical citation guarantees down to exact character offsets, compliant with EU AI Act.',
-      projectsSummary: 'Trusted Compliance Agent · Deterministic Workflow',
+      projectsSummary: 'Trusted Compliance Agent',
       filterKey: 'compliance',
     },
     {
@@ -29,24 +29,24 @@ export const DomainOverview: React.FC<DomainOverviewProps> = ({ onSelectDomainFi
       title: language === 'pt' ? 'Inteligência Geoespacial' : language === 'es' ? 'Inteligencia Geoespacial' : 'Geospatial Intelligence',
       headline: language === 'pt' ? 'Visão orbital com satélites reais' : language === 'es' ? 'Visión orbital con satélites reales' : 'Earth Observation via Real Satellites',
       description: language === 'pt'
-        ? 'Análise multiespectral contínua a 10m/pixel para monitorar milhares de quilômetros de florestas, plantios e infraestruturas elétricas.'
+        ? 'Análise multiespectral contínua a 10m/pixel para monitorar florestas, plantios e infraestruturas lineares a partir de dados Sentinel-2 L2A.'
         : language === 'es'
-        ? 'Análisis multiespectral continuo a 10m/pixel para monitorear miles de kilómetros de bosques, cultivos e infraestructuras críticas.'
-        : 'Automated 12-band multi-spectral raster processing at 10m/pixel to monitor linear infrastructure corridors, deforestation, and carbon credits.',
-      projectsSummary: 'Trimindslabs Geo AI V4',
+        ? 'Análisis multiespectral continuo a 10m/pixel para monitorear bosques, cultivos e infraestructuras críticas a partir de datos Sentinel-2 L2A.'
+        : 'Automated 12-band multi-spectral raster processing at 10m/pixel to monitor critical infrastructure corridors and environmental ground mutations.',
+      projectsSummary: 'Trimindslabs Geo-AI (V4)',
       filterKey: 'geospatial',
     },
     {
       id: 'logistics',
       icon: Truck,
-      title: language === 'pt' ? 'Automação Logística & Borda' : language === 'es' ? 'Automatización Logística y Borde' : 'Logistics Automation & Edge AI',
+      title: language === 'pt' ? 'Automação Logística & Borda' : language === 'es' ? 'Automatización Logística y Borde' : 'Logistics Automation & Edge Vision',
       headline: language === 'pt' ? 'Rastreamento e contagem em tempo real' : language === 'es' ? 'Trazabilidad y conteo en tiempo real' : 'Real-Time Telemetry & Mobile Vision',
       description: language === 'pt'
-        ? 'Plataformas completas para eventos RFID em armazéns e aplicativos móveis com visão computacional para contagem instantânea de materiais.'
+        ? 'Plataforma para eventos RFID em armazéns e conferência visual de materiais industriais via visão computacional em dispositivos móveis.'
         : language === 'es'
-        ? 'Plataformas completas para eventos RFID en almacenes y aplicaciones móviles con visión artificial para recuento instantáneo de piezas.'
-        : 'Multi-tenant logistics platforms processing high-frequency RFID streams and mobile Android edge scanning for industrial asset counts.',
-      projectsSummary: 'TLP Logistics Platform · ObjectScanner V2',
+        ? 'Plataforma para eventos RFID en almacenes y comprobación visual de piezas industriales mediante visión artificial en dispositivos móviles.'
+        : 'Enterprise logistics platform processing high-frequency RFID streams and mobile Android edge scanning for industrial asset counts.',
+      projectsSummary: 'Trimindslabs Logistics Platform (TLP)',
       filterKey: 'logistics',
     },
     {
@@ -55,11 +55,11 @@ export const DomainOverview: React.FC<DomainOverviewProps> = ({ onSelectDomainFi
       title: language === 'pt' ? 'Plataforma & Nuvem Soberana' : language === 'es' ? 'Plataforma y Nube Soberana' : 'Platform Engineering & Sovereign Mesh',
       headline: language === 'pt' ? 'Segurança Zero Trust e orquestração' : language === 'es' ? 'Seguridad Zero Trust y orquestación' : 'Zero Trust Security & Multi-Cloud Ops',
       description: language === 'pt'
-        ? 'Arquitetura hexagonal para controle de acesso, orquestrador multi-nuvem via protocolo MCP e aceleração semântica no editor de código.'
+        ? 'Arquitetura hexagonal para controle de acesso, orquestrador multi-nuvem via protocolo MCP e barramento de eventos sob regulação europeia.'
         : language === 'es'
-        ? 'Arquitectura hexagonal para control de acceso, orquestador multinube vía protocolo MCP y aceleración semántica en el editor.'
-        : 'Hexagonal identity layers, Model Context Protocol (MCP) multi-cloud administrators, and developer extensions with pgvector.',
-      projectsSummary: 'Security Layer · AI Cloud Admin · VectorAI · Integration Platform',
+        ? 'Arquitectura hexagonal para control de acceso, orquestador multinube vía protocolo MCP y malla de eventos bajo regulación europea.'
+        : 'Hexagonal identity layers, Model Context Protocol (MCP) multi-cloud administrators, and secure event mesh under European data jurisdiction.',
+      projectsSummary: 'Security Platform · AI Cloud Admin · Integration Mesh',
       filterKey: 'platform',
     },
   ];
@@ -69,11 +69,11 @@ export const DomainOverview: React.FC<DomainOverviewProps> = ({ onSelectDomainFi
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mb-12">
           <div className="text-xs font-mono text-[#70706B] uppercase tracking-wider mb-2">
-            {language === 'pt' ? 'O QUE DESENVOLVEMOS' : language === 'es' ? 'QUÉ CONSTRUIMOS' : 'CORE PRODUCT PILLARS'}
+            {language === 'pt' ? 'DOMÍNIOS DE ENGENHARIA' : language === 'es' ? 'DOMINIOS DE INGENIERÍA' : 'ENGINEERING DOMAINS'}
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1A1A] [text-wrap:balance]">
             {language === 'pt' 
-              ? 'Quatro domínios de engenharia focados em resolver problemas reais.'
+              ? 'Quatro áreas de engenharia focadas em resolver problemas reais.'
               : language === 'es'
               ? 'Cuatro áreas de ingeniería enfocadas en resolver problemas reales.'
               : 'Four engineering domains engineered for mission-critical reliability.'}
@@ -116,7 +116,7 @@ export const DomainOverview: React.FC<DomainOverviewProps> = ({ onSelectDomainFi
                   </div>
                   <button
                     onClick={() => onSelectDomainFilter(domain.filterKey)}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1A1A1A] hover:text-emerald-700 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1A1A1A] hover:text-emerald-700 transition-colors cursor-pointer"
                   >
                     <span>{language === 'pt' ? 'Ver sistemas desta área' : language === 'es' ? 'Ver sistemas de esta área' : 'Inspect related systems'}</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />

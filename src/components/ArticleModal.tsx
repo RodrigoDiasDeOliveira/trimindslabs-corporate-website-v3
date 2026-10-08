@@ -110,20 +110,6 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
               <span>{article.doiOrReference}</span>
             </div>
           )}
-
-          {article.repositoryUrl && (
-            <div className="pt-2">
-              <a
-                href={article.repositoryUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-mono text-white bg-[#1A1A1A] hover:bg-[#333330] rounded-lg transition-colors"
-              >
-                <span>Inspecionar Repositório do Laboratório</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          )}
         </div>
 
         {/* Footer */}

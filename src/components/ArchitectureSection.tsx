@@ -63,7 +63,7 @@ export const ArchitectureSection: React.FC = () => {
       details: [
         'Refinamento de bordas sub-pixel para polígonos agrícolas',
         'Índices de vegetação determinísticos (NDVI, NDWI, SAVI)',
-        'Processamento contínuo de 24.000+ km de corredores lineares',
+        language === 'pt' ? 'Processamento contínuo de coberturas e corredores territoriais' : language === 'es' ? 'Procesamiento continuo de coberturas y corredores territoriales' : 'Continuous processing of land cover and territorial corridors',
       ],
     },
   ];

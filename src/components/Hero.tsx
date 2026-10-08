@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { ArrowRight, Terminal, CheckCircle2, Shield, Satellite, Cpu } from 'lucide-react';
+import { ArrowRight, Terminal, CheckCircle2, Shield, Satellite, Server } from 'lucide-react';
 
 interface HeroProps {
   onExploreProjects: () => void;
@@ -54,83 +54,87 @@ export const Hero: React.FC<HeroProps> = ({
           )}
         </h1>
 
-        {/* Human Explanation: Two Audiences */}
+        {/* Explanatory Narrative */}
         <p className="mt-6 text-lg sm:text-xl text-[#4A4A45] max-w-3xl leading-relaxed">
-          {language === 'pt'
-            ? 'A Trimindslabs projeta plataformas críticas de software e IA onde falhas estocásticas não são permitidas. Unimos auditoria regulatória com proveniência legal exata, visão computacional geoespacial com satélites reais e rastreabilidade logística ponta a ponta.'
-            : language === 'es'
-            ? 'Trimindslabs diseña plataformas críticas de software e IA donde los fallos estocásticos no están permitidos. Unimos auditoría regulatoria con procedencia legal exacta, visión computacional geoespacial con satélites reales y trazabilidad logística de extremo a extremo.'
-            : 'Trimindslabs builds mission-critical software and AI platforms where stochastic errors are unacceptable. We combine regulatory compliance with immutable citation provenance, geospatial computer vision using real satellites, and end-to-end industrial logistics traceability.'}
+          {t('hero.subtitle')}
         </p>
 
         {/* Two Clear Entry Points */}
         <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
           <button
             onClick={onExploreProjects}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium text-white bg-[#1A1A1A] hover:bg-[#333330] rounded-lg transition-all shadow-sm"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium text-white bg-[#1A1A1A] hover:bg-[#333330] rounded-lg transition-all shadow-sm cursor-pointer"
           >
-            <span>{language === 'pt' ? 'Conhecer Projetos & Soluções' : language === 'es' ? 'Explorar Proyectos y Soluciones' : 'Explore Projects & Solutions'}</span>
+            <span>{t('hero.exploreCta')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
           <button
             onClick={onOpenDashboard}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium text-[#1A1A1A] bg-white border border-[#D1D1CD] hover:border-[#1A1A1A] rounded-lg transition-all shadow-xs"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium text-[#1A1A1A] bg-white border border-[#D1D1CD] hover:border-[#1A1A1A] rounded-lg transition-all shadow-xs cursor-pointer"
           >
             <Terminal className="w-4 h-4 text-emerald-600" />
-            <span>{language === 'pt' ? 'Engineering Dashboard & Evidências' : language === 'es' ? 'Engineering Dashboard y Evidencias' : 'Engineering Dashboard & Evidence'}</span>
+            <span>{t('hero.dashboardCta')}</span>
           </button>
         </div>
 
-        {/* Rigorous Truth Anchors (Claim-to-Proof Adjacency) */}
+        {/* Rigorous Truth Anchors (Audited, Provenance-Driven) */}
         <div className="mt-14 pt-8 border-t border-[#E2E8F0] grid grid-cols-2 md:grid-cols-4 gap-6">
           <div>
             <div className="flex items-center gap-1.5 text-xs font-mono text-[#70706B] uppercase mb-1">
               <Shield className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{t('hero.metric1Title', 'Política de Evidência')}</span>
+              <span>{t('hero.metric1Title')}</span>
             </div>
-            <div className="font-serif text-2xl font-bold text-[#1A1A1A]">0.00%</div>
+            <div className="font-serif text-xl sm:text-2xl font-bold text-[#1A1A1A]">
+              Offset &amp; SHA-256
+            </div>
             <p className="text-xs text-[#555550] mt-1 leading-snug">
-              {t('hero.metric1Desc', 'Alucinação factual contida com hashing SHA-256')}
+              {t('hero.metric1Desc')}
             </p>
           </div>
 
           <div>
             <div className="flex items-center gap-1.5 text-xs font-mono text-[#70706B] uppercase mb-1">
               <Satellite className="w-3.5 h-3.5 text-blue-600" />
-              <span>{t('hero.metric2Title', 'Satélite Sentinel-2')}</span>
+              <span>{t('hero.metric2Title')}</span>
             </div>
-            <div className="font-serif text-2xl font-bold text-[#1A1A1A]">10m / px</div>
+            <div className="font-serif text-xl sm:text-2xl font-bold text-[#1A1A1A]">
+              10m / px
+            </div>
             <p className="text-xs text-[#555550] mt-1 leading-snug">
-              {t('hero.metric2Desc', 'Entradas orbitais reais no Geo AI V4')}
+              {t('hero.metric2Desc')}
             </p>
           </div>
 
           <div>
             <div className="flex items-center gap-1.5 text-xs font-mono text-[#70706B] uppercase mb-1">
-              <Cpu className="w-3.5 h-3.5 text-purple-600" />
-              <span>{t('hero.metric3Title', 'Nuvem Europeia')}</span>
+              <Server className="w-3.5 h-3.5 text-purple-600" />
+              <span>{t('hero.metric3Title')}</span>
             </div>
-            <div className="font-serif text-2xl font-bold text-[#1A1A1A]">GCP Cloud Run</div>
+            <div className="font-serif text-xl sm:text-2xl font-bold text-[#1A1A1A]">
+              GCP Cloud Run
+            </div>
             <p className="text-xs text-[#555550] mt-1 leading-snug">
-              {t('hero.metric3Desc', 'Região europe-west1 com soberania de dados')}
+              {t('hero.metric3Desc')}
             </p>
           </div>
 
           <div>
             <div className="flex items-center gap-1.5 text-xs font-mono text-[#70706B] uppercase mb-1">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{t('hero.metric4Title', 'Auditoria de Release')}</span>
+              <span>{t('hero.metric4Title')}</span>
             </div>
             <button
               onClick={onOpenGates}
-              className="group flex items-baseline gap-1 text-left"
+              className="group flex items-baseline gap-1 text-left cursor-pointer"
             >
-              <span className="font-serif text-2xl font-bold text-[#1A1A1A] group-hover:underline">11 Gates</span>
-              <span className="text-xs text-emerald-600 font-mono font-medium">Verificados</span>
+              <span className="font-serif text-xl sm:text-2xl font-bold text-[#1A1A1A] group-hover:underline">
+                11 Gates
+              </span>
+              <span className="text-xs text-emerald-600 font-mono font-medium">Auditados</span>
             </button>
             <p className="text-xs text-[#555550] mt-1 leading-snug">
-              {t('hero.metric4Desc', 'Requisitos formais de separação entre estágio e prova')}
+              {t('hero.metric4Desc')}
             </p>
           </div>
         </div>

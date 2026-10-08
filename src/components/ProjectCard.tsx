@@ -1,7 +1,7 @@
 import React from 'react';
 import { Project } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
-import { ArrowRight, Code2, CheckCircle2, Clock, FileCode2 } from 'lucide-react';
+import { ArrowRight, Cpu, CheckCircle2, Clock, FileCode2 } from 'lucide-react';
 
 interface ProjectCardProps {
   project: Project;
@@ -9,14 +9,14 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelectProject }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   // Status mapping to plain language
   const getStatusBadge = (status: Project['truthStatus']) => {
     switch (status) {
       case 'implemented':
         return {
-          label: language === 'pt' ? 'Operacional / Implementado' : language === 'es' ? 'Operativo / Implementado' : 'Operational / Implemented',
+          label: language === 'pt' ? 'Operacional em Produção' : language === 'es' ? 'Operativo en Producción' : 'Operational in Production',
           color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
           icon: CheckCircle2,
         };
@@ -43,7 +43,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelectProje
       {/* Top: Sector and Honest Status */}
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="text-xs font-mono text-[#70706B] tracking-wide uppercase truncate max-w-[65%]">
+          <span className="text-xs font-mono text-[#70706B] tracking-wide uppercase truncate max-w-[60%]">
             {project.sector}
           </span>
           <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-mono rounded border ${status.color}`}>
@@ -60,8 +60,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelectProje
           {project.subtitle}
         </p>
 
-        {/* Layer 1 Plain-Language Explanation */}
-        <div className="mt-4 p-3 bg-[#FAF9F6] rounded-lg border border-[#F0EFEA] text-sm text-[#4A4A45] leading-relaxed">
+        {/* Plain-Language Explanation */}
+        <div className="mt-4 p-3.5 bg-[#FAF9F6] rounded-lg border border-[#F0EFEA] text-sm text-[#4A4A45] leading-relaxed">
           <p className="line-clamp-3">
             {project.honestScope}
           </p>
@@ -69,7 +69,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelectProje
 
         {/* Practical Problem Solved */}
         <div className="mt-4">
-          <div className="text-xs font-mono text-[#70706B] uppercase mb-1">
+          <div className="text-xs font-mono text-[#70706B] uppercase mb-1 font-semibold">
             {language === 'pt' ? 'Problema que resolve:' : language === 'es' ? 'Problema que resuelve:' : 'Problem addressed:'}
           </div>
           <p className="text-xs text-[#555550] line-clamp-2 leading-relaxed">
@@ -101,19 +101,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelectProje
         <div className="flex items-center gap-2">
           <button
             onClick={() => onSelectProject(project, 'overview')}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium text-white bg-[#1A1A1A] hover:bg-[#333330] rounded-md transition-colors"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium text-white bg-[#1A1A1A] hover:bg-[#333330] rounded-md transition-colors cursor-pointer"
           >
-            <span>{language === 'pt' ? 'Conhecer o Projeto' : language === 'es' ? 'Conocer el Proyecto' : 'Explore Case Study'}</span>
+            <span>{t('projects.cardViewCaseStudy', 'Conhecer o Sistema')}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
 
           <button
             onClick={() => onSelectProject(project, 'technical')}
-            className="inline-flex items-center justify-center gap-1 px-2.5 py-2 text-xs font-mono text-[#555550] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] border border-[#E2E8F0] rounded-md transition-colors"
-            title="Acessar Evidência de Engenharia e Repositório"
+            className="inline-flex items-center justify-center gap-1 px-2.5 py-2 text-xs font-mono text-[#555550] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] border border-[#E2E8F0] rounded-md transition-colors cursor-pointer"
+            title="Acessar Especificação de Engenharia"
           >
-            <Code2 className="w-3.5 h-3.5 text-emerald-600" />
-            <span className="hidden sm:inline">Evidência</span>
+            <Cpu className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="hidden sm:inline">Arquitetura</span>
           </button>
         </div>
       </div>

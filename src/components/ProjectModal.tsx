@@ -3,8 +3,6 @@ import { Project } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
 import {
   X,
-  ExternalLink,
-  GitBranch,
   ShieldCheck,
   Cpu,
   Layers,
@@ -13,7 +11,6 @@ import {
   FileText,
   BarChart3,
   Server,
-  Database,
   Terminal,
 } from 'lucide-react';
 
@@ -31,7 +28,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   const { language } = useLanguage();
   const [activeTab, setActiveTab] = useState<'overview' | 'technical'>(initialTab);
 
-  // Sync tab if initialTab changes
   React.useEffect(() => {
     setActiveTab(initialTab);
   }, [initialTab, project]);
@@ -63,10 +59,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 }`}
               >
                 {project.truthStatus === 'implemented'
-                  ? 'Operacional / Implementado'
+                  ? (language === 'pt' ? 'Operacional em Produção' : language === 'es' ? 'Operativo en Producción' : 'Operational in Production')
                   : project.truthStatus === 'partial'
-                  ? 'Em Validação Contínua'
-                  : 'Especificação RFC'}
+                  ? (language === 'pt' ? 'Em Validação Contínua' : language === 'es' ? 'En Validación Continua' : 'Active Validation')
+                  : (language === 'pt' ? 'Especificação / RFC' : language === 'es' ? 'Especificación / RFC' : 'RFC Specification')}
               </span>
             </div>
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
@@ -77,18 +73,18 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 text-[#70706B] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-lg transition-colors"
+            className="p-2 text-[#70706B] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-lg transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Layer Tabs: Layer 2 vs Layer 3 */}
+        {/* Layer Tabs: Case Study vs Technical Spec */}
         <div className="px-6 py-2 bg-white border-b border-[#E2E8F0] flex items-center gap-2">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`px-4 py-2 text-xs font-medium rounded-md transition-colors ${
+            className={`px-4 py-2 text-xs font-medium rounded-md transition-colors cursor-pointer ${
               activeTab === 'overview'
                 ? 'bg-[#1A1A1A] text-white shadow-xs'
                 : 'text-[#555550] hover:text-[#1A1A1A] hover:bg-[#F4F4F1]'
@@ -99,25 +95,25 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
           <button
             onClick={() => setActiveTab('technical')}
-            className={`px-4 py-2 text-xs font-medium rounded-md transition-colors flex items-center gap-1.5 ${
+            className={`px-4 py-2 text-xs font-medium rounded-md transition-colors flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'technical'
                 ? 'bg-[#1A1A1A] text-white shadow-xs'
                 : 'text-[#555550] hover:text-[#1A1A1A] hover:bg-[#F4F4F1]'
             }`}
           >
-            <Terminal className="w-3.5 h-3.5 text-emerald-600" />
-            <span>{language === 'pt' ? '2. Evidência Técnica & Repositório' : language === 'es' ? '2. Evidencia Técnica y Repositorio' : '2. Engineering Evidence & Repo'}</span>
+            <Cpu className="w-3.5 h-3.5 text-emerald-600" />
+            <span>{language === 'pt' ? '2. Especificação de Engenharia & Arquitetura' : language === 'es' ? '2. Especificación de Ingeniería y Arquitectura' : '2. Engineering Specification & Architecture'}</span>
           </button>
         </div>
 
         {/* Modal Scrollable Content */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1">
           {activeTab === 'overview' ? (
-            /* LAYER 2: DEMONSTRATION & CASE STUDY */
+            /* LAYER 1: DEMONSTRATION & CASE STUDY */
             <div className="space-y-6">
               {/* Honest Scope Banner */}
               <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
-                <div className="text-xs font-mono text-[#70706B] uppercase mb-1 flex items-center gap-1.5">
+                <div className="text-xs font-mono text-[#70706B] uppercase mb-1 flex items-center gap-1.5 font-semibold">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                   <span>{language === 'pt' ? 'Escopo Operacional & Propósito' : language === 'es' ? 'Alcance Operativo y Propósito' : 'Operational Scope & Purpose'}</span>
                 </div>
@@ -125,8 +121,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   {project.honestScope}
                 </p>
                 {project.whatItProves && (
-                  <p className="text-xs text-[#555550] mt-2 pt-2 border-t border-[#F0EFEA] italic">
-                    <strong>{language === 'pt' ? 'O que este sistema comprova: ' : language === 'es' ? 'Lo que demuestra este sistema: ' : 'What it proves: '}</strong>
+                  <p className="text-xs text-[#555550] mt-2.5 pt-2.5 border-t border-[#F0EFEA] leading-relaxed">
+                    <strong className="text-[#1A1A1A]">{language === 'pt' ? 'O que este sistema comprova: ' : language === 'es' ? 'Lo que demuestra este sistema: ' : 'What it proves: '}</strong>
                     {project.whatItProves}
                   </p>
                 )}
@@ -135,7 +131,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               {/* Problem & Context Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
-                  <div className="text-xs font-mono text-[#70706B] uppercase mb-2 flex items-center gap-1.5">
+                  <div className="text-xs font-mono text-[#70706B] uppercase mb-2 flex items-center gap-1.5 font-semibold">
                     <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
                     <span>{language === 'pt' ? 'O Problema' : language === 'es' ? 'El Problema' : 'The Problem'}</span>
                   </div>
@@ -145,7 +141,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 </div>
 
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
-                  <div className="text-xs font-mono text-[#70706B] uppercase mb-2 flex items-center gap-1.5">
+                  <div className="text-xs font-mono text-[#70706B] uppercase mb-2 flex items-center gap-1.5 font-semibold">
                     <Layers className="w-3.5 h-3.5 text-blue-600" />
                     <span>{language === 'pt' ? 'Contexto de Aplicação' : language === 'es' ? 'Contexto de Aplicación' : 'Operational Context'}</span>
                   </div>
@@ -155,31 +151,31 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 </div>
               </div>
 
-              {/* Quantifiable Results & Metrics */}
+              {/* Quantifiable / Verified Results */}
               {project.results && project.results.length > 0 && (
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
-                  <div className="text-xs font-mono text-[#70706B] uppercase mb-4 flex items-center gap-1.5">
+                  <div className="text-xs font-mono text-[#70706B] uppercase mb-4 flex items-center gap-1.5 font-semibold">
                     <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>{language === 'pt' ? 'Métricas & Resultados Verificados' : language === 'es' ? 'Métricas y Resultados Verificados' : 'Verified Metrics & Outcomes'}</span>
+                    <span>{language === 'pt' ? 'Capacidades & Validações de Sistema' : language === 'es' ? 'Capacidades y Validaciones del Sistema' : 'System Capabilities & Validations'}</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {project.results.map((res, i) => (
-                      <div key={i} className="p-3 bg-[#FAF9F6] border border-[#F0EFEA] rounded-lg">
+                      <div key={i} className="p-3.5 bg-[#FAF9F6] border border-[#F0EFEA] rounded-lg">
                         <div className="text-xs text-[#70706B] font-mono">{res.metric}</div>
-                        <div className="font-serif text-2xl font-bold text-[#1A1A1A] my-1">
+                        <div className="font-serif text-xl font-bold text-[#1A1A1A] my-1">
                           {res.value}
                         </div>
-                        <div className="text-xs text-[#555550]">{res.description}</div>
+                        <div className="text-xs text-[#555550] leading-snug">{res.description}</div>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Architectural & Product Decisions */}
+              {/* Architectural & Engineering Decisions */}
               {project.decisions && project.decisions.length > 0 && (
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
-                  <div className="text-xs font-mono text-[#70706B] uppercase mb-3">
+                  <div className="text-xs font-mono text-[#70706B] uppercase mb-3 font-semibold">
                     {language === 'pt' ? 'Decisões Críticas de Engenharia' : language === 'es' ? 'Decisiones Críticas de Ingeniería' : 'Critical Engineering Decisions'}
                   </div>
                   <div className="space-y-3">
@@ -197,42 +193,78 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               <div className="flex justify-end pt-2">
                 <button
                   onClick={() => setActiveTab('technical')}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-mono font-medium text-[#1A1A1A] bg-white border border-[#D1D1CD] hover:border-[#1A1A1A] rounded-lg transition-colors shadow-xs"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-mono font-medium text-[#1A1A1A] bg-white border border-[#D1D1CD] hover:border-[#1A1A1A] rounded-lg transition-colors shadow-xs cursor-pointer"
                 >
-                  <Terminal className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{language === 'pt' ? 'Avançar para Camada de Engenharia & Repositório →' : language === 'es' ? 'Avanzar a Capa de Ingeniería y Repositorio →' : 'Expand to Engineering Layer & Repository →'}</span>
+                  <Cpu className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{language === 'pt' ? 'Avançar para Especificação de Engenharia →' : language === 'es' ? 'Avanzar a Especificación de Ingeniería →' : 'Expand to Engineering Specification →'}</span>
                 </button>
               </div>
             </div>
           ) : (
-            /* LAYER 3: ENGINEERING EVIDENCE & VERIFICATION */
+            /* LAYER 2: ENGINEERING SPECIFICATION & TOPOLOGY */
             <div className="space-y-6">
-              {/* Repository Truth Card */}
-              {project.repository && (
+              {/* Architecture Topology & Flow */}
+              {project.architecture && (
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F0EFEA]">
-                    <div>
-                      <div className="text-xs font-mono text-[#70706B] uppercase flex items-center gap-1.5 mb-1">
-                        <GitBranch className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>{language === 'pt' ? 'Repositório Público no GitHub' : language === 'es' ? 'Repositorio Público en GitHub' : 'Public GitHub Repository'}</span>
-                      </div>
-                      <div className="font-mono text-sm font-bold text-[#1A1A1A]">
-                        {project.repository.name}
-                      </div>
+                  <div className="text-xs font-mono text-[#70706B] uppercase mb-2 font-semibold">
+                    Topologia e Fluxo de Execução
+                  </div>
+                  <p className="text-xs text-[#555550] mb-3 leading-relaxed">
+                    {project.architecture.overview}
+                  </p>
+                  <div className="p-3.5 bg-[#1A1A1A] text-[#F4F4F1] font-mono text-xs rounded-lg overflow-x-auto">
+                    <code>{project.architecture.diagramText}</code>
+                  </div>
+                  {project.architecture.components && (
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      {project.architecture.components.map((comp, idx) => (
+                        <div key={idx} className="flex items-start gap-1.5 text-[#555550]">
+                          <span className="text-emerald-600 font-bold">›</span>
+                          <span>{comp}</span>
+                        </div>
+                      ))}
                     </div>
+                  )}
+                </div>
+              )}
 
-                    <a
-                      href={project.repository.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-mono text-white bg-[#1A1A1A] hover:bg-[#333330] rounded-lg transition-colors self-start sm:self-auto"
-                    >
-                      <span>Inspecionar no GitHub</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
+              {/* Architectural Coherence Audit */}
+              {project.realArchitectureVerification && (
+                <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-xs font-mono text-[#70706B] uppercase font-semibold">
+                      Auditoria de Coerência Arquitetural
+                    </div>
+                    <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      {project.realArchitectureVerification.coherenceScore}
+                    </span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-xs font-mono">
+                  <div className="space-y-2.5 text-xs">
+                    <div className="p-3 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
+                      <span className="font-semibold text-[#1A1A1A]">Documentado: </span>
+                      <span className="text-[#555550]">{project.realArchitectureVerification.documented}</span>
+                    </div>
+                    <div className="p-3 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
+                      <span className="font-semibold text-[#1A1A1A]">Implementado em Código: </span>
+                      <span className="text-[#555550]">{project.realArchitectureVerification.implemented}</span>
+                    </div>
+                    <div className="p-3 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
+                      <span className="font-semibold text-[#1A1A1A]">Declaração Pública: </span>
+                      <span className="text-[#555550]">{project.realArchitectureVerification.presentedOnSite}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Automated Test Suite & ADR References */}
+              {project.repository && (
+                <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
+                  <div className="text-xs font-mono text-[#70706B] uppercase mb-3 font-semibold">
+                    Validação e Governança Técnica
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
                     <div className="p-3 bg-[#FAF9F6] rounded-lg border border-[#F0EFEA]">
                       <div className="text-[#70706B] mb-1">Status da Suíte de Testes:</div>
                       <div className="text-emerald-700 font-semibold flex items-center gap-1.5">
@@ -242,17 +274,17 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     </div>
 
                     <div className="p-3 bg-[#FAF9F6] rounded-lg border border-[#F0EFEA]">
-                      <div className="text-[#70706B] mb-1">Pipeline CI/CD:</div>
+                      <div className="text-[#70706B] mb-1">Pipeline de Integração Contínua:</div>
                       <div className="text-[#1A1A1A] font-semibold flex items-center gap-1.5">
                         <Server className="w-3.5 h-3.5 text-blue-600" />
-                        <span>{project.repository.ciCdPipeline || 'GitHub Actions CI'}</span>
+                        <span>{project.repository.ciCdPipeline || 'Pipelines de CI Ativas'}</span>
                       </div>
                     </div>
                   </div>
 
                   {project.repository.adrReferences && project.repository.adrReferences.length > 0 && (
                     <div className="mt-4 pt-3 border-t border-[#F0EFEA]">
-                      <div className="text-xs font-mono text-[#70706B] mb-2">
+                      <div className="text-xs font-mono text-[#70706B] mb-2 font-semibold">
                         Architecture Decision Records (ADRs):
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -270,66 +302,12 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 </div>
               )}
 
-              {/* Architectural Verification (Documented vs Implemented vs Presented) */}
-              {project.realArchitectureVerification && (
-                <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="text-xs font-mono text-[#70706B] uppercase">
-                      Auditoria de Coerência Arquitetural
-                    </div>
-                    <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                      {project.realArchitectureVerification.coherenceScore}
-                    </span>
-                  </div>
-
-                  <div className="space-y-3 text-xs">
-                    <div className="p-2.5 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
-                      <span className="font-semibold text-[#1A1A1A]">Documentado: </span>
-                      <span className="text-[#555550]">{project.realArchitectureVerification.documented}</span>
-                    </div>
-                    <div className="p-2.5 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
-                      <span className="font-semibold text-[#1A1A1A]">Implementado no Código: </span>
-                      <span className="text-[#555550]">{project.realArchitectureVerification.implemented}</span>
-                    </div>
-                    <div className="p-2.5 bg-[#FAF9F6] rounded border border-[#F0EFEA]">
-                      <span className="font-semibold text-[#1A1A1A]">Apresentação Pública: </span>
-                      <span className="text-[#555550]">{project.realArchitectureVerification.presentedOnSite}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Architecture Diagram */}
-              {project.architecture && (
-                <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
-                  <div className="text-xs font-mono text-[#70706B] uppercase mb-2">
-                    Topologia e Fluxo de Execução
-                  </div>
-                  <p className="text-xs text-[#555550] mb-3">
-                    {project.architecture.overview}
-                  </p>
-                  <div className="p-3 bg-[#1A1A1A] text-[#F4F4F1] font-mono text-xs rounded-lg overflow-x-auto">
-                    <code>{project.architecture.diagramText}</code>
-                  </div>
-                  {project.architecture.components && (
-                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                      {project.architecture.components.map((comp, idx) => (
-                        <div key={idx} className="flex items-start gap-1.5 text-[#555550]">
-                          <span className="text-emerald-600 font-bold">›</span>
-                          <span>{comp}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
               {/* Real Technologies Substrate */}
               {project.realTechnologies && (
                 <div className="p-5 bg-white border border-[#E2E8F0] rounded-xl">
-                  <div className="text-xs font-mono text-[#70706B] uppercase mb-4 flex items-center gap-1.5">
+                  <div className="text-xs font-mono text-[#70706B] uppercase mb-4 flex items-center gap-1.5 font-semibold">
                     <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Stack de Tecnologias Reais em Produção</span>
+                    <span>Stack de Tecnologias em Produção</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
@@ -375,7 +353,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
               {/* Concrete Evidence Statement */}
               <div className="p-4 bg-[#FAF9F6] border border-[#E2E8F0] rounded-xl text-xs text-[#555550]">
-                <strong className="text-[#1A1A1A] font-mono">Fonte de Evidência Concreta: </strong>
+                <strong className="text-[#1A1A1A] font-mono">Fonte de Evidência: </strong>
                 <span>{project.evidence}</span>
               </div>
             </div>
@@ -387,12 +365,12 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           <div className="flex items-center gap-2">
             <span>ID: {project.id}</span>
             <span>·</span>
-            <span>Trimindslabs V3 Evidence Model</span>
+            <span>Trimindslabs Systems Architecture</span>
           </div>
 
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-md transition-colors"
+            className="px-4 py-2 text-xs font-medium text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-md transition-colors cursor-pointer"
           >
             Fechar
           </button>

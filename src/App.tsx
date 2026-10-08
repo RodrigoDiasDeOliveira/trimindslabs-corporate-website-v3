@@ -10,6 +10,7 @@ import { Hero } from './components/Hero';
 import { DomainOverview } from './components/DomainOverview';
 import { ProjectsSection } from './components/ProjectsSection';
 import { ArchitectureSection } from './components/ArchitectureSection';
+import { EngineeringDashboardPreview } from './components/EngineeringDashboardPreview';
 import { EngineeringDashboard } from './components/EngineeringDashboard';
 import { ArticlesSection } from './components/ArticlesSection';
 import { Footer } from './components/Footer';
@@ -23,6 +24,7 @@ export function AppContent() {
   const [projectModalTab, setProjectModalTab] = useState<'overview' | 'technical'>('overview');
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isGatesModalOpen, setIsGatesModalOpen] = useState(false);
+  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [activeDomainFilter, setActiveDomainFilter] = useState<string>('all');
 
   const handleSelectProject = (project: Project, initialTab: 'overview' | 'technical' = 'overview') => {
@@ -45,56 +47,56 @@ export function AppContent() {
     }
   };
 
-  const handleScrollToDashboard = () => {
-    const elem = document.getElementById('dashboard');
-    if (elem) {
-      elem.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleOpenDashboard = () => {
+    setIsDashboardOpen(true);
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F4F4F1] text-[#1A1A1A]">
-      {/* Sticky Top Bar Contract */}
+      {/* Top Bar Navigation */}
       <Navbar
-        onOpenDashboard={handleScrollToDashboard}
+        onOpenDashboard={handleOpenDashboard}
         onOpenGates={() => setIsGatesModalOpen(true)}
       />
 
-      {/* Main Content Sections */}
+      {/* Main Corporate Sections */}
       <main className="flex-1">
-        {/* Hero Section */}
+        {/* 1. Hero Section */}
         <Hero
           onExploreProjects={handleScrollToProjects}
-          onOpenDashboard={handleScrollToDashboard}
+          onOpenDashboard={handleOpenDashboard}
           onOpenGates={() => setIsGatesModalOpen(true)}
         />
 
-        {/* Non-Technical Understanding: 4 Functional Pillars */}
+        {/* 2. Corporate Domains & Core Capabilities */}
         <DomainOverview onSelectDomainFilter={handleSelectDomainFilter} />
 
-        {/* Progressive Disclosure: Projects & Case Studies (Layer 1) */}
+        {/* 3. Enterprise Systems & Solutions */}
         <ProjectsSection
           onSelectProject={handleSelectProject}
           activeDomainFilter={activeDomainFilter}
         />
 
-        {/* Transversal Systems Architecture */}
+        {/* 4. Transversal Systems Architecture */}
         <ArchitectureSection />
 
-        {/* The Fundamental Proof Layer: Engineering Dashboard */}
-        <EngineeringDashboard />
+        {/* 5. Engineering Transparency & Verification Preview */}
+        <EngineeringDashboardPreview
+          onOpenDashboard={handleOpenDashboard}
+          onOpenGates={() => setIsGatesModalOpen(true)}
+        />
 
-        {/* Research Papers & Verification Labs */}
+        {/* 6. Research Papers & Verification Labs */}
         <ArticlesSection onSelectArticle={setSelectedArticle} />
       </main>
 
-      {/* Editorial Footer */}
+      {/* Corporate Footer */}
       <Footer
         onOpenGates={() => setIsGatesModalOpen(true)}
-        onOpenDashboard={handleScrollToDashboard}
+        onOpenDashboard={handleOpenDashboard}
       />
 
-      {/* Modals for Progressive Disclosure (Layers 2, 3 and Audit) */}
+      {/* Modals & Overlays for Progressive Disclosure */}
       <ProjectModal
         project={selectedProject}
         initialTab={projectModalTab}
@@ -109,6 +111,11 @@ export function AppContent() {
       <GatesModal
         isOpen={isGatesModalOpen}
         onClose={() => setIsGatesModalOpen(false)}
+      />
+
+      <EngineeringDashboard
+        isOpen={isDashboardOpen}
+        onClose={() => setIsDashboardOpen(false)}
       />
     </div>
   );

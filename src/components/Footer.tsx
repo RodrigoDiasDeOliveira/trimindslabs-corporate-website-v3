@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { ExternalLink, ShieldCheck, Mail, GitBranch } from 'lucide-react';
+import { ShieldCheck, Mail, Terminal } from 'lucide-react';
 
 interface FooterProps {
   onOpenGates: () => void;
@@ -8,26 +8,22 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenGates, onOpenDashboard }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <footer className="bg-white border-t border-[#E2E8F0] pt-16 pb-12 text-[#1A1A1A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-          {/* Col 1: Brand & Philosophy */}
-          <div className="md:col-span-2 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {/* Col 1: Brand & Positioning */}
+          <div className="space-y-4">
             <span className="font-serif text-2xl font-bold tracking-tight text-[#1A1A1A]">
               Trimindslabs
             </span>
-            <p className="text-sm text-[#555550] max-w-md leading-relaxed">
-              {language === 'pt'
-                ? 'Engenharia de sistemas inteligentes com processamento determinístico, proveniência de citações imutável e separação estrita entre estágio de implementação e comprovação operacional.'
-                : language === 'es'
-                ? 'Ingeniería de sistemas inteligentes con procesamiento determinista, procedencia de citas inmutable y separación estricta entre implementación y comprobación.'
-                : 'Engineering intelligent systems with deterministic processing, immutable citation provenance, and strict separation between implementation stage and operational evidence.'}
+            <p className="text-sm text-[#555550] leading-relaxed">
+              {t('footer.positioning')}
             </p>
-            <div className="flex items-center gap-4 text-xs font-mono text-[#70706B] pt-2">
-              <span className="flex items-center gap-1.5 text-emerald-700">
+            <div className="flex items-center gap-3 text-xs font-mono text-[#70706B] pt-1">
+              <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>11 Gates Auditados</span>
               </span>
@@ -36,104 +32,87 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGates, onOpenDashboard }) 
             </div>
           </div>
 
-          {/* Col 2: Navigation & Proof */}
+          {/* Col 2: Navigation & Engineering State */}
           <div>
             <div className="font-mono text-xs text-[#70706B] uppercase mb-3 font-semibold">
-              Camadas de Informação
+              {language === 'pt' ? 'Navegação Corporativa' : language === 'es' ? 'Navegación Corporativa' : 'Corporate Navigation'}
             </div>
             <ul className="space-y-2 text-xs font-mono text-[#4A4A45]">
               <li>
                 <a href="#overview" className="hover:text-black transition-colors">
-                  1. Website (Explica)
+                  {t('nav.home', 'Visão Geral')}
                 </a>
               </li>
               <li>
                 <a href="#projects" className="hover:text-black transition-colors">
-                  2. Case Studies (Demonstra)
+                  {t('nav.aiSystems', 'Sistemas & Produtos')}
                 </a>
               </li>
               <li>
-                <button onClick={onOpenDashboard} className="hover:text-black text-left transition-colors">
-                  3. Dashboard (Comprova)
-                </button>
+                <a href="#architecture" className="hover:text-black transition-colors">
+                  {t('nav.engineering', 'Arquitetura de Sistemas')}
+                </a>
               </li>
               <li>
-                <a
-                  href="https://github.com/RodrigoDiasDeOliveira"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-black inline-flex items-center gap-1 transition-colors"
+                <a href="#research" className="hover:text-black transition-colors">
+                  {t('nav.research', 'Pesquisa, Artigos & Labs')}
+                </a>
+              </li>
+              <li className="pt-1">
+                <button
+                  onClick={onOpenDashboard}
+                  className="hover:text-black text-left transition-colors font-semibold text-emerald-800 inline-flex items-center gap-1.5 cursor-pointer"
                 >
-                  <span>4. GitHub (Inspeciona)</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+                  <Terminal className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{t('nav.dashboardCta', 'Verificar Estado de Engenharia')}</span>
+                </button>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Repositórios Oficiais & Contato */}
+          {/* Col 3: Contact & Data Sovereignty */}
           <div>
             <div className="font-mono text-xs text-[#70706B] uppercase mb-3 font-semibold">
-              Repositórios &amp; Contato
+              {t('footer.contact', 'Contato Técnico & Comercial')}
             </div>
-            <ul className="space-y-2 text-xs font-mono text-[#4A4A45]">
-              <li>
-                <a
-                  href="https://github.com/RodrigoDiasDeOliveira/Trusted-Compliance-Agent"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-black truncate block"
+            <div className="space-y-3 text-xs font-mono text-[#4A4A45]">
+              <a
+                href="mailto:contato@trimindslabs.com"
+                className="inline-flex items-center gap-1.5 text-xs text-[#1A1A1A] font-semibold hover:underline"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>contato@trimindslabs.com</span>
+              </a>
+              <p className="text-[#70706B] leading-relaxed">
+                {t('footer.jurisdiction')}
+              </p>
+              <div className="pt-1">
+                <button
+                  onClick={onOpenGates}
+                  className="inline-flex items-center gap-1.5 text-xs text-[#1A1A1A] border border-[#D1D1CD] rounded px-2.5 py-1 hover:border-[#1A1A1A] transition-colors cursor-pointer"
                 >
-                  Trusted-Compliance-Agent
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/RodrigoDiasDeOliveira/Trimindslabs-Geo-AI"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-black truncate block"
-                >
-                  Trimindslabs-Geo-AI
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/RodrigoDiasDeOliveira/TLP-Trimindslabs-Logistics-Platform"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-black truncate block"
-                >
-                  TLP-Logistics-Platform
-                </a>
-              </li>
-              <li className="pt-2">
-                <a
-                  href="mailto:contato@trimindslabs.com"
-                  className="inline-flex items-center gap-1.5 text-xs text-[#1A1A1A] font-semibold hover:underline"
-                >
-                  <Mail className="w-3.5 h-3.5" />
-                  <span>contato@trimindslabs.com</span>
-                </a>
-              </li>
-            </ul>
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  <span>{t('nav.gatesBtn', 'Auditoria: 11 Gates')}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Bottom Sub-bar */}
         <div className="pt-8 border-t border-[#F0F0EC] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#70706B]">
           <div>
-            &copy; {new Date().getFullYear()} Trimindslabs. Todos os direitos reservados.
+            &copy; {new Date().getFullYear()} Trimindslabs. {t('footer.rights', 'Todos os direitos reservados.')}
           </div>
           <div className="flex items-center gap-3">
+            <span>Trimindslabs Governance Standard</span>
+            <span>·</span>
             <button
               onClick={onOpenGates}
-              className="hover:text-[#1A1A1A] transition-colors underline"
+              className="hover:text-[#1A1A1A] transition-colors underline cursor-pointer"
             >
-              Verificar Gates de Produção
+              Auditoria de Release
             </button>
-            <span>·</span>
-            <span>V3 Production Architecture</span>
           </div>
         </div>
       </div>
