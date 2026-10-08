@@ -145,199 +145,142 @@ export interface ArchitecturePillar {
 const PROJECTS_PT: Project[] = [
   {
     id: "trusted-compliance-agent",
-    title: "Trusted Compliance Agent",
-    subtitle: "Auditoria Regulatória Determinística & Extração Jurídica com Proveniência",
-    tag: "Regulatory AI / Enterprise Retrieval",
-    sector: "Conformidade Regulatória & Jurídica Europeia",
+    title: "Compliance Evidence Engine",
+    subtitle: "Evidência Documental, Reranking e Decisão Tri-State Auditável",
+    tag: "Compliance AI / Evidence Retrieval",
+    sector: "Conformidade Regulatória e Evidência Documental",
     domain: "compliance",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "deployed",
-    honestScope: "Desenvolvido para conformidade legal corporativa com verificação rigorosa de proveniência por offset de caracteres e gates de fallback determinísticos.",
-    whatItProves: "Demonstra que a Trimindslabs projeta sistemas de recuperação verificáveis para conformidade jurídica onde a tolerância a citações incorretas é nula.",
-    problem: "Departamentos jurídicos e de compliance enfrentam semanas na análise de diretivas multijurisdicionais. Modelos de IA generativa convencionais produzem citações legais aparentemente plausíveis, mas sem correspondência exata nos textos normativos oficiais, gerando risco sob o EU AI Act.",
-    context: "Operando sob os critérios do EU AI Act para sistemas de alto risco, o sistema exige proveniência documental auditável até caixas delimitadoras de caracteres e fingerprints criptográficos por parágrafo.",
+    honestScope: "Sistema orientado a evidências que ingere documentos, preserva proveniência SHA-256, recupera cláusulas, faz reranking e decide explicitamente entre TRUSTED, GENERATED e ABSTAIN.",
+    whatItProves: "Demonstra engenharia de pipelines de compliance baseados em evidência, com recuperação auditável e recusa explícita quando a evidência é insuficiente.",
+    problem: "Sistemas de compliance precisam distinguir evidência documental suficiente de respostas apenas plausíveis.",
+    context: "A implementação atual é centrada em documentos e evidências, separada da geração livre e com estados de decisão configuráveis.",
     architecture: {
-      overview: "Pipeline de verificação em três camadas: Ingestão e segmentação lexical/densa → Reranking neural com modelo cross-encoder → Agente de síntese com esquema JSON rígido e validação de proveniência.",
+      overview: "Documento → Parser/Clause Chunker → Proveniência SHA-256 → Embeddings 384d → PostgreSQL/pgvector HNSW → Retrieval → CrossEncoder → Threshold Gate → TRUSTED / GENERATED / ABSTAIN.",
       components: [
-        "Mecanismo de Ingestão de Documentos e Deconstrução Estruturada de PDFs",
-        "Índice de Proveniência Determinística com Validação SHA-256 por Bloco",
-        "Agente de Verificação em Duplo Passo com Fallback de Cruzamento Textual",
-        "Camada de Execução Isolada em Contêineres de Alta Segurança"
+        "Ingestão de PDF, DOCX e TXT",
+        "Fingerprint determinístico SHA-256 por evidência",
+        "PostgreSQL 16 + pgvector HNSW",
+        "CrossEncoder ms-marco-MiniLM-L-6-v2",
+        "Gate de confiança com três estados"
       ],
-      diagramText: "Ingestão Documental ➔ Segmentação Estruturada ➔ Busca Híbrida (Dense+BM25) ➔ Reranker Neural ➔ Agente com Restrição de Esquema ➔ Certificado de Auditoria"
+      diagramText: "Documento ➔ Chunking ➔ SHA-256 ➔ Embedding ➔ pgvector HNSW ➔ Reranking ➔ Threshold Gate ➔ TRUSTED / GENERATED / ABSTAIN"
     },
     realArchitectureVerification: {
-      documented: "Recuperação em duas etapas com reranker neural e aplicação estrita de contratos Pydantic V2.",
-      implemented: "Serviço FastAPI com índice esparso BM25 + vetores densos Qdrant, fusão Reciprocal Rank Fusion e modelo BGE-Reranker-Large.",
-      presentedOnSite: "Descrito com precisão como Python/FastAPI + Qdrant + BGE-Reranker, sem tecnologias não evidenciadas.",
-      coherenceScore: "100% Coerente"
+      documented: "Pipeline document-grounded com recuperação em duas etapas, reranking e decisão tri-state.",
+      implemented: "FastAPI + PostgreSQL/pgvector HNSW + embeddings 384d + CrossEncoder ms-marco-MiniLM-L-6-v2 + estados TRUSTED/GENERATED/ABSTAIN.",
+      presentedOnSite: "Arquitetura alinhada ao repositório atual; sem afirmar produção plena ou tecnologias da geração anterior.",
+      coherenceScore: "Alinhado ao repositório atual"
     },
     realTechnologies: {
-      languages: ["Python 3.12"],
-      frameworks: ["FastAPI", "Pydantic V2"],
-      libraries: ["BGE-Reranker-Large", "HuggingFace Transformers", "PyPDF / PDFPlumber"],
-      databases: ["Qdrant Vector Database", "SQLite (Trilha de auditoria)"],
-      cloud: ["Google Cloud Run (Região Europeia)", "Google Cloud Storage"],
-      iac: ["Docker multi-stage builds", "OpenTofu / Terraform Blueprints"],
-      apis: ["REST OpenAPI v3", "Server-Sent Events (SSE)"],
-      testing: ["Pytest (Testes unitários e de integração)", "Validação baseada em propriedades"],
-      ciCd: ["GitHub Actions (Lint, Typecheck, Auditoria de segurança)"],
-      observability: ["OpenTelemetry Python SDK", "Logs JSON estruturados"]
+      languages: ["Python", "TypeScript"],
+      frameworks: ["FastAPI", "React 19", "Vite", "Tailwind CSS v4"],
+      libraries: ["pgvector", "CrossEncoder", "Lucide"],
+      databases: ["PostgreSQL 16 + pgvector"],
+      cloud: ["Google Cloud Run", "Cloud SQL PostgreSQL/pgvector"],
+      apis: ["REST API", "/v1/compliance/evaluate", "/v1/documents/upload", "/v1/compliance/feedback"],
+      testing: ["Pytest", "TypeScript build"],
+      ciCd: ["GitHub Actions"]
     },
     repository: {
-      name: "RodrigoDiasDeOliveira/Trusted-Compliance-Agent",
+      name: "RodrigoDiasDeOliveira/New-Trusted-Compliance",
       isPrivate: false,
-      visibilityBadge: "Repositório Público",
-      testSuiteStatus: "Suíte automatizada com validação de citações e cobertura de regras",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Hybrid Search over Dense-Only", "ADR-004: Character-Offset Verification Protocol"]
+      visibilityBadge: "Repositório",
+      testSuiteStatus: "Frontend build + testes backend",
+      ciCdPipeline: "GitHub Actions"
     },
     engineering: [
-      "Implementação de loop de verificação que rejeita respostas que não apresentem correspondência exata contra tokens do documento primário.",
-      "Pipeline assíncrona com processamento de diretivas extensas em streaming contínuo.",
-      "Rastreamento distribuído via OpenTelemetry para auditoria de confiança de cada cláusula extraída."
+      "Decisão tri-state explícita com limiares configuráveis.",
+      "ABSTAIN para evidência insuficiente ou consulta não suportada.",
+      "Proveniência determinística por fingerprints SHA-256."
     ],
     technology: [
-      "Python 3.12 / FastAPI",
-      "Qdrant Vector DB",
-      "BGE-Reranker-Large",
-      "Pydantic V2",
-      "Docker / Cloud Run (EU)",
-      "OpenTelemetry"
+      "Python / FastAPI",
+      "React 19 / TypeScript",
+      "PostgreSQL + pgvector HNSW",
+      "CrossEncoder ms-marco-MiniLM-L-6-v2",
+      "Cloud Run + Cloud SQL"
     ],
-    evolution: "Evoluiu de um assistente de busca jurídica para um agente de conformidade autoregulado que gera relatórios estruturados com proveniência criptográfica rastreável.",
-    challenges: [
-      "Normalização de diários oficiais europeus em múltiplos idiomas e diagramações de colunas complexas.",
-      "Isolamento entre diretivas comunitárias e transposições normativas de estados-membros.",
-      "Garantia de latência previsível em corpora regulatórios com centenas de páginas."
-    ],
-    decisions: [
-      {
-        decision: "Verificação estrita por offset de caracteres antes da apresentação de citações.",
-        rationale: "Garante que o auditor legal possa inspecionar o documento original imediatamente com correspondência exata."
-      },
-      {
-        decision: "Substituição de interfaces conversacionais genéricas por tabelas de conformidade estruturadas.",
-        rationale: "Departamentos jurídicos necessitam de relatórios de risco e diffs rastreáveis, não de diálogos informais."
-      }
-    ],
+    evolution: "Evoluiu para um Evidence Engine centrado em proveniência, inspeção de evidência e decisão auditável.",
     results: [
       {
-        metric: "Proveniência Documental",
-        value: "Mapeamento Exato",
-        description: "Associa cada afirmação diretamente a um intervalo de caracteres no documento primário"
+        metric: "Decisão",
+        value: "TRUSTED / GENERATED / ABSTAIN",
+        description: "Estados explícitos conforme a confiança e a evidência disponível"
       },
       {
-        metric: "Contratos de Esquema",
-        value: "Pydantic V2",
-        description: "Validação estruturada de tipos eliminando respostas fora de formato"
-      },
-      {
-        metric: "Recuperação Híbrida",
-        value: "BM25 + Qdrant",
-        description: "Fusão de busca léxica por termos técnicos com busca vetorial por contexto"
+        metric: "Proveniência",
+        value: "SHA-256",
+        description: "Fingerprint determinístico associado ao conteúdo ingerido"
       }
     ],
-    evidence: "Serviço implementado com testes automatizados, especificações ADR e ambientes conteinerizados reproduzíveis."
+    evidence: "Repositório atual, pipeline de testes e deployment Cloud Run/Cloud SQL usados para validação do ambiente real.",
+    evidenceSource: "New-Trusted-Compliance / README e runtime implantado",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Implantado para validação em ambiente real; não apresentado como produção plenamente madura.",
+    deployment: {
+      target: "Google Cloud Run + Cloud SQL PostgreSQL/pgvector",
+      url: "https://compliance-evidence-engine-api-72mbkllrqa-ew.a.run.app",
+      status: "Deployed / validation"
+    }
   },
   {
     id: "triminds-geo-ai",
     title: "Trimindslabs Geo-AI (V4)",
-    subtitle: "Vetorização Geoespacial de Alta Resolução & Sensoriamento Remoto",
+    subtitle: "Plataforma Geoespacial de IA para Earth Observation",
     tag: "Geospatial AI / Remote Sensing",
-    sector: "Observação da Terra, Infraestrutura & Meio Ambiente",
+    sector: "Observação da Terra & Dados Geoespaciais",
     domain: "geospatial",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "deployed",
-    honestScope: "Plataforma para ingestão contínua de imagens orbitais multiespectrais Sentinel-2 L2A, decomposição em tiles espaciais e indexação topológica.",
-    whatItProves: "Demonstra competência técnica em processamento de dados geoespaciais de alta dimensão, transformações raster/vetor e modelos de segmentação em nuvem.",
-    problem: "A inspeção manual de imagens de satélite em grandes extensões territoriais é demorada e custosa para operadoras de infraestrutura e órgãos ambientais, gerando atrasos na identificação de alterações de solo e degradação de ativos.",
-    context: "Processamento de imagens reais Sentinel-2 da Agência Espacial Europeia (ESA), calibrando bandas multiespectrais com correção de distorções geométricas e atmosféricas.",
+    honestScope: "Plataforma modular para workflows de Earth Observation, ML geoespacial, FastAPI e deployment Cloud Run.",
+    whatItProves: "Demonstra deployment operacional de uma plataforma Geo-AI e separação entre demonstração local e serviço cloud.",
+    problem: "Workflows de observação da Terra exigem integração entre fontes geoespaciais, representação, ML e serving.",
+    context: "A versão V4 está online em Google Cloud Run europe-west1; o repositório mantém também uma demo local determinística com dados RGB sintéticos.",
     architecture: {
-      overview: "Malha de inferência distribuída por tiles: Ingestão de GeoTIFFs orbitais → Normalização de bandas multiespectrais (12 canais) → Modelos de segmentação visual (PyTorch/TorchGeo) → Vetorização de polígonos → Indexação topológica no PostGIS.",
-      components: [
-        "Pool de Workers de Tiling GeoTIFF com GDAL e Rasterio",
-        "Pipeline de Normalização Espectral e Correção Atmosférica",
-        "Indexador Topológico Espacial em PostgreSQL 16 com PostGIS 3.4",
-        "Mecanismo Diferencial de Detecção de Mudanças Temporais"
-      ],
-      diagramText: "Feed Sentinel-2 ➔ Ortoretificação ➔ Grade Quadkey ➔ Inferência Multiespectral ➔ Vetorização GeoJSON ➔ Índice PostGIS ➔ Webhook de Eventos"
+      overview: "Earth Observation Sources → Provider Layer → Ingestion/Validation → Representation → Deep Learning / Vector Search → FastAPI → Cloud Run.",
+      components: ["Provider layer", "Ingestion/validation", "Representation", "Deep Learning", "FastAPI", "Cloud Run"],
+      diagramText: "EO Sources ➔ Provider Layer ➔ Ingestion ➔ Representation ➔ ML/Search ➔ FastAPI ➔ Cloud Run"
     },
     realArchitectureVerification: {
-      documented: "Decomposição raster em quadkeys com inferência paralela em PyTorch e indexação topológica PostGIS.",
-      implemented: "Python 3.11 com GDAL, Rasterio, Shapely, PyTorch (TorchGeo), fila Celery/Redis, PostgreSQL 16 + PostGIS 3.4.",
-      presentedOnSite: "Descrito com precisão técnica usando GDAL, PostGIS e PyTorch sobre imagens públicas Sentinel-2.",
-      coherenceScore: "100% Coerente"
+      documented: "Provider-oriented geospatial AI architecture with operational Cloud Run v4.",
+      implemented: "FastAPI service with configurable model layer and Cloud Run v4 deployment; local deterministic demo path.",
+      presentedOnSite: "Alinhado ao README atual, sem transformar a demo sintética em benchmark de satélite real.",
+      coherenceScore: "Alinhado ao README atual"
     },
     realTechnologies: {
-      languages: ["Python 3.11", "SQL (Extensões PostGIS)"],
-      frameworks: ["FastAPI", "TorchGeo / PyTorch"],
-      libraries: ["GDAL / OGR", "Rasterio", "Shapely", "GeoPandas", "NumPy / SciPy"],
-      databases: ["PostgreSQL 16 com PostGIS 3.4", "Redis (Cache de tiles e filas)"],
-      cloud: ["Google Cloud Run (GPUs NVIDIA)", "Google Cloud Storage"],
-      iac: ["Docker com binários C++ do GDAL compilados", "Terraform GCP"],
-      apis: ["Endpoints conformes com padrões OGC", "GeoJSON Vector Tiles"],
-      testing: ["Pytest com suíte de geometria espacial", "Testes de tolerância raster"],
-      ciCd: ["GitHub Actions com cache de contêineres GDAL"],
-      observability: ["Métricas Prometheus", "Dashboards espaciais"]
+      languages: ["Python"],
+      frameworks: ["FastAPI", "PyTorch"],
+      libraries: ["ResNet", "EfficientNet", "Vision Transformers", "MLflow"],
+      cloud: ["Google Cloud Run", "Google Cloud"],
+      apis: ["FastAPI"],
+      testing: ["Pytest", "ruff", "pre-commit"]
     },
     repository: {
       name: "RodrigoDiasDeOliveira/Trimindslabs-Geo-AI",
       isPrivate: false,
-      visibilityBadge: "Repositório Público",
-      testSuiteStatus: "Suíte automatizada com checagens matemáticas de raster e topologia",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-002: Dynamic Quadkey Tiling vs Arbitrary Bounding Box", "ADR-005: FP16 Edge Inference"]
+      visibilityBadge: "Repositório",
+      testSuiteStatus: "Quality checks and pytest"
     },
     engineering: [
-      "Arquitetura de processamento paralelo para rasters multiespectrais de 12 bandas com resolução de 10m/pixel.",
-      "Algoritmos de refinamento de bordas sub-pixel para simplificação de polígonos mantendo fidelidade geométrica.",
-      "Filtros automatizados para descarte de nuvens e interferências atmosféricas na análise de vegetação."
+      "Separação entre deployment operacional e demo local.",
+      "Model factory configurável para múltiplas arquiteturas.",
+      "Maturidade operacional explicitamente separada de implementação."
     ],
-    technology: [
-      "Python 3.11 / PyTorch",
-      "PostgreSQL / PostGIS",
-      "GDAL / Rasterio / Shapely",
-      "Redis Distributed Queue",
-      "GCP Cloud Run GPUs",
-      "GeoJSON / MapLibre"
-    ],
-    evolution: "Evoluiu de protótipos de classificação estática de tiles para uma plataforma contínua de monitoramento de mudanças temporais baseada em dados Sentinel-2 reais.",
-    challenges: [
-      "Variações sazonais de reflectância atmosférica que impactam índices espectrais.",
-      "Manejo de matrizes multicanal de 16-bits com alta demanda de memória.",
-      "Garantia de continuidade topológica nas bordas de partição de tiles adjacentes."
-    ],
-    decisions: [
-      {
-        decision: "Adoção de grade quadkey dinâmica em vez de cortes por caixas delimitadoras arbitrárias.",
-        rationale: "Possibilita cacheamento hierárquico consistente e elimina distorções visuais nas junções de tiles."
-      },
-      {
-        decision: "Inferência com pesos quantizados FP16 em nós de nuvem.",
-        rationale: "Otimiza o uso de memória GPU em contêineres Cloud Run mantendo a fidelidade das predições de cobertura."
-      }
-    ],
-    results: [
-      {
-        metric: "Resolução Nativa",
-        value: "10m / pixel",
-        description: "Processamento de bandas Sentinel-2 L2A preservando resolução física nativa"
-      },
-      {
-        metric: "Particionamento",
-        value: "Quadkey Piramidal",
-        description: "Divisão hierárquica que viabiliza processamento paralelo sem artefatos de borda"
-      },
-      {
-        metric: "Ambiente Operacional",
-        value: "GCP Cloud Run",
-        description: "Execução em contêineres com PostGIS na região europe-west1"
-      }
-    ],
-    evidence: "Código e contêineres com suporte a GDAL/PostGIS; validação com dados reais da constelação Sentinel-2."
+    technology: ["Python", "FastAPI", "PyTorch", "Google Cloud Run", "MLflow"],
+    evolution: "Expansão contínua de providers, representações e workloads geoespaciais avançados.",
+    evidence: "Cloud Run v4 online e README atual com modelo de maturidade operacional.",
+    evidenceSource: "Trimindslabs-Geo-AI / README e deployment Cloud Run v4",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Operational — Cloud Run v4.",
+    deployment: {
+      target: "Google Cloud Run / europe-west1",
+      url: "https://triminds-geo-ai-v4-1091629879450.europe-west1.run.app/",
+      status: "Operational"
+    }
   },
   {
     id: "triminds-logistics-platform",
@@ -439,496 +382,220 @@ const PROJECTS_PT: Project[] = [
   },
   {
     id: "triminds-security-layer",
-    title: "Trimindslabs Security Platform",
-    subtitle: "Identidade Corporativa, Arquitetura Hexagonal & Políticas Zero Trust",
-    tag: "Security Engineering / Hexagonal Architecture",
-    sector: "Cibersegurança Corporativa & Infraestrutura de Acesso",
-    domain: "platform",
-    category: "what-we-built",
-    truthStatus: "implemented",
-    operationalStage: "deployed",
-    honestScope: "Camada de segurança centralizada implementada com princípios de arquitetura hexagonal (Ports and Adapters) e controle de acesso baseado em atributos (ABAC).",
-    whatItProves: "Demonstra rigor em engenharia de segurança, desacoplamento arquitetural e proteção de fronteiras de domínio em sistemas empresariais.",
-    problem: "Sistemas monolíticos com regras de autorização espalhadas em controladores e consultas SQL criam brechas graves de privilégios e impedem auditorias de conformidade.",
-    context: "Projetado como módulo central para autenticação, controle de permissões e validação criptográfica de tokens em todos os serviços do ecossistema.",
-    architecture: {
-      overview: "Arquitetura Hexagonal: Núcleo de domínio imutável → Portas de entrada e saída → Adaptadores para Open Policy Agent (OPA), cofres criptográficos e persistência PostgreSQL.",
-      components: [
-        "Núcleo de Domínio de Identidade e Políticas de Acesso",
-        "Adaptador OPA para Avaliação Declarativa de Regras (Rego)",
-        "Motor de Validação Criptográfica de Tokens e Sessões",
-        "Suíte de Testes Arquiteturais com ArchUnit"
-      ],
-      diagramText: "Requisição ➔ Filtro de Segurança ➔ Porta de Entrada ➔ Núcleo de Domínio ➔ Avaliador OPA ➔ Porta de Saída ➔ Banco de Políticas"
-    },
-    realArchitectureVerification: {
-      documented: "Arquitetura hexagonal para segurança corporativa com Spring Boot e validação de regras de acesso.",
-      implemented: "Java 21, Spring Boot 3.x, ArchUnit para verificação de barreiras arquiteturais, integração OPA, Docker.",
-      presentedOnSite: "Arquitetura e tecnologias fiéis ao código real.",
-      coherenceScore: "100% Coerente"
-    },
-    realTechnologies: {
-      languages: ["Java 21", "Rego (Linguagem OPA)"],
-      frameworks: ["Spring Boot 3.x", "Open Policy Agent"],
-      libraries: ["ArchUnit", "Nimbus JOSE+JWT", "Lombok"],
-      databases: ["PostgreSQL", "In-memory Policy Cache"],
-      cloud: ["Docker Isolated Enclaves"],
-      iac: ["Dockerfile multi-stage"],
-      apis: ["REST Security Policy API"],
-      testing: ["ArchUnit Architecture Tests", "JUnit 5 Security Verification"],
-      ciCd: ["GitHub Actions (Maven Build, ArchUnit enforcement)"],
-      observability: ["Structured Security Audit Logging"]
-    },
-    repository: {
-      name: "RodrigoDiasDeOliveira/Trimindslabs-Security-Layer",
-      isPrivate: false,
-      visibilityBadge: "Repositório Público",
-      testSuiteStatus: "Testes arquiteturais com ArchUnit garantindo isolamento estrito de camadas",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Hexagonal Ports and Adapters", "ADR-002: Declarative Policies with OPA"]
-    },
-    engineering: [
-      "Garantia automatizada via ArchUnit de que o núcleo de domínio não possui referências a frameworks externos ou bancos.",
-      "Isolamento da lógica de autorização em políticas declarativas avaliadas sem acoplamento rígido.",
-      "Trilhas de auditoria imutáveis para qualquer mutação de privilégio administrativo."
-    ],
-    technology: [
-      "Java 21 / Spring Boot 3.x",
-      "Arquitetura Hexagonal",
-      "Open Policy Agent (OPA)",
-      "Zero Trust Architecture",
-      "PostgreSQL",
-      "ArchUnit"
-    ],
-    evolution: "Evoluiu de um filtro básico de autenticação JWT para uma plataforma completa de segurança baseada em portas, adaptadores e políticas declarativas OPA.",
-    challenges: [
-      "Preservação rigorosa da pureza do modelo de domínio frente a conveniências de frameworks.",
-      "Garantia de que consultas de autorização complexas ocorram em sub-milissegundos.",
-      "Compatibilidade entre diferentes provedores de identidade legados."
-    ],
-    decisions: [
-      {
-        decision: "Aplicação estrita do padrão Portas e Adaptadores com validação via ArchUnit no build.",
-        rationale: "Impede degradação arquitetural ao longo do tempo causada por importações indevidas."
-      },
-      {
-        decision: "Desacoplamento do motor de políticas do código da aplicação.",
-        rationale: "Possibilita atualizar regras de segurança sem necessidade de recompilar e reimplantar os serviços."
-      }
-    ],
-    results: [
-      {
-        metric: "Isolamento Estrutural",
-        value: "Hexagonal Puro",
-        description: "Zero dependências externas no núcleo de domínio validadas no pipeline CI"
-      },
-      {
-        metric: "Auditoria Automatizada",
-        value: "ArchUnit Rules",
-        description: "Testes automáticos que falham o build se camadas forem violadas"
-      },
-      {
-        metric: "Políticas Declarativas",
-        value: "Regras OPA",
-        description: "Governança unificada de acesso baseada em atributos"
-      }
-    ],
-    evidence: "Repositório público com código Java, testes ArchUnit e especificações arquiteturais documentadas."
-  },
-  {
-    id: "triminds-ai-cloud-administrator",
-    title: "Trimindslabs AI Cloud Administrator",
-    subtitle: "Orquestrador Multi-Cloud Baseado no Model Context Protocol (MCP)",
-    tag: "Multi-Cloud MCP / Infrastructure Agent",
-    sector: "Infraestrutura Multi-Nuvem & Engenharia de Plataforma",
-    domain: "platform",
-    category: "what-we-built",
-    truthStatus: "implemented",
-    operationalStage: "deployed",
-    honestScope: "Servidor Model Context Protocol (MCP) que expõe ferramentas controladas e seguras para automação de tarefas em nuvens AWS, GCP e Azure.",
-    whatItProves: "Demonstra adoção pioneira de padrões modernos de interoperabilidade de agentes (MCP) com foco em segurança de credenciais e execução restrita.",
-    problem: "Engenheiros de plataforma perdem tempo com tarefas repetitivas em múltiplos painéis de nuvem, enquanto scripts descontrolados representam riscos severos de segurança operacional.",
-    context: "Criado para integrar assistentes de desenvolvimento com a infraestrutura real de forma segura, com confirmação obrigatória para ações destrutivas.",
-    architecture: {
-      overview: "Arquitetura baseada em MCP: Cliente MCP (Claude / IDE) ➔ Protocolo JSON-RPC ➔ Servidor FastMCP ➔ Cofre de Credenciais Keyring ➔ Adaptadores de Nuvem (boto3, google-cloud, azure-mgmt).",
-      components: [
-        "Servidor MCP construído com a biblioteca FastMCP",
-        "Módulo de Cofre de Credenciais Criptográfico (Keyring)",
-        "Adaptadores Modulares para AWS, Google Cloud e Azure",
-        "Camada de Verificação e Política para Ações Sensíveis"
-      ],
-      diagramText: "Cliente MCP ➔ Protocolo JSON-RPC ➔ Servidor FastMCP ➔ Filtro de Segurança ➔ SDKs Multi-Cloud ➔ Nuvem Alvo"
-    },
-    realArchitectureVerification: {
-      documented: "Servidor MCP para administração multi-cloud em Python com FastMCP.",
-      implemented: "Python 3.11+, FastMCP, Typer CLI, bibliotecas oficiais de nuvem, Docker.",
-      presentedOnSite: "Totalmente alinhado à implementação real.",
-      coherenceScore: "100% Coerente"
-    },
-    realTechnologies: {
-      languages: ["Python 3.11+"],
-      frameworks: ["FastMCP", "Typer CLI", "FastAPI"],
-      libraries: ["boto3 (AWS)", "google-cloud-sdk", "azure-mgmt", "keyring"],
-      databases: ["Armazenamento local criptografado"],
-      cloud: ["AWS", "Google Cloud Platform", "Microsoft Azure"],
-      iac: ["Dockerfile"],
-      apis: ["Model Context Protocol (MCP) JSON-RPC"],
-      testing: ["Pytest"],
-      ciCd: ["GitHub Actions"],
-      observability: ["Structured Audit Logs"]
-    },
-    repository: {
-      name: "RodrigoDiasDeOliveira/Trimindslabs-Ai-cloud-Administrator",
-      isPrivate: false,
-      visibilityBadge: "Repositório Público",
-      testSuiteStatus: "Testes automatizados cobrindo ferramentas MCP e gerenciamento de chaves",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Model Context Protocol over Proprietary APIs"]
-    },
-    engineering: [
-      "Implementação completa de especificações do Model Context Protocol com suporte a ferramentas, recursos e prompts.",
-      "Isolamento de credenciais de nuvem em cofres do sistema operacional sem armazenamento em texto plano.",
-      "Barreiras de contenção que impedem execução de comandos com impacto destrutivo sem aprovação explícita."
-    ],
-    technology: [
-      "Python 3.11+ / FastMCP",
-      "Model Context Protocol",
-      "AWS / Azure / GCP",
-      "Typer CLI / FastAPI",
-      "Cofre Criptográfico Keyring",
-      "Docker"
-    ],
-    evolution: "Desenvolvido diretamente sobre a especificação aberta do Model Context Protocol para proporcionar uma ponte segura entre agentes de IA e recursos de nuvem.",
-    challenges: [
-      "Padronização de modelos conceituais divergentes entre AWS, GCP e Azure.",
-      "Garantia de segurança máxima de credenciais com isolamento estrito por sessão.",
-      "Resposta determinística em timeouts e falhas transitórias de APIs de provedores."
-    ],
-    decisions: [
-      {
-        decision: "Adoção estrita do padrão aberto Model Context Protocol (MCP).",
-        rationale: "Evita dependência de ferramentas proprietárias e garante interoperabilidade com qualquer cliente compatível."
-      },
-      {
-        decision: "Uso do Keyring do sistema para credenciais.",
-        rationale: "Impede vazamento acidental de tokens e chaves de acesso em variáveis de ambiente ou arquivos de configuração."
-      }
-    ],
-    results: [
-      {
-        metric: "Padrão Aberto",
-        value: "Protocolo MCP",
-        description: "Compatibilidade nativa com ecossistemas de agentes modernos"
-      },
-      {
-        metric: "Gerenciamento Seguro",
-        value: "Cofre Keyring",
-        description: "Credenciais de nuvem isoladas no cofre do sistema operacional"
-      },
-      {
-        metric: "Interoperabilidade",
-        value: "Multi-Cloud",
-        description: "Ferramentas unificadas para AWS, Google Cloud e Microsoft Azure"
-      }
-    ],
-    evidence: "Repositório público com código Python, implementação FastMCP e Dockerfile funcional."
-  },
-  {
-    id: "triminds-integration-platform",
-    title: "Trimindslabs Integration Platform & Sovereign Mesh",
-    subtitle: "Mediação de APIs Poliglotas, Barramento de Eventos & Malha Segura",
-    tag: "Platform Engineering / Event Mesh",
-    sector: "Engenharia de Plataforma & Arquitetura Orientada a Eventos",
+    title: "Triminds Security Layer",
+    subtitle: "Camada de Segurança Empresarial com Políticas e Arquitetura Modular",
+    tag: "Enterprise Security",
+    sector: "Segurança de Aplicações & Governança",
     domain: "platform",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "validation",
-    honestScope: "Substrato de engenharia de plataforma para mediação de APIs, roteamento assíncrono de mensagens e interconexão de serviços em nuvens europeias.",
-    whatItProves: "Demonstra competência em engenharia de sistemas transversais, arquiteturas distribuídas e governança de comunicação entre microsserviços.",
-    problem: "Ecossistemas com múltiplos serviços poliglotas sofrem com acoplamento ponto a ponto frágil, falta de rastreabilidade distribuída e inconsistência de esquemas de dados.",
-    context: "Atua como espinha dorsal de comunicação para os módulos do ecossistema Trimindslabs, padronizando contratos e observabilidade.",
+    honestScope: "Modular monolith Java 21/Spring Boot 3.4 com arquitetura hexagonal/clean, autenticação, autorização, políticas, risco e auditoria.",
+    whatItProves: "Demonstra fundação de segurança corporativa modular e orientada a políticas.",
+    problem: "Aplicações empresariais precisam centralizar identidade, autorização, políticas e auditoria sem acoplar essas capacidades ao domínio de cada aplicação.",
+    context: "O repositório declara arquitetura modular e core concluído, enquanto testes de integração, Docker Compose e Kubernetes ainda estão em andamento.",
     architecture: {
-      overview: "Barramento de eventos e mediação: Gateway de API ➔ Malha de Mensageria Redis/Kafka ➔ Adaptadores de Protocolo (Spring Boot / FastAPI) ➔ Rastreamento com OpenTelemetry.",
-      components: [
-        "Gateway Unificado de Mediação de Protocolos e Rotas",
-        "Barramento de Eventos Assíncronos com Redis Pub/Sub",
-        "Adaptadores Poliglotas padronizados em Java e Python",
-        "Coletor Centralizado de Tracing com OpenTelemetry"
-      ],
-      diagramText: "Serviços Clientes ➔ Gateway Unificado ➔ Barramento de Eventos ➔ Adaptadores de Destino ➔ Coletor OpenTelemetry"
+      overview: "Security Gateway → Identity/Auth/Access Control → Policy Engine (OPA) → Risk → Audit/Intelligence.",
+      components: ["Security Identity", "Authentication/JWT", "Access Control", "OPA Policy Engine", "Risk Engine", "Audit"],
+      diagramText: "Client ➔ Security Gateway ➔ Identity/Auth/Access ➔ OPA Policy ➔ Risk ➔ Audit/Intelligence"
     },
     realArchitectureVerification: {
-      documented: "Plataforma de integração e barramento de eventos com Spring Boot, Python e Redis.",
-      implemented: "Java 21, Python 3.12, Redis, OpenTelemetry, Docker multi-stage.",
-      presentedOnSite: "Alinhado aos artefatos de código presentes no repositório.",
-      coherenceScore: "100% Coerente"
+      documented: "Modular Monolith com Ports & Adapters, Clean Architecture, DDD e PBAC.",
+      implemented: "Java 21 + Spring Boot 3.4 com módulos de identidade, auth, access control, policy, risk, gateway, intelligence e audit.",
+      presentedOnSite: "Arquitetura alinhada; maturidade operacional limitada ao que o README comprova.",
+      coherenceScore: "Alinhado ao README atual"
     },
     realTechnologies: {
-      languages: ["Java 21", "Python 3.12", "TypeScript"],
-      frameworks: ["Spring Boot 3.x", "FastAPI"],
-      libraries: ["Redis Pub/Sub", "OpenTelemetry Tracing"],
-      databases: ["Redis", "PostgreSQL"],
-      cloud: ["Hetzner Cloud", "OVHcloud", "GCP Cloud Run"],
-      iac: ["Docker Multi-Stage", "Docker Compose"],
-      apis: ["REST OpenAPI", "Async Event Messaging"],
-      testing: ["Testes de integração automatizados"],
-      ciCd: ["GitHub Actions CI"],
-      observability: ["OpenTelemetry Collector"]
+      languages: ["Java 21"],
+      frameworks: ["Spring Boot 3.4", "Spring Security", "Spring Data JPA"],
+      libraries: ["OPA", "JWT/OAuth2 Resource Server"],
+      databases: ["PostgreSQL", "Redis"],
+      cloud: ["Cloud-native ready"],
+      apis: ["Security Gateway"],
+      testing: ["CI build and verification; integration tests in progress"],
+      ciCd: ["CI build and verification"],
+      observability: ["Micrometer", "Prometheus", "OpenTelemetry"]
+    },
+    repository: {
+      name: "RodrigoDiasDeOliveira/Trimindslabs-Security-Layer-v1",
+      isPrivate: true,
+      visibilityBadge: "Repositório Privado",
+      testSuiteStatus: "Core verification complete; integration tests in progress",
+      ciCdPipeline: "CI build and verification"
+    },
+    engineering: [
+      "Separação modular entre identidade, autenticação, autorização, políticas, risco e auditoria.",
+      "OPA como motor de avaliação de políticas.",
+      "Arquitetura orientada a Zero Trust e PBAC."
+    ],
+    technology: ["Java 21", "Spring Boot 3.4", "Spring Security", "OPA", "PostgreSQL", "Redis"],
+    evolution: "Próximas etapas: testes de integração, ambiente Docker Compose, CD e deployment Kubernetes.",
+    evidence: "README atual e estrutura modular do repositório.",
+    evidenceSource: "Trimindslabs-Security-Layer-v1 / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Arquitetura/core concluídos; integração e deployment ainda em evolução."
+  },
+  {
+    id: "triminds-ai-cloud-administrator",
+    title: "Trimindslabs AI Cloud Administrator",
+    subtitle: "Administração Multi-Cloud Assistida por IA com Execução Controlada",
+    tag: "Cloud Platform / AI Operations",
+    sector: "Cloud Administration & Governance",
+    domain: "platform",
+    category: "what-we-built",
+    truthStatus: "implemented",
+    operationalStage: "validation",
+    honestScope: "MVP React/TypeScript + Express com capacidades reais explicitamente separadas de adapters ainda não configurados.",
+    whatItProves: "Demonstra governança operacional, dry-run, auditoria encadeada e integração real com AWS quando as credenciais estão configuradas.",
+    problem: "Operações cloud precisam distinguir planejamento, análise de IA e execução real.",
+    context: "A versão atual usa Node/Express como runtime principal e mantém estado operacional em memória.",
+    architecture: {
+      overview: "React/TypeScript/Vite → Express API + AI orchestration + policy engine → adapters de provedores.",
+      components: ["AWS SDKs reais", "Policy engine interno", "Dry-run explícito", "Auditoria SHA-256", "Telemetria interna"],
+      diagramText: "React ➔ Express ➔ Policy/AI ➔ AWS (real quando configurado) / Azure-GCP-OCI (NOT_CONFIGURED)"
+    },
+    realArchitectureVerification: {
+      documented: "MVP multi-cloud com separação entre planejamento e execução.",
+      implemented: "Node/Express com AWS STS/EC2 real, policy engine, dry-run e audit chain SHA-256.",
+      presentedOnSite: "Sem afirmar adapters Azure/GCP/OCI ou FastMCP operacional.",
+      coherenceScore: "Alinhado ao README atual"
+    },
+    realTechnologies: {
+      languages: ["TypeScript"],
+      frameworks: ["React 19", "Vite", "Express"],
+      libraries: ["AWS SDKs", "Gemini API"],
+      databases: ["In-memory runtime state"],
+      cloud: ["AWS adapter real quando configurado", "Azure/GCP/OCI NOT_CONFIGURED"],
+      apis: ["HTTP API"],
+      testing: ["npm test", "npm run lint", "npm run build"],
+      ciCd: ["GitHub Actions"]
+    },
+    repository: {
+      name: "RodrigoDiasDeOliveira/trimindslabs-ai-cloud-administrator",
+      isPrivate: false,
+      visibilityBadge: "Repositório",
+      testSuiteStatus: "Testes, lint e build",
+      ciCdPipeline: "GitHub Actions"
+    },
+    engineering: [
+      "Dry-run não produz efeitos colaterais.",
+      "Execução real depende de adapter e credenciais configurados.",
+      "Provider sem adapter retorna NOT_CONFIGURED em vez de sucesso fictício."
+    ],
+    technology: ["React 19 / TypeScript", "Express", "AWS SDKs", "Gemini opcional", "SHA-256 audit chain"],
+    evolution: "Evolução planejada para adapters multi-cloud reais, persistência externa e maior maturidade operacional.",
+    evidence: "README atual e implementação principal Node/Express.",
+    evidenceSource: "Trimindslabs AI Cloud Administrator / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "MVP operacional / Work in Progress; preparado para validação de deploy."
+  },
+  {
+    id: "triminds-integration-platform",
+    title: "Triminds Integration Platform (TIP)",
+    subtitle: "Plataforma de Integração Corporativa com Conectores e Resiliência",
+    tag: "Integration Platform",
+    sector: "Integração de Sistemas & APIs",
+    domain: "platform",
+    category: "what-we-built",
+    truthStatus: "implemented",
+    operationalStage: "validation",
+    honestScope: "Monólito TypeScript/Node/Express com console React, pipelines, transformação, validação e dispatch HTTP real para REST/Webhook.",
+    whatItProves: "Demonstra arquitetura modular, abstração de conectores e mecanismos de resiliência sem apresentar infraestrutura futura como entregue.",
+    problem: "Integrações heterogêneas precisam de uma camada consistente para modelagem, execução, retry e validação.",
+    context: "O runtime atual mantém estado em memória e foi estruturado para evolução futura sem acoplamento a um provedor específico.",
+    architecture: {
+      overview: "React Console → Express API → Integration Engine → Connectors → HTTP/Webhook.",
+      components: ["Pipeline Designer", "Transformation/Validation", "Retry/Timeout", "Idempotency", "Circuit Breaker"],
+      diagramText: "React ➔ Express ➔ Integration Engine ➔ REST/Webhook / Gemini opcional"
+    },
+    realArchitectureVerification: {
+      documented: "Clean/Hexagonal-inspired modular monolith.",
+      implemented: "TypeScript 5.8 + React 19 + Express 4; dispatch real REST/Webhook; demais conectores NOT_CONFIGURED.",
+      presentedOnSite: "Sem afirmar Redis/Kafka/Spring/FastAPI ou observabilidade distribuída como infraestrutura atual.",
+      coherenceScore: "Alinhado ao README atual"
+    },
+    realTechnologies: {
+      languages: ["TypeScript 5.8"],
+      frameworks: ["React 19", "Express 4", "Vite"],
+      databases: ["In-memory runtime state"],
+      cloud: ["Cloud-agnostic"],
+      apis: ["REST", "Webhook", "Optional Gemini"],
+      testing: ["TypeScript build / lint"],
+      ciCd: ["GitHub Actions"]
     },
     repository: {
       name: "RodrigoDiasDeOliveira/Trimindslabs-Integration-Platform",
       isPrivate: false,
-      visibilityBadge: "Repositório Público",
-      testSuiteStatus: "Testes automatizados cobrindo adaptadores e roteamento de eventos",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Asynchronous Event Mesh over Synchronous REST"]
+      visibilityBadge: "Repositório",
+      adrReferences: ["ADR-001 Clean Architecture & Hexagonal Ports/Adapters", "ADR-002 Modular Monolith"]
     },
     engineering: [
-      "Padronização de contratos de eventos com validação estrita de esquemas em múltiplos ambientes.",
-      "Implementação de rastreamento distribuído unificado propagando identificadores de contexto entre serviços.",
-      "Isolamento de tráfego de dados sensíveis em provedores de infraestrutura com jurisdição europeia."
+      "Retry, timeout, idempotência e circuit breaker no dispatch HTTP real.",
+      "SOAP, Database, SFTP e Custom permanecem NOT_CONFIGURED.",
+      "Persistência externa e mensageria distribuída são evolução futura."
     ],
-    technology: [
-      "Java 21 / Spring Boot 3.x",
-      "Python 3.12 / FastAPI",
-      "Redis Event Mesh",
-      "OpenTelemetry",
-      "Docker Multi-Stage",
-      "Malha Soberana"
-    ],
-    evolution: "Evoluiu de scripts de integração pontual para uma malha estruturada de eventos e mediação de serviços corporativos.",
-    challenges: [
-      "Garantia de interoperabilidade de tipos entre ecossistemas Java e Python.",
-      "Manutenção de rastreabilidade de ponta a ponta através de múltiplos saltos de rede.",
-      "Proteção de dados em trânsito com criptografia de ponta a ponta."
-    ],
-    decisions: [
-      {
-        decision: "Uso de OpenTelemetry como padrão universal de observabilidade.",
-        rationale: "Evita dependência de ferramentas proprietárias de monitoramento e padroniza a coleta de métricas."
-      },
-      {
-        decision: "Comunicação primária assíncrona orientada a eventos.",
-        rationale: "Desacopla a disponibilidade dos serviços individuais e aumenta a resiliência global do sistema."
-      }
-    ],
-    results: [
-      {
-        metric: "Topologia de Eventos",
-        value: "Mesh Desacoplado",
-        description: "Comunicação assíncrona entre módulos sem bloqueio síncrono"
-      },
-      {
-        metric: "Observabilidade",
-        value: "OpenTelemetry",
-        description: "Tracing distribuído com propagação de contexto padronizada"
-      },
-      {
-        metric: "Jurisdição Europeia",
-        value: "Infraestrutura EU",
-        description: "Conformidade com padrões rigorosos de soberania e proteção de dados"
-      }
-    ],
-    evidence: "Repositório público com arquitetura de adaptadores, templates e suítes de validação automatizadas."
-  }
-];
-
-const PROJECTS_EN: Project[] = [
-  {
-    id: "trusted-compliance-agent",
-    title: "Trusted Compliance Agent",
-    subtitle: "Deterministic Regulatory Auditing & Zero-Hallucination Legal Extraction",
-    tag: "Regulatory AI / Enterprise Retrieval",
-    sector: "European Financial & Legal Compliance",
-    domain: "compliance",
-    category: "what-we-built",
-    truthStatus: "implemented",
-    operationalStage: "deployed",
-    honestScope: "Engineered for institutional legal compliance with character-offset provenance and deterministic fallback gates.",
-    whatItProves: "Proves that Trimindslabs builds verifiable retrieval systems for mission-critical legal compliance where factual hallucination is strictly zero-tolerance.",
-    problem: "Financial and legal compliance teams spend weeks reviewing complex multi-jurisdictional directives. Conventional generative AI models generate plausible yet legally invalid article citations, creating severe legal liabilities under EU AI Act frameworks.",
-    context: "Operating under strict EU AI Act High-Risk Category criteria, the system requires source document provenance down to character-level bounding boxes and cryptographic token hashing.",
-    architecture: {
-      overview: "Three-tier verifiable pipeline: Lexical & dense chunk ingestion → Cross-encoder neural reranking → Controlled agentic synthesis with strict JSON schema and legal validation gates.",
-      components: [
-        "Document Ingestion Engine & Multi-modal PDF Structural Deconstruction",
-        "Deterministic Citation Provenance Index with SHA-256 Block Fingerprints",
-        "Dual-Pass Verification Agent with Cross-Reference Fallback",
-        "Isolated Enclave Execution Layer in High-Security European Containers"
-      ],
-      diagramText: "Document Ingestion ➔ Structural Chunking ➔ Hybrid Search (Dense+BM25) ➔ Neural Reranker ➔ Constrained Verification Agent ➔ Signed Audit Certificate"
-    },
-    realArchitectureVerification: {
-      documented: "Two-stage retrieval with cross-encoder neural reranking and JSON Schema output enforcement.",
-      implemented: "FastAPI service with BM25 sparse index + Qdrant dense vectors, fused by Reciprocal Rank Fusion (k=60), scored by BGE-Reranker-Large, validated by Pydantic V2.",
-      presentedOnSite: "Transparently described as Python/FastAPI + Qdrant + BGE-Reranker with no unevidenced technologies.",
-      coherenceScore: "100% Coherent"
-    },
-    realTechnologies: {
-      languages: ["Python 3.12"],
-      frameworks: ["FastAPI", "Pydantic V2"],
-      libraries: ["BGE-Reranker-Large", "HuggingFace Transformers", "PyPDF / PDFPlumber"],
-      databases: ["Qdrant Vector Database", "SQLite (Audit Trail)"],
-      cloud: ["Google Cloud Run (European Region)", "Google Cloud Storage"],
-      iac: ["Docker multi-stage builds", "OpenTofu / Terraform Blueprints"],
-      apis: ["REST OpenAPI v3", "Server-Sent Events (SSE)"],
-      testing: ["Pytest (Unit & Integration Suites)", "Property-based citation fuzzing"],
-      ciCd: ["GitHub Actions (Lint, Typecheck, Security Audit)"],
-      observability: ["OpenTelemetry Python SDK", "Structured JSON Logging"]
-    },
-    repository: {
-      name: "RodrigoDiasDeOliveira/Trusted-Compliance-Agent",
-      isPrivate: false,
-      visibilityBadge: "Public Repository",
-      testSuiteStatus: "Automated test suite with legal citation validation and full coverage",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Hybrid Search over Dense-Only", "ADR-004: Character-Offset Verification Protocol"]
-    },
-    engineering: [
-      "Engineered a zero-hallucination verification loop rejecting any LLM response lacking an exact match against retrieved primary source tokens.",
-      "Implemented asynchronous streaming pipelines processing 500+ page regulatory PDFs with predictable low latency.",
-      "Integrated strict OpenTelemetry tracing measuring semantic confidence score per extracted clause."
-    ],
-    technology: [
-      "Python 3.12 / FastAPI",
-      "Qdrant Vector DB",
-      "BGE-Reranker-Large",
-      "Pydantic V2",
-      "Docker / Cloud Run (EU)",
-      "OpenTelemetry"
-    ],
-    evolution: "Evolved from an assisted search interface into a self-auditing compliance agent generating cryptographically signed audit reports directly for regulatory committees.",
-    challenges: [
-      "Normalizing European Official Gazette publications with multi-column layouts across official languages.",
-      "Preventing model leakage across differing EU directives and national transpositions.",
-      "Maintaining predictable p95 latency across large legal corpora."
-    ],
-    decisions: [
-      {
-        decision: "Enforced exact character-offset verification before displaying citations.",
-        rationale: "Ensures legal counsel can click any assertion and inspect the highlighted primary source immediately."
-      },
-      {
-        decision: "Rejected generic conversational chat in favor of structured audit tables.",
-        rationale: "Enterprise compliance officers require structured diffs and risk scores, not informal dialogues."
-      }
-    ],
-    results: [
-      {
-        metric: "Citation Provenance",
-        value: "Exact Offset Mapping",
-        description: "Binds every generated assertion directly to character bounding spans in primary sources"
-      },
-      {
-        metric: "Schema Contracts",
-        value: "Pydantic V2",
-        description: "Strict typed validation preventing ungrounded or malformed responses"
-      },
-      {
-        metric: "Hybrid Retrieval",
-        value: "BM25 + Qdrant",
-        description: "Fuses exact technical terminology matching with dense semantic context"
-      }
-    ],
-    evidence: "Repository contains complete test suites, Architecture Decision Records (ADRs), and reproducible Docker environments."
+    technology: ["TypeScript 5.8", "React 19", "Express 4", "Vite"],
+    evolution: "Evolução prevista para persistência externa, mensageria, observabilidade distribuída e conectores empresariais reais.",
+    evidence: "README atual, estrutura do repositório e runtime Express.",
+    evidenceSource: "Trimindslabs-Integration-Platform / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Validação do runtime atual; maturidade de produção ainda não reivindicada."
   },
   {
     id: "triminds-geo-ai",
     title: "Trimindslabs Geo-AI (V4)",
-    subtitle: "High-Resolution Geospatial Vectorization & Remote Sensing",
+    subtitle: "Plataforma Geoespacial de IA para Earth Observation",
     tag: "Geospatial AI / Remote Sensing",
-    sector: "Earth Observation, Critical Infrastructure & Environment",
+    sector: "Observação da Terra & Dados Geoespaciais",
     domain: "geospatial",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "deployed",
-    honestScope: "Platform for automated ingestion of Sentinel-2 L2A multi-spectral satellite imagery, hierarchical spatial quadkey tiling, and topological vector indexing.",
-    whatItProves: "Proves Trimindslabs possesses deep engineering competence in high-dimensional spatial data, raster/vector transformations, and cloud-native GPU inference pipelines.",
-    problem: "Manual satellite imagery inspection across large geographic territories is slow and cost-prohibitive for infrastructure operators and environmental agencies, causing delays in detecting ground mutations and asset deterioration.",
-    context: "Processes real European Space Agency (ESA) Sentinel-2 L2A observations, calibrating multi-spectral bands with geometric distortion and cloud filtering.",
+    honestScope: "Plataforma modular para workflows de Earth Observation, ML geoespacial, FastAPI e deployment Cloud Run.",
+    whatItProves: "Demonstra deployment operacional de uma plataforma Geo-AI e separação entre demonstração local e serviço cloud.",
+    problem: "Workflows de observação da Terra exigem integração entre fontes geoespaciais, representação, ML e serving.",
+    context: "A versão V4 está online em Google Cloud Run europe-west1; o repositório mantém também uma demo local determinística com dados RGB sintéticos.",
     architecture: {
-      overview: "Distributed spatial tiled inference mesh: Satellite raster tile splitter → Multi-spectral band normalization (12 channels) → PyTorch/TorchGeo visual segmentation models → Geospatial polygon vectorization → PostGIS topology indexing.",
-      components: [
-        "Distributed GeoTIFF Tiling Worker Pool with GDAL and Rasterio",
-        "Spectral Normalization & Atmospheric Correction Pipeline",
-        "Spatial Topology Graph Indexer with PostgreSQL 16 & PostGIS 3.4",
-        "Temporal Change Detection Differential Matrix"
-      ],
-      diagramText: "Sentinel-2 Feed ➔ Orthorectification ➔ Quadkey Grid ➔ Multi-spectral Neural Inference ➔ GeoJSON Vectorizer ➔ PostGIS Geo-Spatial Index ➔ Alert Webhook"
+      overview: "Earth Observation Sources → Provider Layer → Ingestion/Validation → Representation → Deep Learning / Vector Search → FastAPI → Cloud Run.",
+      components: ["Provider layer", "Ingestion/validation", "Representation", "Deep Learning", "FastAPI", "Cloud Run"],
+      diagramText: "EO Sources ➔ Provider Layer ➔ Ingestion ➔ Representation ➔ ML/Search ➔ FastAPI ➔ Cloud Run"
     },
     realArchitectureVerification: {
-      documented: "Spatial raster decomposition into Quadkey tiles with parallel PyTorch inference and PostGIS spatial topology indexing.",
-      implemented: "Python 3.11 with GDAL, Rasterio, Shapely, PyTorch (TorchGeo), Celery/Redis task queue, PostgreSQL 16 + PostGIS 3.4.",
-      presentedOnSite: "Accurately described as Python, GDAL, PyTorch, PostGIS operating on public Sentinel-2 orbits.",
-      coherenceScore: "100% Coherent"
+      documented: "Provider-oriented geospatial AI architecture with operational Cloud Run v4.",
+      implemented: "FastAPI service with configurable model layer and Cloud Run v4 deployment; local deterministic demo path.",
+      presentedOnSite: "Alinhado ao README atual, sem transformar a demo sintética em benchmark de satélite real.",
+      coherenceScore: "Alinhado ao README atual"
     },
     realTechnologies: {
-      languages: ["Python 3.11", "SQL (PostGIS Extensions)"],
-      frameworks: ["FastAPI", "TorchGeo / PyTorch"],
-      libraries: ["GDAL / OGR", "Rasterio", "Shapely", "GeoPandas", "NumPy / SciPy"],
-      databases: ["PostgreSQL 16 with PostGIS 3.4", "Redis (Tile Cache & Queues)"],
-      cloud: ["Google Cloud Run (NVIDIA L4 GPUs)", "Google Cloud Storage"],
-      iac: ["Docker Container with compiled GDAL C++ binaries", "Terraform GCP"],
-      apis: ["OGC API Features compliant endpoints", "GeoJSON Vector Tiles"],
-      testing: ["Pytest Spatial Geometry Suite", "Raster tolerance verification tests"],
-      ciCd: ["GitHub Actions with GDAL container caching"],
-      observability: ["Prometheus metrics", "Spatial Grafana dashboards"]
+      languages: ["Python"],
+      frameworks: ["FastAPI", "PyTorch"],
+      libraries: ["ResNet", "EfficientNet", "Vision Transformers", "MLflow"],
+      cloud: ["Google Cloud Run", "Google Cloud"],
+      apis: ["FastAPI"],
+      testing: ["Pytest", "ruff", "pre-commit"]
     },
     repository: {
       name: "RodrigoDiasDeOliveira/Trimindslabs-Geo-AI",
       isPrivate: false,
-      visibilityBadge: "Public Repository",
-      testSuiteStatus: "Automated test suite with raster mathematics and topology verifications",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-002: Dynamic Quadkey Tiling vs Arbitrary Bounding Box", "ADR-005: FP16 Edge Inference"]
+      visibilityBadge: "Repositório",
+      testSuiteStatus: "Quality checks and pytest"
     },
     engineering: [
-      "Architected parallel worker pipelines processing 12-band multi-spectral rasters at native 10m/pixel resolution.",
-      "Created sub-pixel boundary refinement reducing polygon vertices while maintaining geometric fidelity.",
-      "Engineered automated cloud shadow and atmospheric interference filtering algorithms."
+      "Separação entre deployment operacional e demo local.",
+      "Model factory configurável para múltiplas arquiteturas.",
+      "Maturidade operacional explicitamente separada de implementação."
     ],
-    technology: [
-      "Python 3.11 / PyTorch",
-      "PostgreSQL / PostGIS",
-      "GDAL / Rasterio / Shapely",
-      "Redis Distributed Queue",
-      "GCP Cloud Run GPUs",
-      "GeoJSON / MapLibre"
-    ],
-    evolution: "Evolved from static tile classification prototypes into an end-to-end continuous temporal monitoring system based on real Sentinel-2 satellite data.",
-    challenges: [
-      "Seasonal atmospheric reflectance fluctuations distorting vegetation index values.",
-      "Memory footprint pressure handling 16-bit multi-channel matrix arrays.",
-      "Preserving spatial topological continuity across adjacent tile boundaries."
-    ],
-    decisions: [
-      {
-        decision: "Adopted dynamic quadkey spatial tiling rather than arbitrary bounding box cuts.",
-        rationale: "Allows seamless parallel caching and eliminates boundary seam artifacts at tile edges."
-      },
-      {
-        decision: "Used FP16 quantized model inference on cloud nodes.",
-        rationale: "Optimizes GPU memory utilization in Cloud Run containers while preserving segmentation fidelity."
-      }
-    ],
-    results: [
-      {
-        metric: "Native Resolution",
-        value: "10m / pixel",
-        description: "Processes Sentinel-2 L2A bands preserving physical optical resolution"
-      },
-      {
-        metric: "Partitioning",
-        value: "Pyramidal Quadkey",
-        description: "Hierarchical spatial grid enabling parallel execution without boundary seam artifacts"
-      },
-      {
-        metric: "Execution Environment",
-        value: "GCP Cloud Run",
-        description: "Containerized deployment with PostGIS in europe-west1 cloud region"
-      }
-    ],
-    evidence: "Source code with GDAL/PostGIS container support; validated with public Sentinel-2 constellation data."
+    technology: ["Python", "FastAPI", "PyTorch", "Google Cloud Run", "MLflow"],
+    evolution: "Expansão contínua de providers, representações e workloads geoespaciais avançados.",
+    evidence: "Cloud Run v4 online e README atual com modelo de maturidade operacional.",
+    evidenceSource: "Trimindslabs-Geo-AI / README e deployment Cloud Run v4",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Operational — Cloud Run v4.",
+    deployment: {
+      target: "Google Cloud Run / europe-west1",
+      url: "https://triminds-geo-ai-v4-1091629879450.europe-west1.run.app/",
+      status: "Operational"
+    }
   },
   {
     id: "triminds-logistics-platform",
@@ -1030,496 +697,220 @@ const PROJECTS_EN: Project[] = [
   },
   {
     id: "triminds-security-layer",
-    title: "Trimindslabs Security Platform",
-    subtitle: "Enterprise Centralized Identity, Hexagonal Architecture & Zero Trust Policies",
-    tag: "Security Engineering / Hexagonal Architecture",
-    sector: "Enterprise Cybersecurity & Access Governance",
-    domain: "platform",
-    category: "what-we-built",
-    truthStatus: "implemented",
-    operationalStage: "deployed",
-    honestScope: "Centralized enterprise security platform implemented with Hexagonal Architecture (Ports and Adapters) and Attribute-Based Access Control (ABAC).",
-    whatItProves: "Demonstrates engineering discipline in cybersecurity, architectural decoupling, and strict domain boundary protection.",
-    problem: "Monolithic applications with authorization rules scattered across web controllers and database queries create critical privilege escalation vulnerabilities and fail compliance audits.",
-    context: "Engineered as the foundational security module for authentication, fine-grained access control, and cryptographic token verification across the ecosystem.",
-    architecture: {
-      overview: "Hexagonal Architecture: Immutable domain core → Input & output ports → Adapters for Open Policy Agent (OPA), cryptographic vaults, and PostgreSQL persistence.",
-      components: [
-        "Pure Identity Domain Core & Attribute Policy Engine",
-        "OPA Adapter for Declarative Policy Evaluation (Rego)",
-        "Cryptographic Token & Session Verification Engine",
-        "Architectural Rule Verification Suite with ArchUnit"
-      ],
-      diagramText: "Request ➔ Security Filter ➔ Inbound Port ➔ Domain Core ➔ OPA Evaluator ➔ Outbound Port ➔ Policy Store"
-    },
-    realArchitectureVerification: {
-      documented: "Hexagonal architecture for enterprise security with Spring Boot and declarative policy evaluation.",
-      implemented: "Java 21, Spring Boot 3.x, ArchUnit for architectural boundary enforcement, OPA integration, Docker.",
-      presentedOnSite: "Truthful architecture and technologies directly matching codebase.",
-      coherenceScore: "100% Coherent"
-    },
-    realTechnologies: {
-      languages: ["Java 21", "Rego (OPA Policy Language)"],
-      frameworks: ["Spring Boot 3.x", "Open Policy Agent"],
-      libraries: ["ArchUnit", "Nimbus JOSE+JWT", "Lombok"],
-      databases: ["PostgreSQL", "In-memory Policy Cache"],
-      cloud: ["Docker Isolated Enclaves"],
-      iac: ["Dockerfile multi-stage"],
-      apis: ["REST Security Policy API"],
-      testing: ["ArchUnit Architecture Tests", "JUnit 5 Security Verification"],
-      ciCd: ["GitHub Actions (Maven Build, ArchUnit Enforcement)"],
-      observability: ["Structured Security Audit Logging"]
-    },
-    repository: {
-      name: "RodrigoDiasDeOliveira/Trimindslabs-Security-Layer",
-      isPrivate: false,
-      visibilityBadge: "Public Repository",
-      testSuiteStatus: "ArchUnit architectural test suite guaranteeing strict layer decoupling",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Hexagonal Ports and Adapters", "ADR-002: Declarative Policies with OPA"]
-    },
-    engineering: [
-      "Enforced automated ArchUnit rules ensuring the domain core contains zero external framework or database dependencies.",
-      "Decoupled authorization logic into declarative policies evaluated without application recompilation.",
-      "Implemented immutable security audit trails for any administrative permission mutation."
-    ],
-    technology: [
-      "Java 21 / Spring Boot 3.x",
-      "Hexagonal Architecture",
-      "Open Policy Agent (OPA)",
-      "Zero Trust Architecture",
-      "PostgreSQL",
-      "ArchUnit"
-    ],
-    evolution: "Evolved from basic JWT authentication filters into an enterprise security platform based on ports, adapters, and declarative OPA policies.",
-    challenges: [
-      "Strictly protecting domain model purity against framework convenience shortcuts.",
-      "Ensuring complex attribute-based authorization queries execute with sub-millisecond latency.",
-      "Handling backward compatibility across differing legacy identity providers."
-    ],
-    decisions: [
-      {
-        decision: "Enforced strict Ports and Adapters pattern verified by ArchUnit on every build.",
-        rationale: "Prevents architectural decay over time caused by inadvertent cross-layer imports."
-      },
-      {
-        decision: "Decoupled the policy engine from application business logic.",
-        rationale: "Allows security officers to update access policies without redeploying application microservices."
-      }
-    ],
-    results: [
-      {
-        metric: "Structural Decoupling",
-        value: "Pure Hexagonal",
-        description: "Zero external dependencies in domain core verified in automated CI pipeline"
-      },
-      {
-        metric: "Automated Governance",
-        value: "ArchUnit Rules",
-        description: "Automated unit tests that fail the build if architectural boundaries are breached"
-      },
-      {
-        metric: "Declarative Rules",
-        value: "OPA Policies",
-        description: "Unified attribute-based access control engine with audit trail"
-      }
-    ],
-    evidence: "Public repository with Java codebase, ArchUnit tests, and documented architectural specifications."
-  },
-  {
-    id: "triminds-ai-cloud-administrator",
-    title: "Trimindslabs AI Cloud Administrator",
-    subtitle: "Model Context Protocol (MCP) Multi-Cloud Agentic Orchestrator",
-    tag: "Multi-Cloud MCP / Infrastructure Agent",
-    sector: "Multi-Cloud Infrastructure & Platform Engineering",
-    domain: "platform",
-    category: "what-we-built",
-    truthStatus: "implemented",
-    operationalStage: "deployed",
-    honestScope: "Model Context Protocol (MCP) server providing secure, strictly governed tooling for autonomous infrastructure operations across AWS, GCP, and Azure.",
-    whatItProves: "Demonstrates early adoption of modern agent interoperability standards (MCP) prioritizing credential vaulting and bounded execution.",
-    problem: "Platform engineers lose valuable hours performing repetitive cloud tasks across divergent consoles, while uncontrolled scripts introduce catastrophic production outage risks.",
-    context: "Engineered to safely bridge AI developer assistants with live cloud infrastructure using mandatory confirmation gates for sensitive actions.",
-    architecture: {
-      overview: "MCP-based architecture: MCP Client (Claude / IDE) ➔ JSON-RPC Protocol ➔ FastMCP Server ➔ Keyring Cryptographic Vault ➔ Cloud SDK Adapters (boto3, google-cloud, azure-mgmt).",
-      components: [
-        "MCP Server implemented using the FastMCP library",
-        "Cryptographic Credential Vault Integration (Keyring)",
-        "Modular Cloud Adapters for AWS, Google Cloud, and Azure",
-        "Policy Filter Guardrails for High-Impact Infrastructure Actions"
-      ],
-      diagramText: "MCP Client ➔ JSON-RPC Protocol ➔ FastMCP Server ➔ Security Policy Filter ➔ Cloud SDKs ➔ Target Cloud"
-    },
-    realArchitectureVerification: {
-      documented: "Model Context Protocol multi-cloud server implemented in Python with FastMCP.",
-      implemented: "Python 3.11+, FastMCP, Typer CLI, official cloud SDKs, Docker.",
-      presentedOnSite: "Fully aligned with implementation in public repository.",
-      coherenceScore: "100% Coherent"
-    },
-    realTechnologies: {
-      languages: ["Python 3.11+"],
-      frameworks: ["FastMCP", "Typer CLI", "FastAPI"],
-      libraries: ["boto3 (AWS)", "google-cloud-sdk", "azure-mgmt", "keyring"],
-      databases: ["Encrypted Local Vault Storage"],
-      cloud: ["AWS", "Google Cloud Platform", "Microsoft Azure"],
-      iac: ["Dockerfile"],
-      apis: ["Model Context Protocol (MCP) JSON-RPC"],
-      testing: ["Pytest"],
-      ciCd: ["GitHub Actions"],
-      observability: ["Structured Audit Logs"]
-    },
-    repository: {
-      name: "RodrigoDiasDeOliveira/Trimindslabs-Ai-cloud-Administrator",
-      isPrivate: false,
-      visibilityBadge: "Public Repository",
-      testSuiteStatus: "Automated tests covering MCP tools and credential vaulting routines",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Model Context Protocol over Proprietary APIs"]
-    },
-    engineering: [
-      "Engineered complete Model Context Protocol specifications supporting tools, resources, and structured prompts.",
-      "Isolated cloud API credentials in OS-native secure keyrings preventing plaintext credential leakage.",
-      "Integrated confirmation guardrails rejecting high-impact destructive commands without explicit human approval."
-    ],
-    technology: [
-      "Python 3.11+ / FastMCP",
-      "Model Context Protocol",
-      "AWS / Azure / GCP",
-      "Typer CLI / FastAPI",
-      "Keyring Cryptographic Vault",
-      "Docker"
-    ],
-    evolution: "Built natively on the open Model Context Protocol specification to provide a secure bridge between AI agents and cloud infrastructure resources.",
-    challenges: [
-      "Harmonizing conflicting resource models across AWS, GCP, and Azure.",
-      "Ensuring robust credential secrecy with strict per-session isolation.",
-      "Providing deterministic error responses during transient cloud provider API failures."
-    ],
-    decisions: [
-      {
-        decision: "Adopted open Model Context Protocol (MCP) standard exclusively.",
-        rationale: "Eliminates vendor lock-in and ensures native interoperability with any standard MCP client."
-      },
-      {
-        decision: "Delegated credentials to OS-native keyring stores.",
-        rationale: "Prevents accidental credential leakage in environment variables or configuration files."
-      }
-    ],
-    results: [
-      {
-        metric: "Open Standard",
-        value: "MCP Protocol",
-        description: "Native compatibility with modern AI agent tools and developer environments"
-      },
-      {
-        metric: "Secret Management",
-        value: "Keyring Vault",
-        description: "Cloud API credentials isolated in operating system secure enclaves"
-      },
-      {
-        metric: "Unified Control",
-        value: "Multi-Cloud Ops",
-        description: "Unified tooling across AWS, Google Cloud, and Microsoft Azure"
-      }
-    ],
-    evidence: "Public repository with Python source code, FastMCP implementation, and containerized Dockerfile."
-  },
-  {
-    id: "triminds-integration-platform",
-    title: "Trimindslabs Integration Platform & Sovereign Mesh",
-    subtitle: "Unified Polyglot API Mediation, Event Mesh & Secure Interconnect",
-    tag: "Platform Engineering / Event Mesh",
-    sector: "Platform Engineering & Event-Driven Architecture",
+    title: "Triminds Security Layer",
+    subtitle: "Camada de Segurança Empresarial com Políticas e Arquitetura Modular",
+    tag: "Enterprise Security",
+    sector: "Segurança de Aplicações & Governança",
     domain: "platform",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "validation",
-    honestScope: "Platform engineering substrate for polyglot API mediation, asynchronous message routing, and inter-service connectivity across sovereign European cloud infrastructure.",
-    whatItProves: "Demonstrates engineering competence in transversal systems, distributed architectures, and microservice communication governance.",
-    problem: "Multi-service ecosystems suffer from brittle point-to-point coupling, lack of end-to-end distributed tracing, and inconsistent schema validation across service boundaries.",
-    context: "Acts as the operational backbone for Trimindslabs ecosystem components, standardizing contracts, tracing, and secure data routing.",
+    honestScope: "Modular monolith Java 21/Spring Boot 3.4 com arquitetura hexagonal/clean, autenticação, autorização, políticas, risco e auditoria.",
+    whatItProves: "Demonstra fundação de segurança corporativa modular e orientada a políticas.",
+    problem: "Aplicações empresariais precisam centralizar identidade, autorização, políticas e auditoria sem acoplar essas capacidades ao domínio de cada aplicação.",
+    context: "O repositório declara arquitetura modular e core concluído, enquanto testes de integração, Docker Compose e Kubernetes ainda estão em andamento.",
     architecture: {
-      overview: "Event mesh & mediation: API Gateway ➔ Redis/Kafka Message Mesh ➔ Protocol Adapters (Spring Boot / FastAPI) ➔ OpenTelemetry Distributed Tracing.",
-      components: [
-        "Unified Protocol Mediation & Dynamic Routing Gateway",
-        "Asynchronous Event Mesh with Redis Pub/Sub",
-        "Standardized Polyglot Service Adapters in Java and Python",
-        "Centralized Tracing Collector with OpenTelemetry"
-      ],
-      diagramText: "Client Services ➔ Unified Gateway ➔ Asynchronous Event Mesh ➔ Target Adapters ➔ OpenTelemetry Collector"
+      overview: "Security Gateway → Identity/Auth/Access Control → Policy Engine (OPA) → Risk → Audit/Intelligence.",
+      components: ["Security Identity", "Authentication/JWT", "Access Control", "OPA Policy Engine", "Risk Engine", "Audit"],
+      diagramText: "Client ➔ Security Gateway ➔ Identity/Auth/Access ➔ OPA Policy ➔ Risk ➔ Audit/Intelligence"
     },
     realArchitectureVerification: {
-      documented: "Integration platform and event mesh using Spring Boot, Python, and Redis.",
-      implemented: "Java 21, Python 3.12, Redis, OpenTelemetry, Docker multi-stage.",
-      presentedOnSite: "Directly aligned with source code artifacts in public repository.",
-      coherenceScore: "100% Coherent"
+      documented: "Modular Monolith com Ports & Adapters, Clean Architecture, DDD e PBAC.",
+      implemented: "Java 21 + Spring Boot 3.4 com módulos de identidade, auth, access control, policy, risk, gateway, intelligence e audit.",
+      presentedOnSite: "Arquitetura alinhada; maturidade operacional limitada ao que o README comprova.",
+      coherenceScore: "Alinhado ao README atual"
     },
     realTechnologies: {
-      languages: ["Java 21", "Python 3.12", "TypeScript"],
-      frameworks: ["Spring Boot 3.x", "FastAPI"],
-      libraries: ["Redis Pub/Sub", "OpenTelemetry Tracing"],
-      databases: ["Redis", "PostgreSQL"],
-      cloud: ["Hetzner Cloud", "OVHcloud", "GCP Cloud Run"],
-      iac: ["Docker Multi-Stage", "Docker Compose"],
-      apis: ["REST OpenAPI", "Async Event Messaging"],
-      testing: ["Automated integration test suites"],
-      ciCd: ["GitHub Actions CI"],
-      observability: ["OpenTelemetry Collector"]
+      languages: ["Java 21"],
+      frameworks: ["Spring Boot 3.4", "Spring Security", "Spring Data JPA"],
+      libraries: ["OPA", "JWT/OAuth2 Resource Server"],
+      databases: ["PostgreSQL", "Redis"],
+      cloud: ["Cloud-native ready"],
+      apis: ["Security Gateway"],
+      testing: ["CI build and verification; integration tests in progress"],
+      ciCd: ["CI build and verification"],
+      observability: ["Micrometer", "Prometheus", "OpenTelemetry"]
+    },
+    repository: {
+      name: "RodrigoDiasDeOliveira/Trimindslabs-Security-Layer-v1",
+      isPrivate: true,
+      visibilityBadge: "Repositório Privado",
+      testSuiteStatus: "Core verification complete; integration tests in progress",
+      ciCdPipeline: "CI build and verification"
+    },
+    engineering: [
+      "Separação modular entre identidade, autenticação, autorização, políticas, risco e auditoria.",
+      "OPA como motor de avaliação de políticas.",
+      "Arquitetura orientada a Zero Trust e PBAC."
+    ],
+    technology: ["Java 21", "Spring Boot 3.4", "Spring Security", "OPA", "PostgreSQL", "Redis"],
+    evolution: "Próximas etapas: testes de integração, ambiente Docker Compose, CD e deployment Kubernetes.",
+    evidence: "README atual e estrutura modular do repositório.",
+    evidenceSource: "Trimindslabs-Security-Layer-v1 / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Arquitetura/core concluídos; integração e deployment ainda em evolução."
+  },
+  {
+    id: "triminds-ai-cloud-administrator",
+    title: "Trimindslabs AI Cloud Administrator",
+    subtitle: "AI-Assisted Multi-Cloud Administration with Controlled Execution",
+    tag: "Cloud Platform / AI Operations",
+    sector: "Cloud Administration & Governance",
+    domain: "platform",
+    category: "what-we-built",
+    truthStatus: "implemented",
+    operationalStage: "validation",
+    honestScope: "React/TypeScript + Express MVP with real capabilities explicitly separated from adapters that are not yet configured.",
+    whatItProves: "Demonstrates operational governance, dry-run planning, chained audit and real AWS integration when credentials are configured.",
+    problem: "Cloud operations need to distinguish planning, AI analysis and real execution.",
+    context: "The current version uses Node/Express as the main runtime and keeps operational state in memory.",
+    architecture: {
+      overview: "React/TypeScript/Vite → Express API + AI orchestration + policy engine → provider adapters.",
+      components: ["Real AWS SDKs", "Internal policy engine", "Explicit dry-run", "SHA-256 audit chain", "Internal telemetry"],
+      diagramText: "React ➔ Express ➔ Policy/AI ➔ AWS (real when configured) / Azure-GCP-OCI (NOT_CONFIGURED)"
+    },
+    realArchitectureVerification: {
+      documented: "Multi-cloud MVP separating planning from execution.",
+      implemented: "Node/Express with real AWS STS/EC2 paths, policy engine, dry-run and SHA-256 audit chain.",
+      presentedOnSite: "No claim of configured Azure/GCP/OCI adapters or an operational standalone FastMCP server.",
+      coherenceScore: "Aligned with current README"
+    },
+    realTechnologies: {
+      languages: ["TypeScript"],
+      frameworks: ["React 19", "Vite", "Express"],
+      libraries: ["AWS SDKs", "Gemini API"],
+      databases: ["In-memory runtime state"],
+      cloud: ["Real AWS adapter when configured", "Azure/GCP/OCI NOT_CONFIGURED"],
+      apis: ["HTTP API"],
+      testing: ["npm test", "npm run lint", "npm run build"],
+      ciCd: ["GitHub Actions"]
+    },
+    repository: {
+      name: "RodrigoDiasDeOliveira/trimindslabs-ai-cloud-administrator",
+      isPrivate: false,
+      visibilityBadge: "Repository",
+      testSuiteStatus: "Tests, lint and build",
+      ciCdPipeline: "GitHub Actions"
+    },
+    engineering: [
+      "Dry-run produces no side effects.",
+      "Real execution depends on a configured adapter and credentials.",
+      "A provider without an adapter returns NOT_CONFIGURED rather than false success."
+    ],
+    technology: ["React 19 / TypeScript", "Express", "AWS SDKs", "Optional Gemini", "SHA-256 audit chain"],
+    evolution: "Planned evolution toward real multi-cloud adapters, external persistence and greater operational maturity.",
+    evidence: "Current README and main Node/Express implementation.",
+    evidenceSource: "Trimindslabs AI Cloud Administrator / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Operational MVP / Work in Progress; prepared for deployment validation."
+  },
+  {
+    id: "triminds-integration-platform",
+    title: "Triminds Integration Platform (TIP)",
+    subtitle: "Plataforma de Integração Corporativa com Conectores e Resiliência",
+    tag: "Integration Platform",
+    sector: "Integração de Sistemas & APIs",
+    domain: "platform",
+    category: "what-we-built",
+    truthStatus: "implemented",
+    operationalStage: "validation",
+    honestScope: "Monólito TypeScript/Node/Express com console React, pipelines, transformação, validação e dispatch HTTP real para REST/Webhook.",
+    whatItProves: "Demonstra arquitetura modular, abstração de conectores e mecanismos de resiliência sem apresentar infraestrutura futura como entregue.",
+    problem: "Integrações heterogêneas precisam de uma camada consistente para modelagem, execução, retry e validação.",
+    context: "O runtime atual mantém estado em memória e foi estruturado para evolução futura sem acoplamento a um provedor específico.",
+    architecture: {
+      overview: "React Console → Express API → Integration Engine → Connectors → HTTP/Webhook.",
+      components: ["Pipeline Designer", "Transformation/Validation", "Retry/Timeout", "Idempotency", "Circuit Breaker"],
+      diagramText: "React ➔ Express ➔ Integration Engine ➔ REST/Webhook / Gemini opcional"
+    },
+    realArchitectureVerification: {
+      documented: "Clean/Hexagonal-inspired modular monolith.",
+      implemented: "TypeScript 5.8 + React 19 + Express 4; dispatch real REST/Webhook; demais conectores NOT_CONFIGURED.",
+      presentedOnSite: "Sem afirmar Redis/Kafka/Spring/FastAPI ou observabilidade distribuída como infraestrutura atual.",
+      coherenceScore: "Alinhado ao README atual"
+    },
+    realTechnologies: {
+      languages: ["TypeScript 5.8"],
+      frameworks: ["React 19", "Express 4", "Vite"],
+      databases: ["In-memory runtime state"],
+      cloud: ["Cloud-agnostic"],
+      apis: ["REST", "Webhook", "Optional Gemini"],
+      testing: ["TypeScript build / lint"],
+      ciCd: ["GitHub Actions"]
     },
     repository: {
       name: "RodrigoDiasDeOliveira/Trimindslabs-Integration-Platform",
       isPrivate: false,
-      visibilityBadge: "Public Repository",
-      testSuiteStatus: "Automated test suites covering adapters and event routing logic",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Asynchronous Event Mesh over Synchronous REST"]
+      visibilityBadge: "Repositório",
+      adrReferences: ["ADR-001 Clean Architecture & Hexagonal Ports/Adapters", "ADR-002 Modular Monolith"]
     },
     engineering: [
-      "Standardized event contracts with strict schema validation across heterogeneous runtime environments.",
-      "Engineered unified distributed tracing propagating context identifiers across multi-service boundaries.",
-      "Isolated sensitive data workloads in infrastructure providers bound to European privacy jurisdictions."
+      "Retry, timeout, idempotência e circuit breaker no dispatch HTTP real.",
+      "SOAP, Database, SFTP e Custom permanecem NOT_CONFIGURED.",
+      "Persistência externa e mensageria distribuída são evolução futura."
     ],
-    technology: [
-      "Java 21 / Spring Boot 3.x",
-      "Python 3.12 / FastAPI",
-      "Redis Event Mesh",
-      "OpenTelemetry",
-      "Docker Multi-Stage",
-      "Sovereign Cloud Mesh"
-    ],
-    evolution: "Evolved from point-to-point integration scripts into a structured event mesh and service mediation layer for enterprise platforms.",
-    challenges: [
-      "Ensuring seamless type interoperability between Java and Python runtimes.",
-      "Maintaining end-to-end tracing observability across multiple network hops.",
-      "Guaranteeing data encryption in transit with mutual TLS security."
-    ],
-    decisions: [
-      {
-        decision: "Adopted OpenTelemetry as the universal observability standard.",
-        rationale: "Prevents vendor monitoring lock-in and standardizes metrics collection across services."
-      },
-      {
-        decision: "Favored asynchronous event-driven communication for core workflows.",
-        rationale: "Decouples individual service availability and enhances global system resilience."
-      }
-    ],
-    results: [
-      {
-        metric: "Event Topology",
-        value: "Decoupled Mesh",
-        description: "Asynchronous communication across microservices without synchronous blocking"
-      },
-      {
-        metric: "Observability",
-        value: "OpenTelemetry",
-        description: "Distributed tracing with standardized context propagation across services"
-      },
-      {
-        metric: "Data Sovereignty",
-        value: "European Cloud",
-        description: "Strict compliance with European privacy standards and data residency laws"
-      }
-    ],
-    evidence: "Public repository with platform adapters, architectural templates, and automated validation suites."
-  }
-];
-
-const PROJECTS_ES: Project[] = [
-  {
-    id: "trusted-compliance-agent",
-    title: "Trusted Compliance Agent",
-    subtitle: "Auditoría Regulatoria Determinista y Extracción Legal con Procedencia",
-    tag: "Regulatory AI / Enterprise Retrieval",
-    sector: "Cumplimiento Regulatorio y Jurídico Europeo",
-    domain: "compliance",
-    category: "what-we-built",
-    truthStatus: "implemented",
-    operationalStage: "deployed",
-    honestScope: "Diseñado para el cumplimiento legal corporativo con estricta verificación de procedencia por offset de caracteres y gates de fallback deterministas.",
-    whatItProves: "Demuestra que Trimindslabs construye sistemas de recuperación comprobables para cumplimiento jurídico donde la tolerancia a citas incorrectas es cero.",
-    problem: "Los equipos jurídicos y de compliance tardan semanas en analizar directivas multijurisdiccionales. Los modelos tradicionales de IA generativa generan citas aparentemente válidas pero inexistentes en los textos normativos oficiales, creando graves riesgos legales bajo el EU AI Act.",
-    context: "Operando bajo los criterios del EU AI Act para sistemas de alto riesgo, el sistema exige procedencia documental auditable hasta cajas delimitadoras de caracteres y huellas criptográficas por párrafo.",
-    architecture: {
-      overview: "Pipeline de verificación en tres capas: Ingesta y segmentación léxica/densa → Reranking neural con modelo cross-encoder → Agente de síntesis con esquema JSON estricto y validación de procedencia.",
-      components: [
-        "Motor de Ingesta Documental y Deconstrucción Estructurada de PDFs",
-        "Índice de Procedencia Determinista con Validación SHA-256 por Bloque",
-        "Agente de Verificación en Doble Paso con Fallback de Cruce Textual",
-        "Capa de Ejecución Aislada en Contenedores de Alta Seguridad"
-      ],
-      diagramText: "Ingesta Documental ➔ Segmentación Estructurada ➔ Búsqueda Híbrida (Dense+BM25) ➔ Reranker Neural ➔ Agente con Restricción de Esquema ➔ Certificado de Auditoría"
-    },
-    realArchitectureVerification: {
-      documented: "Recuperación en dos etapas con reranker neural y aplicación estricta de contratos Pydantic V2.",
-      implemented: "Servicio FastAPI con índice disperso BM25 + vectores densos Qdrant, fusión Reciprocal Rank Fusion y modelo BGE-Reranker-Large.",
-      presentedOnSite: "Descrito con precisión técnica como Python/FastAPI + Qdrant + BGE-Reranker, sin tecnologías no evidenciadas.",
-      coherenceScore: "100% Coherente"
-    },
-    realTechnologies: {
-      languages: ["Python 3.12"],
-      frameworks: ["FastAPI", "Pydantic V2"],
-      libraries: ["BGE-Reranker-Large", "HuggingFace Transformers", "PyPDF / PDFPlumber"],
-      databases: ["Qdrant Vector Database", "SQLite (Pista de auditoría)"],
-      cloud: ["Google Cloud Run (Región Europea)", "Google Cloud Storage"],
-      iac: ["Docker multi-stage builds", "OpenTofu / Terraform Blueprints"],
-      apis: ["REST OpenAPI v3", "Server-Sent Events (SSE)"],
-      testing: ["Pytest (Pruebas unitarias y de integración)", "Validación basada en propiedades"],
-      ciCd: ["GitHub Actions (Lint, Typecheck, Auditoría de seguridad)"],
-      observability: ["OpenTelemetry Python SDK", "Logs JSON estructurados"]
-    },
-    repository: {
-      name: "RodrigoDiasDeOliveira/Trusted-Compliance-Agent",
-      isPrivate: false,
-      visibilityBadge: "Repositorio Público",
-      testSuiteStatus: "Suite automatizada con validación de citas y cobertura de reglas",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Hybrid Search over Dense-Only", "ADR-004: Character-Offset Verification Protocol"]
-    },
-    engineering: [
-      "Implementación de bucle de verificación que rechaza respuestas que no presenten coincidencia exacta contra tokens del documento original.",
-      "Pipeline asíncrono con procesamiento de directivas extensas en streaming continuo.",
-      "Trazabilidad distribuida con OpenTelemetry para auditar la confianza de cada cláusula extraída."
-    ],
-    technology: [
-      "Python 3.12 / FastAPI",
-      "Qdrant Vector DB",
-      "BGE-Reranker-Large",
-      "Pydantic V2",
-      "Docker / Cloud Run (EU)",
-      "OpenTelemetry"
-    ],
-    evolution: "Evolucionó de un asistente de búsqueda legal a un agente de cumplimiento autorregulado que genera informes estructurados con procedencia criptográfica trazable.",
-    challenges: [
-      "Normalización de diarios oficiales europeos en múltiples idiomas y maquetaciones complejas.",
-      "Aislamiento estricto entre directivas comunitarias y transposiciones de estados miembros.",
-      "Mantenimiento de latencia predecible en corpus regulatorios con cientos de páginas."
-    ],
-    decisions: [
-      {
-        decision: "Verificación estricta por offset de caracteres antes de presentar citas.",
-        rationale: "Garantiza que el auditor legal pueda inspeccionar la fuente primaria original de inmediato con coincidencia exacta."
-      },
-      {
-        decision: "Sustitución de chats conversacionales genéricos por tablas de cumplimiento estructuradas.",
-        rationale: "Los departamentos jurídicos requieren tablas de riesgo y diffs auditables, no diálogos informales."
-      }
-    ],
-    results: [
-      {
-        metric: "Procedencia Documental",
-        value: "Mapeo Exacto",
-        description: "Vincula cada afirmación directamente con un intervalo de caracteres en la fuente primaria"
-      },
-      {
-        metric: "Contratos de Esquema",
-        value: "Pydantic V2",
-        description: "Validación estructurada de tipos eliminando respuestas fuera de formato"
-      },
-      {
-        metric: "Recuperación Híbrida",
-        value: "BM25 + Qdrant",
-        description: "Fusión de búsqueda léxica por términos técnicos con búsqueda vectorial por contexto"
-      }
-    ],
-    evidence: "Servicio implementado con pruebas automatizadas, especificaciones ADR y contenedores reproducibles."
+    technology: ["TypeScript 5.8", "React 19", "Express 4", "Vite"],
+    evolution: "Evolução prevista para persistência externa, mensageria, observabilidade distribuída e conectores empresariais reais.",
+    evidence: "README atual, estrutura do repositório e runtime Express.",
+    evidenceSource: "Trimindslabs-Integration-Platform / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Validação do runtime atual; maturidade de produção ainda não reivindicada."
   },
   {
     id: "triminds-geo-ai",
     title: "Trimindslabs Geo-AI (V4)",
-    subtitle: "Vectorización Geoespacial de Alta Resolución y Teledetección",
+    subtitle: "Plataforma Geoespacial de IA para Earth Observation",
     tag: "Geospatial AI / Remote Sensing",
-    sector: "Observación de la Tierra, Infraestructura y Medio Ambiente",
+    sector: "Observação da Terra & Dados Geoespaciais",
     domain: "geospatial",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "deployed",
-    honestScope: "Plataforma para la ingesta continua de imágenes orbitales multiespectrales Sentinel-2 L2A, descomposición en teselas espaciales e indexación topológica.",
-    whatItProves: "Demuestra competencia técnica en procesamiento de datos geoespaciales de alta dimensión, transformaciones raster/vector y modelos de segmentación en la nube.",
-    problem: "La inspección manual de imágenes de satélite en extensiones territoriales amplias es lenta y costosa para operadoras de infraestructura y organismos ambientales, demorando la detección de alteraciones del suelo.",
-    context: "Procesamiento de imágenes reales Sentinel-2 de la Agencia Espacial Europea (ESA), calibrando bandas multiespectrales con corrección de distorsiones geométricas y atmosféricas.",
+    honestScope: "Plataforma modular para workflows de Earth Observation, ML geoespacial, FastAPI e deployment Cloud Run.",
+    whatItProves: "Demonstra deployment operacional de uma plataforma Geo-AI e separação entre demonstração local e serviço cloud.",
+    problem: "Workflows de observação da Terra exigem integração entre fontes geoespaciais, representação, ML e serving.",
+    context: "A versão V4 está online em Google Cloud Run europe-west1; o repositório mantém também uma demo local determinística com dados RGB sintéticos.",
     architecture: {
-      overview: "Malla de inferencia distribuida por teselas: Ingesta de GeoTIFFs orbitales → Normalización de bandas multiespectrales (12 canales) → Modelos de segmentación visual (PyTorch/TorchGeo) → Vectorización de polígonos → Indexación topológica en PostGIS.",
-      components: [
-        "Pool de Workers de Tiling GeoTIFF con GDAL y Rasterio",
-        "Pipeline de Normalización Espectral y Corrección Atmosférica",
-        "Indexador Topológico Espacial en PostgreSQL 16 con PostGIS 3.4",
-        "Mecanismo Diferencial de Detección de Cambios Temporales"
-      ],
-      diagramText: "Feed Sentinel-2 ➔ Ortorrectificación ➔ Malla Quadkey ➔ Inferencia Multiespectral ➔ Vectorización GeoJSON ➔ Índice PostGIS ➔ Webhook de Eventos"
+      overview: "Earth Observation Sources → Provider Layer → Ingestion/Validation → Representation → Deep Learning / Vector Search → FastAPI → Cloud Run.",
+      components: ["Provider layer", "Ingestion/validation", "Representation", "Deep Learning", "FastAPI", "Cloud Run"],
+      diagramText: "EO Sources ➔ Provider Layer ➔ Ingestion ➔ Representation ➔ ML/Search ➔ FastAPI ➔ Cloud Run"
     },
     realArchitectureVerification: {
-      documented: "Descomposición raster en teselas quadkey con inferencia paralela en PyTorch e indexación topológica PostGIS.",
-      implemented: "Python 3.11 con GDAL, Rasterio, Shapely, PyTorch (TorchGeo), cola Celery/Redis, PostgreSQL 16 + PostGIS 3.4.",
-      presentedOnSite: "Descrito con precisión técnica utilizando GDAL, PostGIS y PyTorch sobre imágenes públicas Sentinel-2.",
-      coherenceScore: "100% Coherente"
+      documented: "Provider-oriented geospatial AI architecture with operational Cloud Run v4.",
+      implemented: "FastAPI service with configurable model layer and Cloud Run v4 deployment; local deterministic demo path.",
+      presentedOnSite: "Alinhado ao README atual, sem transformar a demo sintética em benchmark de satélite real.",
+      coherenceScore: "Alinhado ao README atual"
     },
     realTechnologies: {
-      languages: ["Python 3.11", "SQL (Extensiones PostGIS)"],
-      frameworks: ["FastAPI", "TorchGeo / PyTorch"],
-      libraries: ["GDAL / OGR", "Rasterio", "Shapely", "GeoPandas", "NumPy / SciPy"],
-      databases: ["PostgreSQL 16 con PostGIS 3.4", "Redis (Caché de teselas y colas)"],
-      cloud: ["Google Cloud Run (GPUs NVIDIA)", "Google Cloud Storage"],
-      iac: ["Docker con binarios C++ de GDAL compilados", "Terraform GCP"],
-      apis: ["Endpoints conformes con estándares OGC", "GeoJSON Vector Tiles"],
-      testing: ["Pytest con suite de geometría espacial", "Pruebas de tolerancia raster"],
-      ciCd: ["GitHub Actions con caché de contenedores GDAL"],
-      observability: ["Métricas Prometheus", "Dashboards espaciales"]
+      languages: ["Python"],
+      frameworks: ["FastAPI", "PyTorch"],
+      libraries: ["ResNet", "EfficientNet", "Vision Transformers", "MLflow"],
+      cloud: ["Google Cloud Run", "Google Cloud"],
+      apis: ["FastAPI"],
+      testing: ["Pytest", "ruff", "pre-commit"]
     },
     repository: {
       name: "RodrigoDiasDeOliveira/Trimindslabs-Geo-AI",
       isPrivate: false,
-      visibilityBadge: "Repositorio Público",
-      testSuiteStatus: "Suite automatizada con verificaciones matemáticas de raster y topología",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-002: Dynamic Quadkey Tiling vs Arbitrary Bounding Box", "ADR-005: FP16 Edge Inference"]
+      visibilityBadge: "Repositório",
+      testSuiteStatus: "Quality checks and pytest"
     },
     engineering: [
-      "Arquitectura de procesamiento paralelo para rasters multiespectrales de 12 bandas con resolución nativa de 10m/pixel.",
-      "Algoritmos de refinamiento de bordes sub-pixel para simplificación de polígonos manteniendo fidelidad geométrica.",
-      "Filtros automatizados para descarte de nubes e interferencias atmosféricas en el análisis de vegetación."
+      "Separação entre deployment operacional e demo local.",
+      "Model factory configurável para múltiplas arquiteturas.",
+      "Maturidade operacional explicitamente separada de implementação."
     ],
-    technology: [
-      "Python 3.11 / PyTorch",
-      "PostgreSQL / PostGIS",
-      "GDAL / Rasterio / Shapely",
-      "Redis Distributed Queue",
-      "GCP Cloud Run GPUs",
-      "GeoJSON / MapLibre"
-    ],
-    evolution: "Evolucionó de prototipos de clasificación estática a una plataforma continua de monitoreo temporal basada en datos reales de Sentinel-2.",
-    challenges: [
-      "Variaciones estacionales de reflectancia atmosférica que impactan los índices espectrales.",
-      "Manejo de matrices multicanal de 16 bits con alta demanda de memoria.",
-      "Garantía de continuidad topológica en los límites de corte de teselas adyacentes."
-    ],
-    decisions: [
-      {
-        decision: "Adopción de malla quadkey dinámica en lugar de recortes arbitrarios por cajas delimitadoras.",
-        rationale: "Permite almacenamiento en caché jerárquico uniforme y elimina artefactos en las uniones de teselas."
-      },
-      {
-        decision: "Inferencia con pesos cuantizados FP16 en nodos de nube.",
-        rationale: "Optimiza el uso de memoria GPU en contenedores Cloud Run conservando la precisión de segmentación."
-      }
-    ],
-    results: [
-      {
-        metric: "Resolución Nativa",
-        value: "10m / pixel",
-        description: "Procesa bandas Sentinel-2 L2A preservando la resolución física óptica nativa"
-      },
-      {
-        metric: "Partición Espacial",
-        value: "Quadkey Piramidal",
-        description: "División jerárquica que permite procesamiento paralelo sin artefactos de borde"
-      },
-      {
-        metric: "Entorno Operativo",
-        value: "GCP Cloud Run",
-        description: "Ejecución en contenedores con PostGIS en la región europe-west1"
-      }
-    ],
-    evidence: "Código y contenedores con soporte a GDAL/PostGIS; validación con datos reales de la constelación Sentinel-2."
+    technology: ["Python", "FastAPI", "PyTorch", "Google Cloud Run", "MLflow"],
+    evolution: "Expansão contínua de providers, representações e workloads geoespaciais avançados.",
+    evidence: "Cloud Run v4 online e README atual com modelo de maturidade operacional.",
+    evidenceSource: "Trimindslabs-Geo-AI / README e deployment Cloud Run v4",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Operational — Cloud Run v4.",
+    deployment: {
+      target: "Google Cloud Run / europe-west1",
+      url: "https://triminds-geo-ai-v4-1091629879450.europe-west1.run.app/",
+      status: "Operational"
+    }
   },
   {
     id: "triminds-logistics-platform",
@@ -1621,322 +1012,164 @@ const PROJECTS_ES: Project[] = [
   },
   {
     id: "triminds-security-layer",
-    title: "Trimindslabs Security Platform",
-    subtitle: "Identidad Corporativa, Arquitectura Hexagonal y Políticas Zero Trust",
-    tag: "Security Engineering / Hexagonal Architecture",
-    sector: "Ciberseguridad Corporativa e Infraestructura de Acceso",
-    domain: "platform",
-    category: "what-we-built",
-    truthStatus: "implemented",
-    operationalStage: "deployed",
-    honestScope: "Capa central de seguridad implementada con arquitectura hexagonal (Ports and Adapters) y control de acceso basado en atributos (ABAC).",
-    whatItProves: "Demuestra rigor en ingeniería de seguridad, desacoplamiento arquitectónico y protección estricta de fronteras de dominio.",
-    problem: "Sistemas monolíticos con reglas de autorización dispersas en controladores y consultas de base de datos crean graves brechas de seguridad e impiden auditorías.",
-    context: "Diseñado como módulo transversal para autenticación, control de permisos y validación criptográfica de tokens en todos los servicios.",
-    architecture: {
-      overview: "Arquitectura Hexagonal: Núcleo de dominio inmutable → Puertos de entrada y salida → Adaptadores para Open Policy Agent (OPA), bóvedas criptográficas y PostgreSQL.",
-      components: [
-        "Núcleo de Dominio de Identidad y Motor de Políticas de Atributos",
-        "Adaptador OPA para Evaluación Declarativa de Reglas (Rego)",
-        "Motor de Validación Criptográfica de Tokens y Sesiones",
-        "Suite de Pruebas de Arquitectura con ArchUnit"
-      ],
-      diagramText: "Petición ➔ Filtro de Seguridad ➔ Puerto de Entrada ➔ Núcleo de Dominio ➔ Evaluador OPA ➔ Puerto de Salida ➔ Almacén de Políticas"
-    },
-    realArchitectureVerification: {
-      documented: "Arquitectura hexagonal para seguridad empresarial con Spring Boot y evaluación declarativa de políticas.",
-      implemented: "Java 21, Spring Boot 3.x, ArchUnit para verificación de barreras arquitectónicas, integración OPA, Docker.",
-      presentedOnSite: "Arquitectura y tecnologías correspondientes al código real.",
-      coherenceScore: "100% Coherente"
-    },
-    realTechnologies: {
-      languages: ["Java 21", "Rego (Lenguaje OPA)"],
-      frameworks: ["Spring Boot 3.x", "Open Policy Agent"],
-      libraries: ["ArchUnit", "Nimbus JOSE+JWT", "Lombok"],
-      databases: ["PostgreSQL", "Caché de políticas en memoria"],
-      cloud: ["Enclaves aislados Docker"],
-      iac: ["Dockerfile multi-stage"],
-      apis: ["REST Security Policy API"],
-      testing: ["ArchUnit Architecture Tests", "JUnit 5 Security Verification"],
-      ciCd: ["GitHub Actions (Maven Build, ArchUnit Enforcement)"],
-      observability: ["Structured Security Audit Logging"]
-    },
-    repository: {
-      name: "RodrigoDiasDeOliveira/Trimindslabs-Security-Layer",
-      isPrivate: false,
-      visibilityBadge: "Repositorio Público",
-      testSuiteStatus: "Suite de pruebas ArchUnit que garantiza aislamiento estricto de capas",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Hexagonal Ports and Adapters", "ADR-002: Declarative Policies with OPA"]
-    },
-    engineering: [
-      "Verificación automatizada con ArchUnit de que el núcleo de dominio no tiene dependencias de librerías externas o frameworks.",
-      "Desacoplamiento de la lógica de autorización en políticas declarativas evaluadas sin recompilar el servicio.",
-      "Registro inmutable de auditoría para cualquier mutación de privilegios administrativos."
-    ],
-    technology: [
-      "Java 21 / Spring Boot 3.x",
-      "Arquitectura Hexagonal",
-      "Open Policy Agent (OPA)",
-      "Zero Trust Architecture",
-      "PostgreSQL",
-      "ArchUnit"
-    ],
-    evolution: "Evolucionó de un filtro elemental de tokens JWT a una plataforma integral de seguridad basada en puertos, adaptadores y políticas declarativas OPA.",
-    challenges: [
-      "Preservación estricta de la pureza del modelo de dominio frente a comodidades del framework.",
-      "Garantía de evaluación de consultas de autorización complejas en sub-milisegundos.",
-      "Compatibilidad con diversos proveedores de identidad corporativos heterogéneos."
-    ],
-    decisions: [
-      {
-        decision: "Aplicación estricta del patrón Puertos y Adaptadores con validación ArchUnit en compilación.",
-        rationale: "Impide la degradación arquitectónica a lo largo del tiempo causada por dependencias indebidas."
-      },
-      {
-        decision: "Desacoplamiento del motor de políticas del código de la aplicación.",
-        rationale: "Permite actualizar reglas de seguridad sin necesidad de recompilar y desplegar los microservicios."
-      }
-    ],
-    results: [
-      {
-        metric: "Aislamiento Estructural",
-        value: "Hexagonal Puro",
-        description: "Cero dependencias externas en el núcleo de dominio validadas en el pipeline CI"
-      },
-      {
-        metric: "Gobierno Automatizado",
-        value: "ArchUnit Rules",
-        description: "Pruebas automáticas que fallan la compilación si se vulneran los límites de capas"
-      },
-      {
-        metric: "Políticas Declarativas",
-        value: "Reglas OPA",
-        description: "Gobernanza unificada de accesos basada en atributos y perfiles"
-      }
-    ],
-    evidence: "Repositorio público con código fuente Java, pruebas ArchUnit y especificaciones documentadas."
-  },
-  {
-    id: "triminds-ai-cloud-administrator",
-    title: "Trimindslabs AI Cloud Administrator",
-    subtitle: "Orquestador Multi-Cloud Basado en el Model Context Protocol (MCP)",
-    tag: "Multi-Cloud MCP / Infrastructure Agent",
-    sector: "Infraestructura Multi-Cloud e Ingeniería de Plataforma",
-    domain: "platform",
-    category: "what-we-built",
-    truthStatus: "implemented",
-    operationalStage: "deployed",
-    honestScope: "Servidor Model Context Protocol (MCP) que expone herramientas controladas y seguras para operaciones en nubes AWS, GCP y Azure.",
-    whatItProves: "Demuestra adopción temprana de estándares modernos de interoperabilidad de agentes (MCP) priorizando custodia de credenciales y ejecución restringida.",
-    problem: "Los ingenieros de infraestructura pierden horas en tareas operativas dispersas en múltiples consolas de nube, mientras scripts descontrolados generan riesgos de caída de servicios.",
-    context: "Creado para conectar asistentes de desarrollo con la infraestructura real de forma segura, exigiendo confirmación humana para comandos destructivos.",
-    architecture: {
-      overview: "Arquitectura basada en MCP: Cliente MCP (Claude / IDE) ➔ Protocolo JSON-RPC ➔ Servidor FastMCP ➔ Bóveda Criptográfica Keyring ➔ Adaptadores de Nube (boto3, google-cloud, azure-mgmt).",
-      components: [
-        "Servidor MCP desarrollado con la librería FastMCP",
-        "Módulo de Bóveda Criptográfica del Sistema (Keyring)",
-        "Adaptadores Modulares para AWS, Google Cloud y Azure",
-        "Capa de Filtro y Políticas de Seguridad para Acciones Críticas"
-      ],
-      diagramText: "Cliente MCP ➔ Protocolo JSON-RPC ➔ Servidor FastMCP ➔ Filtro de Seguridad ➔ SDKs Multi-Cloud ➔ Nube Destino"
-    },
-    realArchitectureVerification: {
-      documented: "Servidor MCP para administración multi-cloud en Python con FastMCP.",
-      implemented: "Python 3.11+, FastMCP, Typer CLI, librerías oficiales de nube, Docker.",
-      presentedOnSite: "Completamente alineado a los artefactos reales de código.",
-      coherenceScore: "100% Coherente"
-    },
-    realTechnologies: {
-      languages: ["Python 3.11+"],
-      frameworks: ["FastMCP", "Typer CLI", "FastAPI"],
-      libraries: ["boto3 (AWS)", "google-cloud-sdk", "azure-mgmt", "keyring"],
-      databases: ["Almacenamiento local cifrado"],
-      cloud: ["AWS", "Google Cloud Platform", "Microsoft Azure"],
-      iac: ["Dockerfile"],
-      apis: ["Model Context Protocol (MCP) JSON-RPC"],
-      testing: ["Pytest"],
-      ciCd: ["GitHub Actions"],
-      observability: ["Structured Audit Logs"]
-    },
-    repository: {
-      name: "RodrigoDiasDeOliveira/Trimindslabs-Ai-cloud-Administrator",
-      isPrivate: false,
-      visibilityBadge: "Repositorio Público",
-      testSuiteStatus: "Pruebas automatizadas cubriendo herramientas MCP y custodia de claves",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Model Context Protocol over Proprietary APIs"]
-    },
-    engineering: [
-      "Implementación completa de especificaciones del Model Context Protocol soportando herramientas, recursos y prompts.",
-      "Aislamiento de credenciales de nube en bóvedas nativas del sistema operativo sin texto plano.",
-      "Barreras de contención que rechazan comandos destructivos sin aprobación humana explícita."
-    ],
-    technology: [
-      "Python 3.11+ / FastMCP",
-      "Model Context Protocol",
-      "AWS / Azure / GCP",
-      "Typer CLI / FastAPI",
-      "Bóveda Criptográfica Keyring",
-      "Docker"
-    ],
-    evolution: "Desarrollado directamente sobre el estándar abierto Model Context Protocol para proporcionar un puente seguro entre agentes de IA y recursos de nube.",
-    challenges: [
-      "Homogeneización de modelos de recursos discrepantes entre AWS, GCP y Azure.",
-      "Garantía de máxima seguridad de credenciales con aislamiento por sesión.",
-      "Respuestas deterministas ante caídas transitorias de APIs de proveedores."
-    ],
-    decisions: [
-      {
-        decision: "Adopción exclusiva del estándar abierto Model Context Protocol (MCP).",
-        rationale: "Elimina dependencias propietarias y asegura compatibilidad con cualquier cliente MCP estándar."
-      },
-      {
-        decision: "Uso del Keyring nativo del sistema operativo para secretos.",
-        rationale: "Previene fugas accidentales de tokens y credenciales en variables de entorno o archivos de configuración."
-      }
-    ],
-    results: [
-      {
-        metric: "Estándar Abierto",
-        value: "Protocolo MCP",
-        description: "Interoperabilidad nativa con herramientas de desarrollo y agentes modernos"
-      },
-      {
-        metric: "Custodia de Secretos",
-        value: "Bóveda Keyring",
-        description: "Credenciales de nube aisladas en los enclaves seguros del sistema operativo"
-      },
-      {
-        metric: "Control Unificado",
-        value: "Multi-Cloud Ops",
-        description: "Herramientas comunes para AWS, Google Cloud y Microsoft Azure"
-      }
-    ],
-    evidence: "Repositorio público con código Python, implementación FastMCP y Dockerfile funcional."
-  },
-  {
-    id: "triminds-integration-platform",
-    title: "Trimindslabs Integration Platform & Sovereign Mesh",
-    subtitle: "Mediación de APIs Políglotas, Malla de Eventos e Interconexión Segura",
-    tag: "Platform Engineering / Event Mesh",
-    sector: "Ingeniería de Plataforma y Arquitectura Orientada a Eventos",
+    title: "Triminds Security Layer",
+    subtitle: "Camada de Segurança Empresarial com Políticas e Arquitetura Modular",
+    tag: "Enterprise Security",
+    sector: "Segurança de Aplicações & Governança",
     domain: "platform",
     category: "what-we-built",
     truthStatus: "implemented",
     operationalStage: "validation",
-    honestScope: "Sustrato de ingeniería de plataforma para mediación de APIs, enrutamiento asíncrono de mensajes e interconexión de servicios bajo regulación europea.",
-    whatItProves: "Demuestra competencia en ingeniería de sistemas transversales, arquitecturas distribuidas y gobernanza de comunicación entre microservicios.",
-    problem: "Los ecosistemas con múltiples servicios políglotas sufren acoplamiento punto a punto frágil, falta de trazabilidad distribuida e inconsistencia de esquemas de datos.",
-    context: "Funciona como columna vertebral de comunicación para los módulos del ecosistema Trimindslabs, estandarizando contratos y observabilidad.",
+    honestScope: "Modular monolith Java 21/Spring Boot 3.4 com arquitetura hexagonal/clean, autenticação, autorização, políticas, risco e auditoria.",
+    whatItProves: "Demonstra fundação de segurança corporativa modular e orientada a políticas.",
+    problem: "Aplicações empresariais precisam centralizar identidade, autorização, políticas e auditoria sem acoplar essas capacidades ao domínio de cada aplicação.",
+    context: "O repositório declara arquitetura modular e core concluído, enquanto testes de integração, Docker Compose e Kubernetes ainda estão em andamento.",
     architecture: {
-      overview: "Malla de eventos y mediación: Pasarela de API ➔ Malla de Mensajería Redis/Kafka ➔ Adaptadores de Protocolo (Spring Boot / FastAPI) ➔ Trazabilidad OpenTelemetry.",
-      components: [
-        "Pasarela Unificada de Mediación de Protocolos y Rutas",
-        "Malla de Eventos Asíncronos con Redis Pub/Sub",
-        "Adaptadores Políglotas Estandarizados en Java y Python",
-        "Colector Centralizado de Trazabilidad con OpenTelemetry"
-      ],
-      diagramText: "Servicios Clientes ➔ Pasarela Unificada ➔ Malla de Eventos ➔ Adaptadores de Destino ➔ Colector OpenTelemetry"
+      overview: "Security Gateway → Identity/Auth/Access Control → Policy Engine (OPA) → Risk → Audit/Intelligence.",
+      components: ["Security Identity", "Authentication/JWT", "Access Control", "OPA Policy Engine", "Risk Engine", "Audit"],
+      diagramText: "Client ➔ Security Gateway ➔ Identity/Auth/Access ➔ OPA Policy ➔ Risk ➔ Audit/Intelligence"
     },
     realArchitectureVerification: {
-      documented: "Plataforma de integración y malla de eventos con Spring Boot, Python y Redis.",
-      implemented: "Java 21, Python 3.12, Redis, OpenTelemetry, Docker multi-stage.",
-      presentedOnSite: "Alineado con los artefactos de código presentes en el repositorio.",
-      coherenceScore: "100% Coherente"
+      documented: "Modular Monolith com Ports & Adapters, Clean Architecture, DDD e PBAC.",
+      implemented: "Java 21 + Spring Boot 3.4 com módulos de identidade, auth, access control, policy, risk, gateway, intelligence e audit.",
+      presentedOnSite: "Arquitetura alinhada; maturidade operacional limitada ao que o README comprova.",
+      coherenceScore: "Alinhado ao README atual"
     },
     realTechnologies: {
-      languages: ["Java 21", "Python 3.12", "TypeScript"],
-      frameworks: ["Spring Boot 3.x", "FastAPI"],
-      libraries: ["Redis Pub/Sub", "OpenTelemetry Tracing"],
-      databases: ["Redis", "PostgreSQL"],
-      cloud: ["Hetzner Cloud", "OVHcloud", "GCP Cloud Run"],
-      iac: ["Docker Multi-Stage", "Docker Compose"],
-      apis: ["REST OpenAPI", "Async Event Messaging"],
-      testing: ["Suites de pruebas de integración automatizadas"],
-      ciCd: ["GitHub Actions CI"],
-      observability: ["OpenTelemetry Collector"]
+      languages: ["Java 21"],
+      frameworks: ["Spring Boot 3.4", "Spring Security", "Spring Data JPA"],
+      libraries: ["OPA", "JWT/OAuth2 Resource Server"],
+      databases: ["PostgreSQL", "Redis"],
+      cloud: ["Cloud-native ready"],
+      apis: ["Security Gateway"],
+      testing: ["CI build and verification; integration tests in progress"],
+      ciCd: ["CI build and verification"],
+      observability: ["Micrometer", "Prometheus", "OpenTelemetry"]
+    },
+    repository: {
+      name: "RodrigoDiasDeOliveira/Trimindslabs-Security-Layer-v1",
+      isPrivate: true,
+      visibilityBadge: "Repositório Privado",
+      testSuiteStatus: "Core verification complete; integration tests in progress",
+      ciCdPipeline: "CI build and verification"
+    },
+    engineering: [
+      "Separação modular entre identidade, autenticação, autorização, políticas, risco e auditoria.",
+      "OPA como motor de avaliação de políticas.",
+      "Arquitetura orientada a Zero Trust e PBAC."
+    ],
+    technology: ["Java 21", "Spring Boot 3.4", "Spring Security", "OPA", "PostgreSQL", "Redis"],
+    evolution: "Próximas etapas: testes de integração, ambiente Docker Compose, CD e deployment Kubernetes.",
+    evidence: "README atual e estrutura modular do repositório.",
+    evidenceSource: "Trimindslabs-Security-Layer-v1 / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Arquitetura/core concluídos; integração e deployment ainda em evolução."
+  },
+  {
+    id: "triminds-ai-cloud-administrator",
+    title: "Trimindslabs AI Cloud Administrator",
+    subtitle: "Administración Multi-Cloud Asistida por IA con Ejecución Controlada",
+    tag: "Cloud Platform / AI Operations",
+    sector: "Administración Cloud y Gobernanza",
+    domain: "platform",
+    category: "what-we-built",
+    truthStatus: "implemented",
+    operationalStage: "validation",
+    honestScope: "MVP React/TypeScript + Express con capacidades reales separadas explícitamente de los adapters todavía no configurados.",
+    whatItProves: "Demuestra gobernanza operativa, dry-run, auditoría encadenada e integración real con AWS cuando las credenciales están configuradas.",
+    problem: "Las operaciones cloud deben distinguir planificación, análisis de IA y ejecución real.",
+    context: "La versión actual utiliza Node/Express como runtime principal y mantiene el estado operativo en memoria.",
+    architecture: {
+      overview: "React/TypeScript/Vite → Express API + orquestación IA + motor de políticas → adapters de proveedores.",
+      components: ["AWS SDKs reales", "Motor interno de políticas", "Dry-run explícito", "Audit chain SHA-256", "Telemetría interna"],
+      diagramText: "React ➔ Express ➔ Policy/AI ➔ AWS (real cuando está configurado) / Azure-GCP-OCI (NOT_CONFIGURED)"
+    },
+    realArchitectureVerification: {
+      documented: "MVP multi-cloud con separación entre planificación y ejecución.",
+      implemented: "Node/Express con rutas AWS STS/EC2 reales, motor de políticas, dry-run y audit chain SHA-256.",
+      presentedOnSite: "Sin afirmar adapters Azure/GCP/OCI configurados ni un servidor FastMCP independiente operativo.",
+      coherenceScore: "Alineado con el README actual"
+    },
+    realTechnologies: {
+      languages: ["TypeScript"],
+      frameworks: ["React 19", "Vite", "Express"],
+      libraries: ["AWS SDKs", "Gemini API"],
+      databases: ["Estado operativo en memoria"],
+      cloud: ["AWS real cuando está configurado", "Azure/GCP/OCI NOT_CONFIGURED"],
+      apis: ["HTTP API"],
+      testing: ["npm test", "npm run lint", "npm run build"],
+      ciCd: ["GitHub Actions"]
+    },
+    repository: {
+      name: "RodrigoDiasDeOliveira/trimindslabs-ai-cloud-administrator",
+      isPrivate: false,
+      visibilityBadge: "Repositorio",
+      testSuiteStatus: "Tests, lint y build",
+      ciCdPipeline: "GitHub Actions"
+    },
+    engineering: [
+      "El dry-run no produce efectos secundarios.",
+      "La ejecución real depende de un adapter y credenciales configurados.",
+      "Un proveedor sin adapter devuelve NOT_CONFIGURED en lugar de un éxito ficticio."
+    ],
+    technology: ["React 19 / TypeScript", "Express", "AWS SDKs", "Gemini opcional", "Audit chain SHA-256"],
+    evolution: "Evolución prevista hacia adapters multi-cloud reales, persistencia externa y mayor madurez operativa.",
+    evidence: "README actual e implementación principal Node/Express.",
+    evidenceSource: "Trimindslabs AI Cloud Administrator / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "MVP operativo / Work in Progress; preparado para validación de despliegue."
+  },
+  {
+    id: "triminds-integration-platform",
+    title: "Triminds Integration Platform (TIP)",
+    subtitle: "Plataforma de Integração Corporativa com Conectores e Resiliência",
+    tag: "Integration Platform",
+    sector: "Integração de Sistemas & APIs",
+    domain: "platform",
+    category: "what-we-built",
+    truthStatus: "implemented",
+    operationalStage: "validation",
+    honestScope: "Monólito TypeScript/Node/Express com console React, pipelines, transformação, validação e dispatch HTTP real para REST/Webhook.",
+    whatItProves: "Demonstra arquitetura modular, abstração de conectores e mecanismos de resiliência sem apresentar infraestrutura futura como entregue.",
+    problem: "Integrações heterogêneas precisam de uma camada consistente para modelagem, execução, retry e validação.",
+    context: "O runtime atual mantém estado em memória e foi estruturado para evolução futura sem acoplamento a um provedor específico.",
+    architecture: {
+      overview: "React Console → Express API → Integration Engine → Connectors → HTTP/Webhook.",
+      components: ["Pipeline Designer", "Transformation/Validation", "Retry/Timeout", "Idempotency", "Circuit Breaker"],
+      diagramText: "React ➔ Express ➔ Integration Engine ➔ REST/Webhook / Gemini opcional"
+    },
+    realArchitectureVerification: {
+      documented: "Clean/Hexagonal-inspired modular monolith.",
+      implemented: "TypeScript 5.8 + React 19 + Express 4; dispatch real REST/Webhook; demais conectores NOT_CONFIGURED.",
+      presentedOnSite: "Sem afirmar Redis/Kafka/Spring/FastAPI ou observabilidade distribuída como infraestrutura atual.",
+      coherenceScore: "Alinhado ao README atual"
+    },
+    realTechnologies: {
+      languages: ["TypeScript 5.8"],
+      frameworks: ["React 19", "Express 4", "Vite"],
+      databases: ["In-memory runtime state"],
+      cloud: ["Cloud-agnostic"],
+      apis: ["REST", "Webhook", "Optional Gemini"],
+      testing: ["TypeScript build / lint"],
+      ciCd: ["GitHub Actions"]
     },
     repository: {
       name: "RodrigoDiasDeOliveira/Trimindslabs-Integration-Platform",
       isPrivate: false,
-      visibilityBadge: "Repositorio Público",
-      testSuiteStatus: "Pruebas automatizadas cubriendo adaptadores y enrutamiento de eventos",
-      ciCdPipeline: "GitHub Actions CI: Passed",
-      adrReferences: ["ADR-001: Asynchronous Event Mesh over Synchronous REST"]
+      visibilityBadge: "Repositório",
+      adrReferences: ["ADR-001 Clean Architecture & Hexagonal Ports/Adapters", "ADR-002 Modular Monolith"]
     },
     engineering: [
-      "Estandarización de contratos de eventos con validación rigurosa de esquemas en entornos heterogéneos.",
-      "Implementación de trazabilidad distribuida unificada propagando identificadores de contexto entre servicios.",
-      "Aislamiento de tráfico de datos sensibles en proveedores de infraestructura bajo jurisdicción europea."
+      "Retry, timeout, idempotência e circuit breaker no dispatch HTTP real.",
+      "SOAP, Database, SFTP e Custom permanecem NOT_CONFIGURED.",
+      "Persistência externa e mensageria distribuída são evolução futura."
     ],
-    technology: [
-      "Java 21 / Spring Boot 3.x",
-      "Python 3.12 / FastAPI",
-      "Redis Event Mesh",
-      "OpenTelemetry",
-      "Docker Multi-Stage",
-      "Malla Soberana"
-    ],
-    evolution: "Evolucionó de scripts de integración aislados a una malla estructurada de eventos y mediación de servicios corporativos.",
-    challenges: [
-      "Garantía de interoperabilidad de tipos entre ecosistemas Java y Python.",
-      "Mantenimiento de trazabilidad de extremo a extremo a través de múltiples saltos de red.",
-      "Protección de datos en tránsito con cifrado de extremo a extremo."
-    ],
-    decisions: [
-      {
-        decision: "Uso de OpenTelemetry como estándar universal de observabilidad.",
-        rationale: "Evita la dependencia de herramientas propietarias de monitoreo y estandariza la recolección de métricas."
-      },
-      {
-        decision: "Comunicación primaria asíncrona orientada a eventos.",
-        rationale: "Desacopla la disponibilidad de los servicios individuales y aumenta la resiliencia global del sistema."
-      }
-    ],
-    results: [
-      {
-        metric: "Topología de Eventos",
-        value: "Malla Desacoplada",
-        description: "Comunicación asíncrona entre módulos sin bloqueo síncrono"
-      },
-      {
-        metric: "Observabilidad",
-        value: "OpenTelemetry",
-        description: "Trazabilidad distribuida con propagación de contexto estandarizada"
-      },
-      {
-        metric: "Jurisdicción Europea",
-        value: "Nube Soberana",
-        description: "Cumplimiento con estándares rigurosos de soberanía y protección de datos"
-      }
-    ],
-    evidence: "Repositorio público con arquitectura de adaptadores, plantillas y suites de validación automatizadas."
-  }
-];
-
-export const getProjects = (lang: Language): Project[] => {
-  switch (lang) {
-    case 'en': return PROJECTS_EN;
-    case 'es': return PROJECTS_ES;
-    default: return PROJECTS_PT;
-  }
-};
-
-export const PROJECTS = PROJECTS_PT;
-
-/* =========================================================================
-   PRODUCTION GATES BY LANGUAGE
-   ========================================================================= */
-
-const GATES_PT: ProductionGate[] = [
-  {
-    id: "gate-repository-truth",
-    name: "Veracidade dos Repositórios & Código",
-    phase: "Fase 1",
-    status: "verified",
-    evidence: "Separação formal entre estágio de implementação, validação contínua e comprovação de produção.",
-    details: "Nenhum sistema pode ser apresentado como produto final sem evidências em código e arquitetura."
+    technology: ["TypeScript 5.8", "React 19", "Express 4", "Vite"],
+    evolution: "Evolução prevista para persistência externa, mensageria, observabilidade distribuída e conectores empresariais reais.",
+    evidence: "README atual, estrutura do repositório e runtime Express.",
+    evidenceSource: "Trimindslabs-Integration-Platform / README",
+    lastVerified: "2026-10-08",
+    deploymentStatus: "Validação do runtime atual; maturidade de produção ainda não reivindicada."
   },
   {
     id: "gate-content-integrity",
