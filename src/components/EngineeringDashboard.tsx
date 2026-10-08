@@ -9,7 +9,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Clock,
-    Terminal,
+  Terminal,
 } from 'lucide-react';
 
 interface EngineeringDashboardProps {
@@ -24,7 +24,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
   initialTab = 'telemetry',
 }) => {
   const { language, t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'telemetry' | 'gates' | 'vocab'>(initialTab === 'releases' ? 'telemetry' : initialTab);
+  const [activeTab, setActiveTab] = useState<'telemetry' | 'gates' | 'vocab'>(initialTab);
 
   if (!isOpen) return null;
 
