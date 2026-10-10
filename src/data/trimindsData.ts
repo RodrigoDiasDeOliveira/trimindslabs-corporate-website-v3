@@ -1909,6 +1909,8 @@ export const getArticles = (lang: Language): Article[] => {
   }
 };
 
+export const getProjects = (_lang: Language): Project[] => PROJECTS_PT;
+
 export const ARTICLES = ARTICLES_PT;
 
 /* =========================================================================
