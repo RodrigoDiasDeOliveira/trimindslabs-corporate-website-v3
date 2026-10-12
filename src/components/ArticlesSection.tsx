@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAuditSiteContent } from '../hooks/useAuditSiteContent';
 import { Article, getArticles } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
 import { BookOpen, ArrowRight, FlaskConical } from 'lucide-react';
@@ -9,7 +10,8 @@ interface ArticlesSectionProps {
 
 export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticle }) => {
   const { language, t } = useLanguage();
-  const articles = getArticles(language);
+  const { content: auditContent, error: contentError } = useAuditSiteContent();
+  const articles = auditContent?.site_modules.articles?.[language] || getArticles(language);
 
   return (
     <section id="research" className="py-16 md:py-24 border-b border-[#E2E8F0]">
@@ -26,6 +28,11 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
           </p>
         </div>
 
+        {contentError && (
+          <div role="status" className="mb-5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            {language === 'pt' ? 'Conteúdo do Audit indisponível; exibindo a cópia local não sincronizada.' : language === 'es' ? 'Contenido de Audit no disponible; se muestra la copia local no sincronizada.' : 'Audit content unavailable; showing the unsynchronized local fallback.'}
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {articles.map((article) => {
             const isLab = article.id.includes('detector') || article.id.includes('eye-guardian');
