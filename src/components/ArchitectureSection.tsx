@@ -1,11 +1,13 @@
 import React from 'react';
+import { useAuditSiteContent } from '../hooks/useAuditSiteContent';
 import { useLanguage } from '../context/LanguageContext';
 import { getArchitecturePillars } from '../data/trimindsData';
 import { Cpu, ShieldCheck, GitMerge, FileCode, CheckCircle2 } from 'lucide-react';
 
 export const ArchitectureSection: React.FC = () => {
   const { language, t } = useLanguage();
-  const pillars = getArchitecturePillars(language);
+  const { content: auditContent, error: contentError } = useAuditSiteContent();
+  const pillars = auditContent?.site_modules.architecture_pillars?.[language] || getArchitecturePillars(language);
 
   const getPillarIcon = (num: string) => {
     switch (num) {
@@ -31,6 +33,11 @@ export const ArchitectureSection: React.FC = () => {
           </p>
         </div>
 
+        {contentError && (
+          <div role="status" className="mb-5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            {language === 'pt' ? 'Conteúdo do Audit indisponível; arquitetura local não sincronizada.' : language === 'es' ? 'Contenido de Audit no disponible; arquitectura local no sincronizada.' : 'Audit content unavailable; local architecture content is not synchronized.'}
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {pillars.map((pillar) => {
             const Icon = getPillarIcon(pillar.num);
