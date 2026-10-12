@@ -1,8 +1,27 @@
-import React, { useState } from 'react';
-import { Project, getProjects } from '../data/trimindsData';
+import React, { useEffect, useMemo, useState } from 'react';
+import { AuditRepositoryRecord, Project, getProjects } from '../data/trimindsData';
 import { ProjectCard } from './ProjectCard';
 import { useLanguage } from '../context/LanguageContext';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, RefreshCw, CircleAlert, LoaderCircle, ShieldCheck } from 'lucide-react';
+
+const AUDIT_API_BASE = 'https://triminds-ecosystem-audit-72mbkllrqa-ew.a.run.app';
+
+interface AuditObservation {
+  observation_id: string;
+  observed_at: string;
+  repositories: Array<{
+    observation_id: string;
+    observed_at: string;
+    source: {
+      full_name: string;
+      html_url?: string | null;
+      private?: boolean | null;
+      default_branch?: string | null;
+    };
+    commit: { sha: string; html_url?: string | null };
+    source_commit_sha: string;
+  }>;
+}
 
 interface ProjectsSectionProps {
   onSelectProject: (project: Project, initialTab?: 'overview' | 'technical') => void;
@@ -17,6 +36,31 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>(activeDomainFilter || 'all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'implemented' | 'partial' | 'planned'>('all');
+  const [auditObservation, setAuditObservation] = useState<AuditObservation | null>(null);
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [auditError, setAuditError] = useState<string | null>(null);
+
+  const loadAuditRecords = async () => {
+    setAuditLoading(true);
+    setAuditError(null);
+    try {
+      const response = await fetch(`${AUDIT_API_BASE}/api/v1/audit/ecosystem/observations`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (!response.ok) throw new Error(`Ecosystem Audit respondeu com HTTP ${response.status}`);
+      const data = await response.json() as AuditObservation;
+      if (!data || !Array.isArray(data.repositories)) {
+        throw new Error('A resposta do Audit não contém a lista de observações esperada.');
+      }
+      setAuditObservation(data);
+    } catch (error) {
+      setAuditError(error instanceof Error ? error.message : 'Não foi possível carregar os registros do Audit.');
+    } finally {
+      setAuditLoading(false);
+    }
+  };
+
+  useEffect(() => { void loadAuditRecords(); }, []);
 
   // Handle prop change if passed from parent
   React.useEffect(() => {
@@ -33,7 +77,44 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
     { id: 'platform', label: t('projects.filterPlatform', 'Plataforma & Nuvem') },
   ];
 
-  const allProjects = getProjects(language);
+  const editorialProjects = getProjects(language);
+  const allProjects = useMemo(() => {
+    if (!auditObservation) return editorialProjects;
+    const records = new Map<string, AuditRepositoryRecord>();
+    for (const item of auditObservation.repositories) {
+      const fullName = item.source?.full_name;
+      if (!fullName) continue;
+      records.set(fullName.toLowerCase(), {
+        fullName,
+        url: item.source.html_url || undefined,
+        private: item.source.private,
+        defaultBranch: item.source.default_branch || undefined,
+        commitSha: item.commit?.sha || item.source_commit_sha,
+        commitUrl: item.commit?.html_url || undefined,
+        observedAt: item.observed_at || auditObservation.observed_at,
+        observationId: item.observation_id,
+      });
+    }
+
+    return editorialProjects.map((project) => {
+      const repoName = project.repository?.name?.toLowerCase();
+      const record = repoName ? records.get(repoName) : undefined;
+      if (!record) return { ...project, auditRecord: undefined };
+      return {
+        ...project,
+        auditRecord: record,
+        repository: project.repository ? {
+          ...project.repository,
+          name: record.fullName,
+          url: record.url || project.repository.url,
+          isPrivate: typeof record.private === 'boolean' ? record.private : project.repository.isPrivate,
+          visibilityBadge: typeof record.private === 'boolean'
+            ? (record.private ? 'Repositório Privado' : 'Repositório Público')
+            : project.repository.visibilityBadge,
+        } : project.repository,
+      };
+    });
+  }, [editorialProjects, auditObservation]);
 
   const filteredProjects = allProjects.filter((p) => {
     // Category match
@@ -76,6 +157,35 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             {t('projects.subtitle', 'Conheça o propósito, o problema solucionado e as capacidades de cada sistema. Aprofunde-se na arquitetura e na validação técnica sob demanda.')}
           </p>
         </div>
+
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-start gap-2 text-xs text-[#555550]">
+            <ShieldCheck className="w-4 h-4 mt-0.5 text-emerald-700 shrink-0" />
+            <div>
+              <div className="font-semibold text-[#1A1A1A]">
+                {language === 'pt' ? 'Metadados de repositório provenientes do Ecosystem Audit' : language === 'es' ? 'Metadatos del repositorio procedentes de Ecosystem Audit' : 'Repository metadata sourced from Ecosystem Audit'}
+              </div>
+              <div className="mt-1">
+                {auditObservation
+                  ? (language === 'pt' ? `Observação ${auditObservation.observation_id} · ${auditObservation.repositories.length} repositórios observados` : language === 'es' ? `Observación ${auditObservation.observation_id} · ${auditObservation.repositories.length} repositorios observados` : `Observation ${auditObservation.observation_id} · ${auditObservation.repositories.length} repositories observed`)
+                  : (language === 'pt' ? 'O conteúdo editorial é mantido separadamente; links, visibilidade e commit são associados aos registros observados pelo Audit.' : language === 'es' ? 'El contenido editorial se mantiene separado; enlaces, visibilidad y commit se asocian a los registros observados por Audit.' : 'Editorial content stays separate; links, visibility and commit are matched to Audit observations.')}
+              </div>
+            </div>
+          </div>
+          <button type="button" onClick={() => void loadAuditRecords()} disabled={auditLoading} className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md border border-[#D1D1CD] bg-white text-xs font-mono disabled:opacity-50">
+            {auditLoading ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+            {language === 'pt' ? 'Atualizar registros' : language === 'es' ? 'Actualizar registros' : 'Refresh records'}
+          </button>
+        </div>
+        {auditError && (
+          <div role="alert" className="mb-6 p-3 rounded-lg border border-amber-200 bg-amber-50 text-amber-900 text-xs flex gap-2">
+            <CircleAlert className="w-4 h-4 shrink-0" />
+            <div>
+              <strong>{language === 'pt' ? 'Audit indisponível:' : language === 'es' ? 'Audit no disponible:' : 'Audit unavailable:'}</strong> {auditError}
+              <p className="mt-1">{language === 'pt' ? 'Os cartões editoriais continuam visíveis, mas os metadados do repositório não podem ser considerados sincronizados.' : language === 'es' ? 'Las tarjetas editoriales siguen visibles, pero los metadatos del repositorio no pueden considerarse sincronizados.' : 'Editorial cards remain visible, but repository metadata cannot be considered synchronized.'}</p>
+            </div>
+          </div>
+        )}
 
         {/* Filter Bar & Search */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-[#EAEAE6]">

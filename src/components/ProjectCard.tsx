@@ -67,6 +67,35 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelectProje
           </p>
         </div>
 
+        {project.auditRecord ? (
+          <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono font-semibold text-emerald-800">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              {language === 'pt' ? 'METADADOS CONFIRMADOS PELO AUDIT' : language === 'es' ? 'METADATOS CONFIRMADOS POR AUDIT' : 'AUDIT-OBSERVED REPOSITORY'}
+            </div>
+            <div className="mt-1 text-xs text-[#4A4A45] break-all">
+              {project.auditRecord.url ? (
+                <a href={project.auditRecord.url} target="_blank" rel="noreferrer" className="underline hover:text-[#1A1A1A]">
+                  {project.auditRecord.fullName}
+                </a>
+              ) : project.auditRecord.fullName}
+            </div>
+            <div className="mt-1 text-[11px] text-[#555550]">
+              {typeof project.auditRecord.private === 'boolean'
+                ? (project.auditRecord.private
+                    ? (language === 'pt' ? 'Repositório privado' : language === 'es' ? 'Repositorio privado' : 'Private repository')
+                    : (language === 'pt' ? 'Repositório público' : language === 'es' ? 'Repositorio público' : 'Public repository'))
+                : (language === 'pt' ? 'Visibilidade não informada pelo Audit' : language === 'es' ? 'Visibilidad no informada por Audit' : 'Visibility not reported by Audit')}
+              {' · '}
+              {language === 'pt' ? 'HEAD observado:' : language === 'es' ? 'HEAD observado:' : 'Observed HEAD:'} {project.auditRecord.commitSha.slice(0, 7)}
+            </div>
+          </div>
+        ) : project.repository ? (
+          <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50/60 p-3 text-[11px] text-amber-900">
+            {language === 'pt' ? 'Registro do repositório ainda não associado a uma observação do Audit.' : language === 'es' ? 'El repositorio aún no está asociado a una observación de Audit.' : 'Repository not yet matched to an Audit observation.'}
+          </div>
+        ) : null}
+
         {/* Practical Problem Solved */}
         <div className="mt-4">
           <div className="text-xs font-mono text-[#70706B] uppercase mb-1 font-semibold">
