@@ -47,6 +47,8 @@ export interface ProjectRepository {
   adrReferences?: string[];
 }
 
+export type CanonicalLocalizedProjectContent = Partial<Omit<Project, 'id' | 'domain' | 'category' | 'truthStatus' | 'operationalStage' | 'repository' | 'auditRecord' | 'deployment'>>;
+
 export interface CanonicalProjectRecord {
   id: string;
   canonical_name: string;
@@ -59,6 +61,8 @@ export interface CanonicalProjectRecord {
   deployment?: { url?: string | null; status?: string | null; evidence_status?: string | null } | null;
   portfolio_visible: boolean;
   dashboard_visible: boolean;
+  localized_content?: Partial<Record<Language, CanonicalLocalizedProjectContent>>;
+  content_provenance?: { source_system: string; migrated_at: string; verification_status: string; note: string };
 }
 
 export interface CanonicalProjectRegistry {
