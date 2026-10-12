@@ -17,11 +17,13 @@ import { Footer } from './components/Footer';
 import { ProjectModal } from './components/ProjectModal';
 import { ArticleModal } from './components/ArticleModal';
 import { GatesModal } from './components/GatesModal';
-import { Project, Article, getProjects, getArticles } from './data/trimindsData';
+import { Language, Project, Article, getProjects, getArticles } from './data/trimindsData';
 
 export function AppContent() {
   const { language } = useLanguage();
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [selectedProjectOverride, setSelectedProjectOverride] = useState<Project | null>(null);
+  const [selectedProjectOverrideLanguage, setSelectedProjectOverrideLanguage] = useState<Language | null>(null);
   const [projectModalTab, setProjectModalTab] = useState<'overview' | 'technical'>('overview');
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const [isGatesModalOpen, setIsGatesModalOpen] = useState(false);
@@ -31,10 +33,16 @@ export function AppContent() {
   // Dynamically resolve the selected project and article based on current language
   const currentProjects = getProjects(language);
   const currentArticles = getArticles(language);
-  const selectedProject = selectedProjectId ? currentProjects.find(p => p.id === selectedProjectId) || null : null;
+  const selectedProject = selectedProjectId
+    ? (selectedProjectOverride?.id === selectedProjectId && selectedProjectOverrideLanguage === language
+        ? selectedProjectOverride
+        : currentProjects.find(p => p.id === selectedProjectId) || null)
+    : null;
   const selectedArticle = selectedArticleId ? currentArticles.find(a => a.id === selectedArticleId) || null : null;
 
   const handleSelectProject = (project: Project, initialTab: 'overview' | 'technical' = 'overview') => {
+    setSelectedProjectOverride(project);
+    setSelectedProjectOverrideLanguage(language);
     setSelectedProjectId(project.id);
     setProjectModalTab(initialTab);
   };
