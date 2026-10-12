@@ -46,31 +46,39 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const loadAuditRecords = async () => {
     setAuditLoading(true);
     setAuditError(null);
-    try {
-      const response = await fetch(`${AUDIT_API_BASE}/api/v1/audit/ecosystem/observations`, {
-        headers: { Accept: 'application/json' },
-      });
-      if (!response.ok) throw new Error(`Ecosystem Audit respondeu com HTTP ${response.status}`);
-      const data = await response.json() as AuditObservation;
-      if (!data || !Array.isArray(data.repositories)) {
-        throw new Error('A resposta do Audit não contém a lista de observações esperada.');
-      }
-      setAuditObservation(data);
-      const registryResponse = await fetch(CANONICAL_PROJECTS_URL, { headers: { Accept: 'application/json' } });
-      if (!registryResponse.ok) throw new Error(`Registro canônico respondeu com HTTP ${registryResponse.status}`);
-      const registryData = await registryResponse.json() as CanonicalProjectRegistry;
-      if (!registryData || !Array.isArray(registryData.projects)) throw new Error('A resposta do registro canônico não contém projetos.');
-      setCanonicalRegistry(registryData);
-      setRegistryError(null);
-    } catch (error) {
-      setAuditError(error instanceof Error ? error.message : 'Não foi possível carregar os registros do Audit.');
-      setRegistryError(error instanceof Error ? error.message : 'Não foi possível carregar o registro canônico.');
-    } finally {
-      setAuditLoading(false);
-    }
-  };
+    setRegistryError(null);
 
-  useEffect(() => { void loadAuditRecords(); }, []);
+    const [observationResult, registryResult] = await Promise.allSettled([
+      fetch(`${AUDIT_API_BASE}/api/v1/audit/ecosystem/observations`, {
+        headers: { Accept: 'application/json' },
+      }).then(async (response) => {
+        if (!response.ok) throw new Error(`Ecosystem Audit respondeu com HTTP ${response.status}`);
+        return await response.json() as AuditObservation;
+      }),
+      fetch(CANONICAL_PROJECTS_URL, { headers: { Accept: 'application/json' } }).then(async (response) => {
+        if (!response.ok) throw new Error(`Registro canônico respondeu com HTTP ${response.status}`);
+        return await response.json() as CanonicalProjectRegistry;
+      }),
+    ]);
+
+    if (observationResult.status === 'fulfilled' && observationResult.value && Array.isArray(observationResult.value.repositories)) {
+      setAuditObservation(observationResult.value);
+    } else {
+      setAuditError(observationResult.status === 'rejected'
+        ? (observationResult.reason instanceof Error ? observationResult.reason.message : 'Não foi possível carregar as observações de repositório.')
+        : 'A resposta do Audit não contém a lista de observações esperada.');
+    }
+
+    if (registryResult.status === 'fulfilled' && registryResult.value && Array.isArray(registryResult.value.projects)) {
+      setCanonicalRegistry(registryResult.value);
+    } else {
+      setRegistryError(registryResult.status === 'rejected'
+        ? (registryResult.reason instanceof Error ? registryResult.reason.message : 'Não foi possível carregar o registro canônico.')
+        : 'A resposta do registro canônico não contém projetos.');
+    }
+
+    setAuditLoading(false);
+  };
 
   // Handle prop change if passed from parent
   React.useEffect(() => {
@@ -89,10 +97,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
   const editorialProjects = getProjects(language);
   const allProjects = useMemo(() => {
-    if (!auditObservation) return editorialProjects;
+    if (!auditObservation && !canonicalRegistry) return editorialProjects;
     const records = new Map<string, AuditRepositoryRecord>();
     const canonicalRecords = new Map<string, CanonicalProjectRecord>((canonicalRegistry?.projects || []).map((item) => [item.id, item]));
-    for (const item of auditObservation.repositories) {
+    for (const item of auditObservation?.repositories || []) {
       const fullName = item.source?.full_name;
       if (!fullName) continue;
       records.set(fullName.toLowerCase(), {
@@ -102,14 +110,15 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         defaultBranch: item.source.default_branch || undefined,
         commitSha: item.commit?.sha || item.source_commit_sha,
         commitUrl: item.commit?.html_url || undefined,
-        observedAt: item.observed_at || auditObservation.observed_at,
+        observedAt: item.observed_at || auditObservation?.observed_at || '',
         observationId: item.observation_id,
       });
     }
 
     return editorialProjects.map((project) => {
       const canonical = canonicalRecords.get(project.id);
-      const repoName = (canonical?.repository_full_name || project.repository?.name)?.toLowerCase();
+      const associationNeedsReview = canonical?.repository_association_status === 'NEEDS_REVIEW';
+      const repoName = associationNeedsReview ? undefined : (canonical?.repository_full_name || project.repository?.name)?.toLowerCase();
       const record = repoName ? records.get(repoName) : undefined;
       const baseProject: Project = canonical ? {
         ...project,
