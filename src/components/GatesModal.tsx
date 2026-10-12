@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAuditSiteContent } from '../hooks/useAuditSiteContent';
 import { getProductionGates } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
 import { X, ShieldCheck, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
@@ -10,10 +11,11 @@ interface GatesModalProps {
 
 export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
   const { language, t } = useLanguage();
+  const { content: auditContent, error: contentError } = useAuditSiteContent();
 
   if (!isOpen) return null;
 
-  const productionGates = getProductionGates(language);
+  const productionGates = auditContent?.site_modules.production_gates?.[language] || getProductionGates(language);
 
   return (
     <div
@@ -50,6 +52,11 @@ export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         <div className="p-6 overflow-y-auto space-y-4 flex-1">
+          {contentError && (
+            <div role="status" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+              {language === 'pt' ? 'Audit indisponível; os gates locais não estão sincronizados.' : language === 'es' ? 'Audit no disponible; los gates locales no están sincronizados.' : 'Audit unavailable; local gates are not synchronized.'}
+            </div>
+          )}
           <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-mono text-emerald-900 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
