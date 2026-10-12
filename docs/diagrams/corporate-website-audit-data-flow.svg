@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+  <title id="title">Corporate Website V3 and Ecosystem Audit data flow</title>
+  <desc id="desc">The corporate website reads project registry, repository observations, summary metrics, and localized site content from the Ecosystem Audit API. The Audit API observes GitHub. Unmeasured indicators remain unmeasured.</desc>
+  <defs>
+    <style>
+      .bg{fill:#faf9f6}.node{fill:#fff;stroke:#292923;stroke-width:2;rx:14}.api{fill:#eef4f0;stroke:#287653;stroke-width:2;rx:14}.warn{fill:#fff7e6;stroke:#a66b00;stroke-width:2;rx:14}
+      .title{font:700 22px Arial,sans-serif;fill:#1a1a1a}.body{font:16px Arial,sans-serif;fill:#353530}.small{font:14px Arial,sans-serif;fill:#555550}.line{fill:none;stroke:#555550;stroke-width:2.5}.arrow{fill:#555550}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="arrow"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="660"/>
+  <text x="40" y="48" class="title">Trimindslabs Corporate Website V3 — Audit Data Flow</text>
+  <text x="40" y="76" class="small">Source-level architecture • not a live health check</text>
+
+  <rect x="50" y="150" width="300" height="160" class="node"/>
+  <text x="200" y="185" text-anchor="middle" class="title">Corporate Website V3</text>
+  <text x="75" y="222" class="body">ProjectsSection</text>
+  <text x="75" y="248" class="body">EngineeringDashboard</text>
+  <text x="75" y="274" class="body">useAuditSiteContent</text>
+
+  <rect x="445" y="130" width="370" height="200" class="api"/>
+  <text x="630" y="168" text-anchor="middle" class="title">Ecosystem Audit API</text>
+  <text x="475" y="205" class="body">/api/v1/projects</text>
+  <text x="475" y="232" class="body">/api/v1/audit/ecosystem/observations</text>
+  <text x="475" y="259" class="body">/api/v1/audit/summary</text>
+  <text x="475" y="286" class="body">/api/v1/site-content</text>
+
+  <rect x="910" y="150" width="240" height="160" class="node"/>
+  <text x="1030" y="190" text-anchor="middle" class="title">GitHub API</text>
+  <text x="935" y="225" class="body">Repository metadata</text>
+  <text x="935" y="251" class="body">Commit / CI signals</text>
+  <text x="935" y="277" class="small">Within token scope</text>
+
+  <path d="M350 225 H435" class="line" marker-end="url(#arrow)"/>
+  <path d="M815 225 H900" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="115" y="400" width="970" height="175" class="warn"/>
+  <text x="145" y="438" class="title">Evidence and presentation rules</text>
+  <text x="145" y="474" class="body">• Repository count means the number returned by the Audit API, not necessarily the entire GitHub account inventory.</text>
+  <text x="145" y="506" class="body">• Pipeline success is measured only from completed, recognized commit statuses.</text>
+  <text x="145" y="538" class="body">• Security compliance is not inferred from CI; keep NOT_MEASURED until a dedicated assessment exists.</text>
+  <text x="40" y="625" class="small">Source files: ProjectsSection.tsx • EngineeringDashboard.tsx • useAuditSiteContent.ts • Ecosystem Audit main.py</text>
+</svg>
