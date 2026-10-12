@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { getProductionGates, getVocabularyTerms, getOperationalSystems } from '../data/trimindsData';
+import React, { useCallback, useEffect, useState } from 'react';
+import { getProductionGates, getVocabularyTerms } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
 import {
   X,
@@ -10,7 +10,32 @@ import {
   AlertTriangle,
   Clock,
   Terminal,
+  RefreshCw,
+  CircleAlert,
+  LoaderCircle,
 } from 'lucide-react';
+
+const AUDIT_API_BASE = 'https://triminds-ecosystem-audit-72mbkllrqa-ew.a.run.app';
+
+interface AuditLogItem {
+  repository: string;
+  event: string;
+  commit_sha: string;
+  status: string;
+  timestamp: string;
+}
+
+interface AuditSummary {
+  system_status: string;
+  last_audit_timestamp: string;
+  summary_cards: {
+    total_repositories: number;
+    pipeline_success_rate: string;
+    security_compliance: string;
+    active_deployments?: number | null;
+  };
+  audit_logs: AuditLogItem[];
+}
 
 interface EngineeringDashboardProps {
   isOpen: boolean;
@@ -25,10 +50,37 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
 }) => {
   const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'telemetry' | 'gates' | 'vocab'>(initialTab);
+  const [auditSummary, setAuditSummary] = useState<AuditSummary | null>(null);
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [auditError, setAuditError] = useState<string | null>(null);
+
+  const loadAuditSummary = useCallback(async (forceRefresh = false) => {
+    setAuditLoading(true);
+    setAuditError(null);
+    try {
+      const endpoint = `${AUDIT_API_BASE}/api/v1/audit/summary${forceRefresh ? '?force_refresh=true' : ''}`;
+      const response = await fetch(endpoint, { headers: { Accept: 'application/json' } });
+      if (!response.ok) {
+        throw new Error(`Audit API respondeu com HTTP ${response.status}`);
+      }
+      const data = await response.json() as AuditSummary;
+      if (!data || !data.summary_cards || !Array.isArray(data.audit_logs)) {
+        throw new Error('A resposta da API não corresponde ao contrato esperado de AuditSummary.');
+      }
+      setAuditSummary(data);
+    } catch (error) {
+      setAuditError(error instanceof Error ? error.message : 'Não foi possível carregar o Ecosystem Audit.');
+    } finally {
+      setAuditLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) void loadAuditSummary(false);
+  }, [isOpen, loadAuditSummary]);
 
   if (!isOpen) return null;
 
-  const operationalSystems = getOperationalSystems(language);
   const productionGates = getProductionGates(language);
   const vocabularyTerms = getVocabularyTerms(language);
 
@@ -55,10 +107,10 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
             </h2>
             <p className="text-xs text-[#555550] mt-1 max-w-3xl leading-relaxed">
               {language === 'pt'
-                ? 'Evidências verificáveis sobre a arquitetura dos sistemas, ambientes de nuvem declarados, auditoria dos 11 Gates e governança técnica.'
+                ? 'Resumo operacional carregado do Ecosystem Audit, com evidências de repositórios e critérios formais de governança.'
                 : language === 'es'
-                ? 'Evidencias comprobables sobre la arquitectura de los sistemas, entornos de nube declarados, auditoría de los 11 Gates y gobernanza técnica.'
-                : 'Verifiable operational evidence on systems architecture, declared cloud environments, 11 Gates audit criteria, and technical governance.'}
+                ? 'Resumen operativo cargado desde Ecosystem Audit, con evidencias de repositorios y criterios formales de gobernanza.'
+                : 'Operational summary loaded from Ecosystem Audit, with repository evidence and formal governance criteria.'}
             </p>
           </div>
 
@@ -112,56 +164,109 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
 
         {/* Scrollable Dashboard Body */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1 text-sm">
-          {/* TAB 1: OPERATIONAL SYSTEMS & RUNTIME ENVIRONMENTS */}
+          {/* TAB 1: LIVE DATA FROM ECOSYSTEM AUDIT API */}
           {activeTab === 'telemetry' && (
             <div className="space-y-6">
               <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <div className="text-xs font-mono text-[#70706B] uppercase mb-0.5">
-                    {t('dashboard.govHeader', 'Governança Operacional')}
+                    {language === 'pt' ? 'Fonte de dados' : language === 'es' ? 'Fuente de datos' : 'Data source'}
                   </div>
                   <div className="font-serif text-lg font-bold text-[#1A1A1A]">
-                    {t('dashboard.declaredState', 'Estado Declarado dos Ambientes em Produção')}
+                    Ecosystem Audit API
                   </div>
+                  <a className="text-xs text-blue-700 underline break-all" href={`${AUDIT_API_BASE}/api/v1/audit/summary`} target="_blank" rel="noreferrer">
+                    {AUDIT_API_BASE}/api/v1/audit/summary
+                  </a>
                 </div>
-                <div className="text-xs font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded flex items-center gap-1.5 self-start sm:self-auto font-semibold">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{t('dashboard.euBadge', 'JURISDIÇÃO EUROPEIA QUALIFICADA')}</span>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => void loadAuditSummary(true)}
+                  disabled={auditLoading}
+                  className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md border border-[#D1D1CD] bg-white text-xs font-mono text-[#1A1A1A] hover:bg-[#F4F4F1] disabled:opacity-50"
+                >
+                  {auditLoading ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                  {language === 'pt' ? 'Atualizar Audit' : language === 'es' ? 'Actualizar Audit' : 'Refresh Audit'}
+                </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {operationalSystems.map((sys, idx) => (
-                  <div
-                    key={idx}
-                    className="p-5 bg-white border border-[#E2E8F0] rounded-xl flex flex-col justify-between shadow-xs"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="font-serif text-base font-bold text-[#1A1A1A]">
-                          {sys.name}
-                        </span>
-                        <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          {sys.stage}
-                        </span>
-                      </div>
-                      <div className="text-xs font-mono text-[#70706B] mb-2 flex items-center gap-1">
-                        <Server className="w-3.5 h-3.5 text-purple-600" />
-                        <span>{sys.runtime}</span>
-                      </div>
-                      <div className="text-xs font-mono text-[#555550] mb-3">
-                        <span className="text-[#70706B]">Stack: </span>
-                        <span>{sys.stack}</span>
-                      </div>
-                    </div>
+              {auditLoading && !auditSummary && (
+                <div className="p-8 bg-white border border-[#E2E8F0] rounded-xl flex items-center justify-center gap-3 text-sm text-[#555550]">
+                  <LoaderCircle className="w-5 h-5 animate-spin" />
+                  {language === 'pt' ? 'Carregando dados do Ecosystem Audit…' : language === 'es' ? 'Cargando datos de Ecosystem Audit…' : 'Loading Ecosystem Audit data…'}
+                </div>
+              )}
 
-                    <div className="pt-3 border-t border-[#F0F0EC] text-xs text-[#555550]">
-                      <strong className="text-[#1A1A1A] font-mono">{t('dashboard.evidenceLabel', 'Evidência: ')}</strong>
-                      <span>{sys.evidenceSource}</span>
-                    </div>
+              {auditError && (
+                <div role="alert" className="p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-900 flex items-start gap-3">
+                  <CircleAlert className="w-5 h-5 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">{language === 'pt' ? 'Não foi possível consultar o Audit' : language === 'es' ? 'No se pudo consultar Audit' : 'Could not reach Audit'}</div>
+                    <p className="mt-1">{auditError}</p>
+                    <p className="mt-1 text-xs">{language === 'pt' ? 'Os dados locais não serão apresentados como se fossem dados atuais da API.' : language === 'es' ? 'Los datos locales no se mostrarán como si fueran datos actuales de la API.' : 'Local data will not be presented as current API data.'}</p>
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
+
+              {auditSummary && (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    {[
+                      { label: language === 'pt' ? 'Estado do Audit' : language === 'es' ? 'Estado de Audit' : 'Audit status', value: auditSummary.system_status || 'UNKNOWN' },
+                      { label: language === 'pt' ? 'Repositórios observados' : language === 'es' ? 'Repositorios observados' : 'Repositories observed', value: String(auditSummary.summary_cards.total_repositories ?? 0) },
+                      { label: language === 'pt' ? 'Sucesso dos pipelines' : language === 'es' ? 'Éxito de pipelines' : 'Pipeline success', value: auditSummary.summary_cards.pipeline_success_rate || 'NOT_MEASURED' },
+                      { label: language === 'pt' ? 'Conformidade de segurança' : language === 'es' ? 'Cumplimiento de seguridad' : 'Security compliance', value: auditSummary.summary_cards.security_compliance || 'NOT_MEASURED' },
+                    ].map((card) => (
+                      <div key={card.label} className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
+                        <div className="text-xs font-mono text-[#70706B] mb-2">{card.label}</div>
+                        <div className="font-serif text-xl font-bold text-[#1A1A1A] break-words">{card.value}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
+                    <div className="text-xs font-mono text-[#70706B] mb-1">
+                      {language === 'pt' ? 'Última consulta reportada pela API' : language === 'es' ? 'Última consulta informada por la API' : 'Last API audit timestamp'}
+                    </div>
+                    <div className="text-sm font-mono text-[#1A1A1A]">{auditSummary.last_audit_timestamp ? new Date(auditSummary.last_audit_timestamp).toLocaleString() : 'NOT_REPORTED'}</div>
+                  </div>
+
+                  <div className="bg-white border border-[#E2E8F0] rounded-xl overflow-hidden">
+                    <div className="p-4 border-b border-[#E2E8F0]">
+                      <h3 className="font-serif text-lg font-bold text-[#1A1A1A]">{language === 'pt' ? 'Eventos e evidências retornados pelo Audit' : language === 'es' ? 'Eventos y evidencias devueltos por Audit' : 'Events and evidence returned by Audit'}</h3>
+                      <p className="text-xs text-[#70706B] mt-1">{language === 'pt' ? 'Estados históricos ou não medidos permanecem explicitamente identificados.' : language === 'es' ? 'Los estados históricos o no medidos se identifican explícitamente.' : 'Historical or unmeasured states remain explicitly identified.'}</p>
+                    </div>
+                    {auditSummary.audit_logs.length === 0 ? (
+                      <p className="p-5 text-sm text-[#555550]">{language === 'pt' ? 'A API não retornou eventos de auditoria.' : language === 'es' ? 'La API no devolvió eventos de auditoría.' : 'The API returned no audit events.'}</p>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                          <thead className="bg-[#FAF9F6] text-[#70706B] border-b border-[#E2E8F0]">
+                            <tr>
+                              <th className="py-3 px-4">{language === 'pt' ? 'Repositório' : language === 'es' ? 'Repositorio' : 'Repository'}</th>
+                              <th className="py-3 px-4">{language === 'pt' ? 'Evento' : language === 'es' ? 'Evento' : 'Event'}</th>
+                              <th className="py-3 px-4">Status</th>
+                              <th className="py-3 px-4">Commit</th>
+                              <th className="py-3 px-4">{language === 'pt' ? 'Data da evidência' : language === 'es' ? 'Fecha de evidencia' : 'Evidence date'}</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-[#F0F0EC]">
+                            {auditSummary.audit_logs.map((item, idx) => (
+                              <tr key={`${item.repository}-${item.timestamp}-${idx}`} className="hover:bg-[#FAF9F6]">
+                                <td className="py-3 px-4 font-semibold text-[#1A1A1A] whitespace-nowrap">{item.repository}</td>
+                                <td className="py-3 px-4 text-[#555550] min-w-64">{item.event}</td>
+                                <td className="py-3 px-4 font-mono whitespace-nowrap">{item.status}</td>
+                                <td className="py-3 px-4 font-mono">{item.commit_sha}</td>
+                                <td className="py-3 px-4 whitespace-nowrap">{item.timestamp ? new Date(item.timestamp).toLocaleString() : 'NOT_REPORTED'}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           )}
 
