@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AuditRepositoryRecord, Project, getProjects } from '../data/trimindsData';
+import { AuditRepositoryRecord, CanonicalProjectRecord, CanonicalProjectRegistry, Project, getProjects } from '../data/trimindsData';
 import { ProjectCard } from './ProjectCard';
 import { useLanguage } from '../context/LanguageContext';
 import { Search, Filter, RefreshCw, CircleAlert, LoaderCircle, ShieldCheck } from 'lucide-react';
 
 const AUDIT_API_BASE = 'https://triminds-ecosystem-audit-72mbkllrqa-ew.a.run.app';
+const CANONICAL_PROJECTS_URL = `${AUDIT_API_BASE}/api/v1/projects`;
 
 interface AuditObservation {
   observation_id: string;
@@ -37,6 +38,8 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'implemented' | 'partial' | 'planned'>('all');
   const [auditObservation, setAuditObservation] = useState<AuditObservation | null>(null);
+  const [canonicalRegistry, setCanonicalRegistry] = useState<CanonicalProjectRegistry | null>(null);
+  const [registryError, setRegistryError] = useState<string | null>(null);
   const [auditLoading, setAuditLoading] = useState(false);
   const [auditError, setAuditError] = useState<string | null>(null);
 
@@ -53,8 +56,15 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         throw new Error('A resposta do Audit não contém a lista de observações esperada.');
       }
       setAuditObservation(data);
+      const registryResponse = await fetch(CANONICAL_PROJECTS_URL, { headers: { Accept: 'application/json' } });
+      if (!registryResponse.ok) throw new Error(`Registro canônico respondeu com HTTP ${registryResponse.status}`);
+      const registryData = await registryResponse.json() as CanonicalProjectRegistry;
+      if (!registryData || !Array.isArray(registryData.projects)) throw new Error('A resposta do registro canônico não contém projetos.');
+      setCanonicalRegistry(registryData);
+      setRegistryError(null);
     } catch (error) {
       setAuditError(error instanceof Error ? error.message : 'Não foi possível carregar os registros do Audit.');
+      setRegistryError(error instanceof Error ? error.message : 'Não foi possível carregar o registro canônico.');
     } finally {
       setAuditLoading(false);
     }
@@ -81,6 +91,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const allProjects = useMemo(() => {
     if (!auditObservation) return editorialProjects;
     const records = new Map<string, AuditRepositoryRecord>();
+    const canonicalRecords = new Map<string, CanonicalProjectRecord>((canonicalRegistry?.projects || []).map((item) => [item.id, item]));
     for (const item of auditObservation.repositories) {
       const fullName = item.source?.full_name;
       if (!fullName) continue;
@@ -97,24 +108,37 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
     }
 
     return editorialProjects.map((project) => {
-      const repoName = project.repository?.name?.toLowerCase();
+      const canonical = canonicalRecords.get(project.id);
+      const repoName = (canonical?.repository_full_name || project.repository?.name)?.toLowerCase();
       const record = repoName ? records.get(repoName) : undefined;
-      if (!record) return { ...project, auditRecord: undefined };
-      return {
+      const baseProject: Project = canonical ? {
         ...project,
+        domain: canonical.domain,
+        category: canonical.category,
+        truthStatus: canonical.truth_status,
+        operationalStage: canonical.operational_stage,
+        deployment: canonical.deployment?.url ? {
+          ...(project.deployment || { target: 'Ecosystem Audit registry' }),
+          url: canonical.deployment.url,
+          status: canonical.deployment.status || 'NOT_VERIFIED',
+        } : project.deployment,
+      } : project;
+      if (!record) return { ...baseProject, auditRecord: undefined };
+      return {
+        ...baseProject,
         auditRecord: record,
-        repository: project.repository ? {
-          ...project.repository,
+        repository: baseProject.repository ? {
+          ...baseProject.repository,
           name: record.fullName,
-          url: record.url || project.repository.url,
-          isPrivate: typeof record.private === 'boolean' ? record.private : project.repository.isPrivate,
+          url: record.url || baseProject.repository.url,
+          isPrivate: typeof record.private === 'boolean' ? record.private : baseProject.repository.isPrivate,
           visibilityBadge: typeof record.private === 'boolean'
             ? (record.private ? 'Repositório Privado' : 'Repositório Público')
-            : project.repository.visibilityBadge,
-        } : project.repository,
+            : baseProject.repository.visibilityBadge,
+        } : baseProject.repository,
       };
     });
-  }, [editorialProjects, auditObservation]);
+  }, [editorialProjects, auditObservation, canonicalRegistry]);
 
   const filteredProjects = allProjects.filter((p) => {
     // Category match
@@ -159,6 +183,18 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         </div>
 
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        {canonicalRegistry && (
+          <div className="mb-4 rounded-lg border border-[#D1D1CD] bg-[#FAF9F6] px-3 py-2 text-xs text-[#555550]">
+            <strong className="text-[#1A1A1A]">Ecosystem Audit — canonical registry:</strong>{' '}
+            {canonicalRegistry.projects.length} project records · {canonicalRegistry.editorial_content_status}.
+            {' '}{canonicalRegistry.editorial_content_note}
+          </div>
+        )}
+        {registryError && !canonicalRegistry && (
+          <div role="status" className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            Canonical project registry not synchronized: {registryError}
+          </div>
+        )}
           <div className="flex items-start gap-2 text-xs text-[#555550]">
             <ShieldCheck className="w-4 h-4 mt-0.5 text-emerald-700 shrink-0" />
             <div>
