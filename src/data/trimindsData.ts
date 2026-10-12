@@ -47,6 +47,17 @@ export interface ProjectRepository {
   adrReferences?: string[];
 }
 
+export interface AuditRepositoryRecord {
+  fullName: string;
+  url?: string;
+  private?: boolean | null;
+  defaultBranch?: string;
+  commitSha: string;
+  commitUrl?: string;
+  observedAt: string;
+  observationId: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -65,6 +76,7 @@ export interface Project {
   realArchitectureVerification?: RealArchitectureVerification;
   realTechnologies?: RealTechnologies;
   repository?: ProjectRepository;
+  auditRecord?: AuditRepositoryRecord;
   engineering?: string[];
   technology: string[];
   evolution?: string;
@@ -260,7 +272,7 @@ const PROJECTS_PT: Project[] = [
         testing: ["Pytest", "ruff", "pre-commit"]
       },
       repository: {
-        name: "RodrigoDiasDeOliveira/Trimindslabs-Geo-AI",
+        name: "RodrigoDiasDeOliveira/Trimindslabs-Geo-AI-V4",
         isPrivate: false,
         visibilityBadge: "Repositório",
         testSuiteStatus: "Quality checks and pytest"
@@ -278,7 +290,7 @@ const PROJECTS_PT: Project[] = [
       deploymentStatus: "Operational — Cloud Run v4.",
       deployment: {
         target: "Google Cloud Run / europe-west1",
-        url: "https://triminds-geo-ai-v4-1091629879450.europe-west1.run.app/",
+        url: "https://triminds-geo-ai-v4-72mbkllrqa-ew.a.run.app/",
         status: "Operational"
       }
     },
