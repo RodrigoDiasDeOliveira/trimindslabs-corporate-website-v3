@@ -120,8 +120,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       const associationNeedsReview = canonical?.repository_association_status === 'NEEDS_REVIEW';
       const repoName = associationNeedsReview ? undefined : (canonical?.repository_full_name || project.repository?.name)?.toLowerCase();
       const record = repoName ? records.get(repoName) : undefined;
+      const localizedContent = canonical?.localized_content?.[language];
       const baseProject: Project = canonical ? {
         ...project,
+        ...(localizedContent || {}),
+        id: project.id,
         domain: canonical.domain,
         category: canonical.category,
         truthStatus: canonical.truth_status,
