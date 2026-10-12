@@ -180,11 +180,8 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                     {language === 'pt' ? 'Fonte de dados' : language === 'es' ? 'Fuente de datos' : 'Data source'}
                   </div>
                   <div className="font-serif text-lg font-bold text-[#1A1A1A]">
-                    Ecosystem Audit API
+                    Trimindslabs Ecosystem Audit
                   </div>
-                  <a className="text-xs text-blue-700 underline break-all" href={`${AUDIT_API_BASE}/api/v1/audit/summary`} target="_blank" rel="noreferrer">
-                    {AUDIT_API_BASE}/api/v1/audit/summary
-                  </a>
                 </div>
                 <button
                   type="button"
@@ -288,10 +285,6 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                   <div className="font-serif text-lg font-bold text-[#1A1A1A]">
                     {t('dashboard.auditSeparation', 'Separação Estrita entre Implementação, Validação e Evidência')}
                   </div>
-                </div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-emerald-50 border border-emerald-200 text-xs font-mono text-emerald-800 font-semibold self-start sm:self-auto">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>{t('dashboard.gatesBadge', '11 GATES VERIFICADOS')}</span>
                 </div>
               </div>
 
