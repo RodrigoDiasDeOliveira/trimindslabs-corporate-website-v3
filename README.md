@@ -9,6 +9,12 @@ The public-facing corporate website for Trimindslabs. It presents project inform
 - **Canonical content source:** the Trimindslabs Ecosystem Audit API.
 - **Deployment workflow:** GitHub Pages workflow in `.github/workflows/deploy-pages.yml`; a source merge alone does not prove that the published site has updated.
 
+## Architecture diagram
+
+![Corporate Website V3 to Ecosystem Audit data flow](./docs/diagrams/corporate-website-audit-data-flow.svg)
+
+The diagram describes the source-level integration paths. It is not evidence that the public endpoint is currently healthy.
+
 ## Audit integration
 
 The inspected source consumes these Audit endpoints:
