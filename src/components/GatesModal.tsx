@@ -57,12 +57,8 @@ export const GatesModal: React.FC<GatesModalProps> = ({ isOpen, onClose }) => {
               {language === 'pt' ? 'Audit indisponível; os gates locais não estão sincronizados.' : language === 'es' ? 'Audit no disponible; los gates locales no están sincronizados.' : 'Audit unavailable; local gates are not synchronized.'}
             </div>
           )}
-          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-mono text-emerald-900 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>{t('gatesModal.cataloged', '11/11 GATES CATALOGADOS & AUDITADOS NO REPOSITÓRIO')}</span>
-            </div>
-            <span className="font-semibold">{t('gatesModal.releaseReady', 'RELEASE V3 READY')}</span>
+          <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl text-xs font-mono text-[#555550]">
+            {t('gatesModal.cataloged', '11 critérios de produção definidos')}
           </div>
 
           <div className="space-y-3">
