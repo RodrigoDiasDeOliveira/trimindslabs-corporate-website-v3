@@ -26,6 +26,8 @@ export function AppContent() {
   const [selectedProjectOverrideLanguage, setSelectedProjectOverrideLanguage] = useState<Language | null>(null);
   const [projectModalTab, setProjectModalTab] = useState<'overview' | 'technical'>('overview');
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const [selectedArticleOverride, setSelectedArticleOverride] = useState<Article | null>(null);
+  const [selectedArticleOverrideLanguage, setSelectedArticleOverrideLanguage] = useState<Language | null>(null);
   const [isGatesModalOpen, setIsGatesModalOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [activeDomainFilter, setActiveDomainFilter] = useState<string>('all');
@@ -38,7 +40,11 @@ export function AppContent() {
         ? selectedProjectOverride
         : currentProjects.find(p => p.id === selectedProjectId) || null)
     : null;
-  const selectedArticle = selectedArticleId ? currentArticles.find(a => a.id === selectedArticleId) || null : null;
+  const selectedArticle = selectedArticleId
+    ? (selectedArticleOverride?.id === selectedArticleId && selectedArticleOverrideLanguage === language
+        ? selectedArticleOverride
+        : currentArticles.find(a => a.id === selectedArticleId) || null)
+    : null;
 
   const handleSelectProject = (project: Project, initialTab: 'overview' | 'technical' = 'overview') => {
     setSelectedProjectOverride(project);
@@ -48,6 +54,8 @@ export function AppContent() {
   };
 
   const handleSelectArticle = (article: Article) => {
+    setSelectedArticleOverride(article);
+    setSelectedArticleOverrideLanguage(language);
     setSelectedArticleId(article.id);
   };
 
