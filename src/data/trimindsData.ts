@@ -47,6 +47,29 @@ export interface ProjectRepository {
   adrReferences?: string[];
 }
 
+export interface CanonicalProjectRecord {
+  id: string;
+  canonical_name: string;
+  repository_full_name?: string | null;
+  repository_association_status: string;
+  domain: Project['domain'];
+  category: Project['category'];
+  truth_status: Project['truthStatus'];
+  operational_stage: Project['operationalStage'];
+  deployment?: { url?: string | null; status?: string | null; evidence_status?: string | null } | null;
+  portfolio_visible: boolean;
+  dashboard_visible: boolean;
+}
+
+export interface CanonicalProjectRegistry {
+  schema_version: string;
+  registry_id: string;
+  editorial_content_status: string;
+  editorial_content_note: string;
+  served_at?: string;
+  projects: CanonicalProjectRecord[];
+}
+
 export interface AuditRepositoryRecord {
   fullName: string;
   url?: string;
