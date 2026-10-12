@@ -177,6 +177,24 @@ export interface ArchitecturePillar {
   details: string[];
 }
 
+export interface CanonicalSiteModules {
+  production_gates: Record<Language, ProductionGate[]>;
+  vocabulary: Record<Language, VocabularyTerm[]>;
+  articles: Record<Language, Article[]>;
+  operational_systems: Record<Language, OperationalSystem[]>;
+  architecture_pillars: Record<Language, ArchitecturePillar[]>;
+}
+
+export interface CanonicalSiteContentResponse {
+  schema_version: string;
+  site_content_status: string;
+  site_content_note: string;
+  site_modules_provenance: { source_system?: string; migrated_at?: string; verification_status?: string; note?: string };
+  site_modules: CanonicalSiteModules;
+  served_at?: string;
+  source?: string;
+}
+
 /* =========================================================================
    PROJECTS BY LANGUAGE
    ========================================================================= */

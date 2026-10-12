@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useAuditSiteContent } from '../hooks/useAuditSiteContent';
 import { getProductionGates, getVocabularyTerms } from '../data/trimindsData';
 import { useLanguage } from '../context/LanguageContext';
 import {
@@ -49,6 +50,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
   initialTab = 'telemetry',
 }) => {
   const { language, t } = useLanguage();
+  const { content: auditContent, error: siteContentError } = useAuditSiteContent();
   const [activeTab, setActiveTab] = useState<'telemetry' | 'gates' | 'vocab'>(initialTab);
   const [auditSummary, setAuditSummary] = useState<AuditSummary | null>(null);
   const [auditLoading, setAuditLoading] = useState(false);
@@ -81,8 +83,8 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
 
   if (!isOpen) return null;
 
-  const productionGates = getProductionGates(language);
-  const vocabularyTerms = getVocabularyTerms(language);
+  const productionGates = auditContent?.site_modules.production_gates?.[language] || getProductionGates(language);
+  const vocabularyTerms = auditContent?.site_modules.vocabulary?.[language] || getVocabularyTerms(language);
 
   return (
     <div
@@ -164,6 +166,11 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
 
         {/* Scrollable Dashboard Body */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1 text-sm">
+          {siteContentError && (
+            <div role="status" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+              {language === 'pt' ? 'Módulos de conteúdo do Audit indisponíveis; gates e vocabulário locais não estão sincronizados.' : language === 'es' ? 'Módulos de contenido de Audit no disponibles; gates y vocabulario locales no están sincronizados.' : 'Audit content modules unavailable; local gates and vocabulary are not synchronized.'}
+            </div>
+          )}
           {/* TAB 1: LIVE DATA FROM ECOSYSTEM AUDIT API */}
           {activeTab === 'telemetry' && (
             <div className="space-y-6">
