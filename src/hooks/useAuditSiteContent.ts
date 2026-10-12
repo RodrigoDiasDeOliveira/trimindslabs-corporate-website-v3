@@ -24,7 +24,7 @@ async function fetchCanonicalSiteContent(): Promise<CanonicalSiteContentResponse
         throw error;
       });
   }
-  return pendingRequest;
+  return pendingRequest as Promise<CanonicalSiteContentResponse>;
 }
 
 export function useAuditSiteContent() {
