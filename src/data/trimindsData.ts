@@ -243,7 +243,7 @@ const PROJECTS_PT: Project[] = [
       },
       repository: {
         name: "RodrigoDiasDeOliveira/New-Trusted-Compliance",
-        isPrivate: false,
+        isPrivate: true,
         visibilityBadge: "Repositório",
         testSuiteStatus: "Frontend build + testes backend",
         ciCdPipeline: "GitHub Actions"
