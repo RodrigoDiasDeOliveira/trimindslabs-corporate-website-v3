@@ -217,7 +217,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                     {[
                       { label: language === 'pt' ? 'Estado do Audit' : language === 'es' ? 'Estado de Audit' : 'Audit status', value: auditSummary.system_status || 'UNKNOWN' },
-                      { label: language === 'pt' ? 'Repositórios observados' : language === 'es' ? 'Repositorios observados' : 'Repositories observed', value: String(auditSummary.summary_cards.total_repositories ?? 0) },
+                      { label: language === 'pt' ? 'Repositórios retornados pela API' : language === 'es' ? 'Repositorios devueltos por la API' : 'Repositories returned by API', value: String(auditSummary.summary_cards.total_repositories ?? 0) },
                       { label: language === 'pt' ? 'Sucesso dos pipelines' : language === 'es' ? 'Éxito de pipelines' : 'Pipeline success', value: auditSummary.summary_cards.pipeline_success_rate || 'NOT_MEASURED' },
                       { label: language === 'pt' ? 'Conformidade de segurança' : language === 'es' ? 'Cumplimiento de seguridad' : 'Security compliance', value: auditSummary.summary_cards.security_compliance || 'NOT_MEASURED' },
                     ].map((card) => (
@@ -226,6 +226,14 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                         <div className="font-serif text-xl font-bold text-[#1A1A1A] break-words">{card.value}</div>
                       </div>
                     ))}
+                  </div>
+
+                  <div className="rounded-lg border border-[#E2E8F0] bg-[#FAF9F6] px-4 py-3 text-xs leading-relaxed text-[#555550]">
+                    {language === 'pt'
+                      ? 'A contagem reflete os repositórios devolvidos ao Audit dentro do escopo de acesso configurado; pode diferir do inventário completo da conta. A taxa de pipeline considera apenas estados de commit medidos e concluídos. Conformidade de segurança não é inferida de CI e permanece não medida até existir uma avaliação específica.'
+                      : language === 'es'
+                      ? 'El recuento refleja los repositorios devueltos a Audit dentro del alcance de acceso configurado; puede diferir del inventario completo de la cuenta. La tasa de pipelines solo considera estados de commit medidos y completados. El cumplimiento de seguridad no se infiere de CI y permanece sin medir hasta que exista una evaluación específica.'
+                      : 'The count reflects repositories returned to Audit within its configured access scope and may differ from the full account inventory. Pipeline rate uses only measured, completed commit statuses. Security compliance is not inferred from CI and remains unmeasured until a dedicated assessment exists.'}
                   </div>
 
                   <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
