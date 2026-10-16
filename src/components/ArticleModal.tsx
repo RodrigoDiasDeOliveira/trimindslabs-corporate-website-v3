@@ -49,7 +49,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
           <button
             onClick={onClose}
             className="p-2 text-[#70706B] hover:text-[#1A1A1A] hover:bg-[#F4F4F1] rounded-lg transition-colors cursor-pointer"
-            aria-label="Close modal"
+            aria-label={t('common.closeModal')}
           >
             <X className="w-5 h-5" />
           </button>
