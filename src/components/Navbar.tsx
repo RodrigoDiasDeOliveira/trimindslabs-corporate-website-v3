@@ -96,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDashboard, onOpenGates }) 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 text-[#1A1A1A] hover:bg-[#EAEAE6] rounded cursor-pointer"
-            aria-label="Toggle navigation menu"
+            aria-label={t('nav.toggleMenu')}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
