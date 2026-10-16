@@ -1,0 +1,29 @@
+name: Corporate Website Validation
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Install dependencies
+        run: npm install
+      - name: Validate PT/EN/ES translations
+        run: npm run i18n:check
+      - name: TypeScript validation
+        run: npm run lint
+      - name: Production build
+        run: npm run build

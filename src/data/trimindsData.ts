@@ -649,27 +649,27 @@ const PROJECTS_EN: Project[] = [
   {
       id: "triminds-geo-ai",
       title: "Trimindslabs Geo-AI (V4)",
-      subtitle: "Plataforma Geoespacial de IA para Earth Observation",
+      subtitle: "Geospatial AI platform for Earth observation",
       tag: "Geospatial AI / Remote Sensing",
-      sector: "Observação da Terra & Dados Geoespaciais",
+      sector: "Earth observation and geospatial data",
       domain: "geospatial",
       category: "what-we-built",
       truthStatus: "implemented",
       operationalStage: "deployed",
-      honestScope: "Plataforma modular para workflows de Earth Observation, ML geoespacial, FastAPI e deployment Cloud Run.",
-      whatItProves: "Demonstra deployment operacional de uma plataforma Geo-AI e separação entre demonstração local e serviço cloud.",
-      problem: "Workflows de observação da Terra exigem integração entre fontes geoespaciais, representação, ML e serving.",
-      context: "A versão V4 está online em Google Cloud Run europe-west1; o repositório mantém também uma demo local determinística com dados RGB sintéticos.",
+      honestScope: "Modular platform for Earth-observation workflows, geospatial machine learning, FastAPI, and Cloud Run deployment.",
+      whatItProves: "Demonstrates an operational Geo-AI deployment and a clear separation between the local demonstration and the cloud service.",
+      problem: "Earth-observation workflows require integration across geospatial sources, data representation, machine learning, and service delivery.",
+      context: "Version V4 is available on Google Cloud Run in europe-west1. The repository also retains a deterministic local demo using synthetic RGB data.",
       architecture: {
-        overview: "Earth Observation Sources → Provider Layer → Ingestion/Validation → Representation → Deep Learning / Vector Search → FastAPI → Cloud Run.",
+        overview: "Earth-observation sources → Provider layer → Ingestion and validation → Representation → Deep learning / vector search → FastAPI → Cloud Run.",
         components: ["Provider layer", "Ingestion/validation", "Representation", "Deep Learning", "FastAPI", "Cloud Run"],
-        diagramText: "EO Sources ➔ Provider Layer ➔ Ingestion ➔ Representation ➔ ML/Search ➔ FastAPI ➔ Cloud Run"
+        diagramText: "Earth-observation sources ➔ Provider layer ➔ Ingestion ➔ Representation ➔ ML/search ➔ FastAPI ➔ Cloud Run",
       },
       realArchitectureVerification: {
-        documented: "Provider-oriented geospatial AI architecture with operational Cloud Run v4.",
-        implemented: "FastAPI service with configurable model layer and Cloud Run v4 deployment; local deterministic demo path.",
-        presentedOnSite: "Alinhado ao README atual, sem transformar a demo sintética em benchmark de satélite real.",
-        coherenceScore: "Alinhado ao README atual"
+        documented: "Provider-oriented geospatial AI architecture with operational Cloud Run V4.",
+        implemented: "FastAPI service with a configurable model layer, Cloud Run V4 deployment, and a deterministic local-demo path.",
+        presentedOnSite: "Aligned with the current README without presenting the synthetic demo as a real-satellite benchmark.",
+        coherenceScore: "Aligned with the current README",
       },
       realTechnologies: {
         languages: ["Python"],
@@ -686,16 +686,16 @@ const PROJECTS_EN: Project[] = [
         testSuiteStatus: "Quality checks and pytest"
       },
       engineering: [
-        "Separação entre deployment operacional e demo local.",
-        "Model factory configurável para múltiplas arquiteturas.",
-        "Maturidade operacional explicitamente separada de implementação."
+        "Separation between operational deployment and the local demo.",
+        "Configurable model factory for multiple architectures.",
+        "Operational maturity is explicitly distinguished from implementation.",
       ],
       technology: ["Python", "FastAPI", "PyTorch", "Google Cloud Run", "MLflow"],
-      evolution: "Expansão contínua de providers, representações e workloads geoespaciais avançados.",
-      evidence: "Cloud Run v4 online e README atual com modelo de maturidade operacional.",
-      evidenceSource: "Trimindslabs-Geo-AI / README e deployment Cloud Run v4",
+      evolution: "Ongoing expansion of providers, representations, and advanced geospatial workloads.",
+      evidence: "Cloud Run V4 availability and the current README's explicit operational-maturity boundary.",
+      evidenceSource: "Trimindslabs-Geo-AI / README and Cloud Run V4 deployment",
       lastVerified: "2026-10-08",
-      deploymentStatus: "Operational — Cloud Run v4.",
+      deploymentStatus: "Operational — Cloud Run V4.",
       deployment: {
         target: "Google Cloud Run / europe-west1",
         url: "https://triminds-geo-ai-v4-1091629879450.europe-west1.run.app/",
@@ -750,27 +750,27 @@ const PROJECTS_EN: Project[] = [
   {
       id: "triminds-security-layer",
       title: "Triminds Security Layer",
-      subtitle: "Camada de Segurança Empresarial com Políticas e Arquitetura Modular",
-      tag: "Enterprise Security",
-      sector: "Segurança de Aplicações & Governança",
+      subtitle: "Enterprise security layer with policies and modular architecture",
+      tag: "Enterprise security",
+      sector: "Application security and governance",
       domain: "platform",
       category: "what-we-built",
       truthStatus: "implemented",
       operationalStage: "validation",
-      honestScope: "Modular monolith Java 21/Spring Boot 3.4 com arquitetura hexagonal/clean, autenticação, autorização, políticas, risco e auditoria.",
-      whatItProves: "Demonstra fundação de segurança corporativa modular e orientada a políticas.",
-      problem: "Aplicações empresariais precisam centralizar identidade, autorização, políticas e auditoria sem acoplar essas capacidades ao domínio de cada aplicação.",
-      context: "O repositório declara arquitetura modular e core concluído, enquanto testes de integração, Docker Compose e Kubernetes ainda estão em andamento.",
+      honestScope: "Java 21 / Spring Boot 3.4 modular monolith with hexagonal/clean architecture, authentication, authorization, policies, risk, and audit.",
+      whatItProves: "Demonstrates a modular, policy-oriented foundation for enterprise security.",
+      problem: "Enterprise applications need centralized identity, authorization, policy, and auditing without coupling these capabilities to each application's domain.",
+      context: "The repository describes a modular architecture and a completed core; integration tests, Docker Compose, and Kubernetes work remain in progress.",
       architecture: {
-        overview: "Security Gateway → Identity/Auth/Access Control → Policy Engine (OPA) → Risk → Audit/Intelligence.",
+        overview: "Security gateway → Identity/authentication/access control → Policy engine (OPA) → Risk → Audit/intelligence.",
         components: ["Security Identity", "Authentication/JWT", "Access Control", "OPA Policy Engine", "Risk Engine", "Audit"],
-        diagramText: "Client ➔ Security Gateway ➔ Identity/Auth/Access ➔ OPA Policy ➔ Risk ➔ Audit/Intelligence"
+        diagramText: "Client ➔ Security gateway ➔ Identity/authentication/access ➔ OPA policy ➔ Risk ➔ Audit/intelligence",
       },
       realArchitectureVerification: {
-        documented: "Modular Monolith com Ports & Adapters, Clean Architecture, DDD e PBAC.",
-        implemented: "Java 21 + Spring Boot 3.4 com módulos de identidade, auth, access control, policy, risk, gateway, intelligence e audit.",
-        presentedOnSite: "Arquitetura alinhada; maturidade operacional limitada ao que o README comprova.",
-        coherenceScore: "Alinhado ao README atual"
+        documented: "Modular monolith with Ports & Adapters, Clean Architecture, DDD, and PBAC.",
+        implemented: "Java 21 and Spring Boot 3.4 with identity, authentication, access-control, policy, risk, gateway, intelligence, and audit modules.",
+        presentedOnSite: "Architecture is aligned; operational maturity is limited to what the README substantiates.",
+        coherenceScore: "Aligned with the current README",
       },
       realTechnologies: {
         languages: ["Java 21"],
@@ -791,16 +791,16 @@ const PROJECTS_EN: Project[] = [
         ciCdPipeline: "CI build and verification"
       },
       engineering: [
-        "Separação modular entre identidade, autenticação, autorização, políticas, risco e auditoria.",
-        "OPA como motor de avaliação de políticas.",
-        "Arquitetura orientada a Zero Trust e PBAC."
+        "Modular separation of identity, authentication, authorization, policy, risk, and audit.",
+        "OPA as the policy evaluation engine.",
+        "Architecture guided by Zero Trust and PBAC.",
       ],
       technology: ["Java 21", "Spring Boot 3.4", "Spring Security", "OPA", "PostgreSQL", "Redis"],
-      evolution: "Próximas etapas: testes de integração, ambiente Docker Compose, CD e deployment Kubernetes.",
-      evidence: "README atual e estrutura modular do repositório.",
+      evolution: "Next steps: integration tests, a Docker Compose environment, continuous delivery, and Kubernetes deployment.",
+      evidence: "Current README and repository module structure.",
       evidenceSource: "Trimindslabs-Security-Layer-v1 / README",
       lastVerified: "2026-10-08",
-      deploymentStatus: "Arquitetura/core concluídos; integração e deployment ainda em evolução."
+      deploymentStatus: "Architecture and core completed; integration and deployment remain in progress.",
     },
   {
       id: "triminds-ai-cloud-administrator",
@@ -859,27 +859,27 @@ const PROJECTS_EN: Project[] = [
   {
       id: "triminds-integration-platform",
       title: "Triminds Integration Platform (TIP)",
-      subtitle: "Plataforma de Integração Corporativa com Conectores e Resiliência",
-      tag: "Integration Platform",
-      sector: "Integração de Sistemas & APIs",
+      subtitle: "Enterprise integration platform with connectors and resilience",
+      tag: "Integration platform",
+      sector: "Systems and API integration",
       domain: "platform",
       category: "what-we-built",
       truthStatus: "implemented",
       operationalStage: "validation",
-      honestScope: "Monólito TypeScript/Node/Express com console React, pipelines, transformação, validação e dispatch HTTP real para REST/Webhook.",
-      whatItProves: "Demonstra arquitetura modular, abstração de conectores e mecanismos de resiliência sem apresentar infraestrutura futura como entregue.",
-      problem: "Integrações heterogêneas precisam de uma camada consistente para modelagem, execução, retry e validação.",
-      context: "O runtime atual mantém estado em memória e foi estruturado para evolução futura sem acoplamento a um provedor específico.",
+      honestScope: "TypeScript/Node/Express monolith with a React console, pipelines, transformation, validation, and real HTTP dispatch for REST/Webhook.",
+      whatItProves: "Demonstrates modular architecture, connector abstraction, and resilience mechanisms without presenting planned infrastructure as delivered.",
+      problem: "Heterogeneous integrations need a consistent layer for modeling, execution, retries, and validation.",
+      context: "The current runtime keeps operational state in memory and is structured to evolve without coupling to a specific provider.",
       architecture: {
-        overview: "React Console → Express API → Integration Engine → Connectors → HTTP/Webhook.",
+        overview: "React console → Express API → Integration engine → Connectors → HTTP/Webhook.",
         components: ["Pipeline Designer", "Transformation/Validation", "Retry/Timeout", "Idempotency", "Circuit Breaker"],
-        diagramText: "React ➔ Express ➔ Integration Engine ➔ REST/Webhook / Gemini opcional"
+        diagramText: "React ➔ Express ➔ Integration engine ➔ REST/Webhook / optional Gemini",
       },
       realArchitectureVerification: {
         documented: "Clean/Hexagonal-inspired modular monolith.",
-        implemented: "TypeScript 5.8 + React 19 + Express 4; dispatch real REST/Webhook; demais conectores NOT_CONFIGURED.",
-        presentedOnSite: "Sem afirmar Redis/Kafka/Spring/FastAPI ou observabilidade distribuída como infraestrutura atual.",
-        coherenceScore: "Alinhado ao README atual"
+        implemented: "TypeScript 5.8, React 19, and Express 4; real REST/Webhook dispatch; other connectors remain NOT_CONFIGURED.",
+        presentedOnSite: "Does not claim Redis/Kafka/Spring/FastAPI or distributed observability as current infrastructure.",
+        coherenceScore: "Aligned with the current README",
       },
       realTechnologies: {
         languages: ["TypeScript 5.8"],
@@ -897,16 +897,16 @@ const PROJECTS_EN: Project[] = [
         adrReferences: ["ADR-001 Clean Architecture & Hexagonal Ports/Adapters", "ADR-002 Modular Monolith"]
       },
       engineering: [
-        "Retry, timeout, idempotência e circuit breaker no dispatch HTTP real.",
-        "SOAP, Database, SFTP e Custom permanecem NOT_CONFIGURED.",
-        "Persistência externa e mensageria distribuída são evolução futura."
+        "Retry, timeout, idempotency, and circuit breaker in real HTTP dispatch.",
+        "SOAP, Database, SFTP, and Custom remain NOT_CONFIGURED.",
+        "External persistence and distributed messaging are future work.",
       ],
       technology: ["TypeScript 5.8", "React 19", "Express 4", "Vite"],
-      evolution: "Evolução prevista para persistência externa, mensageria, observabilidade distribuída e conectores empresariais reais.",
-      evidence: "README atual, estrutura do repositório e runtime Express.",
+      evolution: "Planned evolution toward external persistence, messaging, distributed observability, and real enterprise connectors.",
+      evidence: "Current README, repository structure, and Express runtime.",
       evidenceSource: "Trimindslabs-Integration-Platform / README",
       lastVerified: "2026-10-08",
-      deploymentStatus: "Validação do runtime atual; maturidade de produção ainda não reivindicada."
+      deploymentStatus: "Current runtime under validation; production maturity is not yet claimed.",
     }
 ];
 
@@ -1012,27 +1012,27 @@ const PROJECTS_ES: Project[] = [
   {
       id: "triminds-geo-ai",
       title: "Trimindslabs Geo-AI (V4)",
-      subtitle: "Plataforma Geoespacial de IA para Earth Observation",
-      tag: "Geospatial AI / Remote Sensing",
-      sector: "Observação da Terra & Dados Geoespaciais",
+      subtitle: "Plataforma de IA geoespacial para la observación de la Tierra",
+      tag: "IA geoespacial / teledetección",
+      sector: "Observación de la Tierra y datos geoespaciales",
       domain: "geospatial",
       category: "what-we-built",
       truthStatus: "implemented",
       operationalStage: "deployed",
-      honestScope: "Plataforma modular para workflows de Earth Observation, ML geoespacial, FastAPI e deployment Cloud Run.",
-      whatItProves: "Demonstra deployment operacional de uma plataforma Geo-AI e separação entre demonstração local e serviço cloud.",
-      problem: "Workflows de observação da Terra exigem integração entre fontes geoespaciais, representação, ML e serving.",
-      context: "A versão V4 está online em Google Cloud Run europe-west1; o repositório mantém também uma demo local determinística com dados RGB sintéticos.",
+      honestScope: "Plataforma modular para flujos de observación de la Tierra, aprendizaje automático geoespacial, FastAPI y despliegue en Cloud Run.",
+      whatItProves: "Demuestra el despliegue operativo de una plataforma Geo-AI y la separación entre la demostración local y el servicio en la nube.",
+      problem: "Los flujos de observación de la Tierra requieren integrar fuentes geoespaciales, representación de datos, aprendizaje automático y prestación de servicios.",
+      context: "La versión V4 está disponible en Google Cloud Run, en la región europe-west1. El repositorio también mantiene una demostración local determinista con datos RGB sintéticos.",
       architecture: {
-        overview: "Earth Observation Sources → Provider Layer → Ingestion/Validation → Representation → Deep Learning / Vector Search → FastAPI → Cloud Run.",
+        overview: "Fuentes de observación de la Tierra → Capa de proveedores → Ingesta y validación → Representación → Aprendizaje profundo / búsqueda vectorial → FastAPI → Cloud Run.",
         components: ["Provider layer", "Ingestion/validation", "Representation", "Deep Learning", "FastAPI", "Cloud Run"],
-        diagramText: "EO Sources ➔ Provider Layer ➔ Ingestion ➔ Representation ➔ ML/Search ➔ FastAPI ➔ Cloud Run"
+        diagramText: "Fuentes de observación terrestre ➔ Capa de proveedores ➔ Ingesta ➔ Representación ➔ ML/búsqueda ➔ FastAPI ➔ Cloud Run",
       },
       realArchitectureVerification: {
-        documented: "Provider-oriented geospatial AI architecture with operational Cloud Run v4.",
-        implemented: "FastAPI service with configurable model layer and Cloud Run v4 deployment; local deterministic demo path.",
-        presentedOnSite: "Alinhado ao README atual, sem transformar a demo sintética em benchmark de satélite real.",
-        coherenceScore: "Alinhado ao README atual"
+        documented: "Arquitectura de IA geoespacial orientada a proveedores, con Cloud Run V4 operativo.",
+        implemented: "Servicio FastAPI con capa de modelos configurable, despliegue en Cloud Run V4 y ruta de demostración local determinista.",
+        presentedOnSite: "Alineado con el README actual, sin presentar la demostración sintética como referencia de rendimiento satelital real.",
+        coherenceScore: "Alineado con el README actual",
       },
       realTechnologies: {
         languages: ["Python"],
@@ -1049,16 +1049,16 @@ const PROJECTS_ES: Project[] = [
         testSuiteStatus: "Quality checks and pytest"
       },
       engineering: [
-        "Separação entre deployment operacional e demo local.",
-        "Model factory configurável para múltiplas arquiteturas.",
-        "Maturidade operacional explicitamente separada de implementação."
+        "Separación entre el despliegue operativo y la demostración local.",
+        "Fábrica de modelos configurable para varias arquitecturas.",
+        "La madurez operativa se distingue explícitamente de la implementación.",
       ],
       technology: ["Python", "FastAPI", "PyTorch", "Google Cloud Run", "MLflow"],
-      evolution: "Expansão contínua de providers, representações e workloads geoespaciais avançados.",
-      evidence: "Cloud Run v4 online e README atual com modelo de maturidade operacional.",
-      evidenceSource: "Trimindslabs-Geo-AI / README e deployment Cloud Run v4",
+      evolution: "Ampliación continua de proveedores, representaciones y cargas de trabajo geoespaciales avanzadas.",
+      evidence: "Disponibilidad de Cloud Run V4 y README actual con límites explícitos sobre la madurez operativa.",
+      evidenceSource: "Trimindslabs-Geo-AI / README y despliegue de Cloud Run V4",
       lastVerified: "2026-10-08",
-      deploymentStatus: "Operational — Cloud Run v4.",
+      deploymentStatus: "Operativo — Cloud Run V4.",
       deployment: {
         target: "Google Cloud Run / europe-west1",
         url: "https://triminds-geo-ai-v4-1091629879450.europe-west1.run.app/",
@@ -1113,27 +1113,27 @@ const PROJECTS_ES: Project[] = [
   {
       id: "triminds-security-layer",
       title: "Triminds Security Layer",
-      subtitle: "Camada de Segurança Empresarial com Políticas e Arquitetura Modular",
-      tag: "Enterprise Security",
-      sector: "Segurança de Aplicações & Governança",
+      subtitle: "Capa de seguridad empresarial con políticas y arquitectura modular",
+      tag: "Seguridad empresarial",
+      sector: "Seguridad de aplicaciones y gobernanza",
       domain: "platform",
       category: "what-we-built",
       truthStatus: "implemented",
       operationalStage: "validation",
-      honestScope: "Modular monolith Java 21/Spring Boot 3.4 com arquitetura hexagonal/clean, autenticação, autorização, políticas, risco e auditoria.",
-      whatItProves: "Demonstra fundação de segurança corporativa modular e orientada a políticas.",
-      problem: "Aplicações empresariais precisam centralizar identidade, autorização, políticas e auditoria sem acoplar essas capacidades ao domínio de cada aplicação.",
-      context: "O repositório declara arquitetura modular e core concluído, enquanto testes de integração, Docker Compose e Kubernetes ainda estão em andamento.",
+      honestScope: "Monolito modular en Java 21/Spring Boot 3.4 con arquitectura hexagonal/clean, autenticación, autorización, políticas, riesgo y auditoría.",
+      whatItProves: "Demuestra una base modular de seguridad empresarial orientada a políticas.",
+      problem: "Las aplicaciones empresariales necesitan centralizar identidad, autorización, políticas y auditoría sin acoplar estas capacidades al dominio de cada aplicación.",
+      context: "El repositorio describe una arquitectura modular y un núcleo terminado; las pruebas de integración, Docker Compose y Kubernetes siguen en desarrollo.",
       architecture: {
-        overview: "Security Gateway → Identity/Auth/Access Control → Policy Engine (OPA) → Risk → Audit/Intelligence.",
+        overview: "Gateway de seguridad → Identidad/autenticación/control de acceso → Motor de políticas (OPA) → Riesgo → Auditoría/inteligencia.",
         components: ["Security Identity", "Authentication/JWT", "Access Control", "OPA Policy Engine", "Risk Engine", "Audit"],
-        diagramText: "Client ➔ Security Gateway ➔ Identity/Auth/Access ➔ OPA Policy ➔ Risk ➔ Audit/Intelligence"
+        diagramText: "Cliente ➔ Gateway de seguridad ➔ Identidad/autenticación/acceso ➔ Política OPA ➔ Riesgo ➔ Auditoría/inteligencia",
       },
       realArchitectureVerification: {
-        documented: "Modular Monolith com Ports & Adapters, Clean Architecture, DDD e PBAC.",
-        implemented: "Java 21 + Spring Boot 3.4 com módulos de identidade, auth, access control, policy, risk, gateway, intelligence e audit.",
-        presentedOnSite: "Arquitetura alinhada; maturidade operacional limitada ao que o README comprova.",
-        coherenceScore: "Alinhado ao README atual"
+        documented: "Monolito modular con Ports & Adapters, Clean Architecture, DDD y PBAC.",
+        implemented: "Java 21 y Spring Boot 3.4 con módulos de identidad, autenticación, control de acceso, políticas, riesgo, gateway, inteligencia y auditoría.",
+        presentedOnSite: "Arquitectura alineada; la madurez operativa se limita a lo que demuestra el README.",
+        coherenceScore: "Alineado con el README actual",
       },
       realTechnologies: {
         languages: ["Java 21"],
@@ -1142,7 +1142,7 @@ const PROJECTS_ES: Project[] = [
         databases: ["PostgreSQL", "Redis"],
         cloud: ["Cloud-native ready"],
         apis: ["Security Gateway"],
-        testing: ["CI build and verification; integration tests in progress"],
+        testing: ["Build y verificación de CI; pruebas de integración en curso"],
         ciCd: ["CI build and verification"],
         observability: ["Micrometer", "Prometheus", "OpenTelemetry"]
       },
@@ -1154,16 +1154,16 @@ const PROJECTS_ES: Project[] = [
         ciCdPipeline: "CI build and verification"
       },
       engineering: [
-        "Separação modular entre identidade, autenticação, autorização, políticas, risco e auditoria.",
-        "OPA como motor de avaliação de políticas.",
-        "Arquitetura orientada a Zero Trust e PBAC."
+        "Separación modular de identidad, autenticación, autorización, políticas, riesgo y auditoría.",
+        "OPA como motor de evaluación de políticas.",
+        "Arquitectura guiada por Zero Trust y PBAC.",
       ],
       technology: ["Java 21", "Spring Boot 3.4", "Spring Security", "OPA", "PostgreSQL", "Redis"],
-      evolution: "Próximas etapas: testes de integração, ambiente Docker Compose, CD e deployment Kubernetes.",
-      evidence: "README atual e estrutura modular do repositório.",
+      evolution: "Próximos pasos: pruebas de integración, entorno Docker Compose, entrega continua y despliegue en Kubernetes.",
+      evidence: "README actual y estructura modular del repositorio.",
       evidenceSource: "Trimindslabs-Security-Layer-v1 / README",
       lastVerified: "2026-10-08",
-      deploymentStatus: "Arquitetura/core concluídos; integração e deployment ainda em evolução."
+      deploymentStatus: "Arquitectura y núcleo terminados; la integración y el despliegue siguen en evolución.",
     },
   {
       id: "triminds-ai-cloud-administrator",
@@ -1222,27 +1222,27 @@ const PROJECTS_ES: Project[] = [
   {
       id: "triminds-integration-platform",
       title: "Triminds Integration Platform (TIP)",
-      subtitle: "Plataforma de Integração Corporativa com Conectores e Resiliência",
-      tag: "Integration Platform",
-      sector: "Integração de Sistemas & APIs",
+      subtitle: "Plataforma de integración empresarial con conectores y resiliencia",
+      tag: "Plataforma de integración",
+      sector: "Integración de sistemas y API",
       domain: "platform",
       category: "what-we-built",
       truthStatus: "implemented",
       operationalStage: "validation",
-      honestScope: "Monólito TypeScript/Node/Express com console React, pipelines, transformação, validação e dispatch HTTP real para REST/Webhook.",
-      whatItProves: "Demonstra arquitetura modular, abstração de conectores e mecanismos de resiliência sem apresentar infraestrutura futura como entregue.",
-      problem: "Integrações heterogêneas precisam de uma camada consistente para modelagem, execução, retry e validação.",
-      context: "O runtime atual mantém estado em memória e foi estruturado para evolução futura sem acoplamento a um provedor específico.",
+      honestScope: "Monolito TypeScript/Node/Express con consola React, pipelines, transformación, validación y envío HTTP real para REST/Webhook.",
+      whatItProves: "Demuestra arquitectura modular, abstracción de conectores y mecanismos de resiliencia sin presentar infraestructura futura como entregada.",
+      problem: "Las integraciones heterogéneas necesitan una capa coherente para modelado, ejecución, reintentos y validación.",
+      context: "El runtime actual mantiene el estado operativo en memoria y está preparado para evolucionar sin acoplarse a un proveedor específico.",
       architecture: {
-        overview: "React Console → Express API → Integration Engine → Connectors → HTTP/Webhook.",
+        overview: "Consola React → API Express → Motor de integración → Conectores → HTTP/Webhook.",
         components: ["Pipeline Designer", "Transformation/Validation", "Retry/Timeout", "Idempotency", "Circuit Breaker"],
-        diagramText: "React ➔ Express ➔ Integration Engine ➔ REST/Webhook / Gemini opcional"
+        diagramText: "React ➔ Express ➔ Motor de integración ➔ REST/Webhook / Gemini opcional",
       },
       realArchitectureVerification: {
-        documented: "Clean/Hexagonal-inspired modular monolith.",
-        implemented: "TypeScript 5.8 + React 19 + Express 4; dispatch real REST/Webhook; demais conectores NOT_CONFIGURED.",
-        presentedOnSite: "Sem afirmar Redis/Kafka/Spring/FastAPI ou observabilidade distribuída como infraestrutura atual.",
-        coherenceScore: "Alinhado ao README atual"
+        documented: "Monolito modular inspirado en Clean Architecture y Hexagonal Architecture.",
+        implemented: "TypeScript 5.8, React 19 y Express 4; envío real a REST/Webhook; los demás conectores siguen como NOT_CONFIGURED.",
+        presentedOnSite: "No afirma que Redis/Kafka/Spring/FastAPI ni la observabilidad distribuida sean infraestructura actual.",
+        coherenceScore: "Alineado con el README actual",
       },
       realTechnologies: {
         languages: ["TypeScript 5.8"],
@@ -1260,16 +1260,16 @@ const PROJECTS_ES: Project[] = [
         adrReferences: ["ADR-001 Clean Architecture & Hexagonal Ports/Adapters", "ADR-002 Modular Monolith"]
       },
       engineering: [
-        "Retry, timeout, idempotência e circuit breaker no dispatch HTTP real.",
-        "SOAP, Database, SFTP e Custom permanecem NOT_CONFIGURED.",
-        "Persistência externa e mensageria distribuída são evolução futura."
+        "Reintentos, timeout, idempotencia y circuit breaker en el envío HTTP real.",
+        "SOAP, Database, SFTP y Custom siguen como NOT_CONFIGURED.",
+        "La persistencia externa y la mensajería distribuida son evoluciones futuras.",
       ],
       technology: ["TypeScript 5.8", "React 19", "Express 4", "Vite"],
-      evolution: "Evolução prevista para persistência externa, mensageria, observabilidade distribuída e conectores empresariais reais.",
-      evidence: "README atual, estrutura do repositório e runtime Express.",
+      evolution: "Evolución prevista hacia persistencia externa, mensajería, observabilidad distribuida y conectores empresariales reales.",
+      evidence: "README actual, estructura del repositorio y runtime Express.",
       evidenceSource: "Trimindslabs-Integration-Platform / README",
       lastVerified: "2026-10-08",
-      deploymentStatus: "Validação do runtime atual; maturidade de produção ainda não reivindicada."
+      deploymentStatus: "Runtime actual en validación; todavía no se declara madurez de producción.",
     }
 ];
 
@@ -2379,7 +2379,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "nav.aiSystems": "Sistemas & Produtos",
     "nav.engineering": "Arquitetura",
     "nav.research": "Pesquisa & Labs",
-    "nav.dashboard": "Engineering Dashboard",
+    "nav.dashboard": "Painel de Engenharia",
     "nav.gatesBtn": "11 Gates",
     "nav.dashboardCta": "Verificar Estado de Engenharia",
     "nav.switchLang": "Mudar para",
@@ -2441,11 +2441,11 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "projectModal.implementedLabel": "Implementado em Código: ",
     "projectModal.presentedLabel": "Declaração Pública: ",
     "projectModal.governanceTitle": "Validação e Governança Técnica",
-    "projectModal.testSuiteLabel": "Status da Suíte de Testes:",
+    "projectModal.testSuiteLabel": "Status da suíte de testes:",
     "projectModal.ciPipelineLabel": "Pipeline de Integração Contínua:",
     "projectModal.testSuiteDefault": "Suíte Automatizada Validada",
     "projectModal.ciPipelineDefault": "Pipelines de CI Ativas",
-    "projectModal.adrLabel": "Architecture Decision Records (ADRs):",
+    "projectModal.adrLabel": "Registros de Decisões de Arquitetura (ADRs):",
     "projectModal.techStackTitle": "Stack de Tecnologias em Produção",
     "projectModal.languagesLabel": "Linguagens",
     "projectModal.frameworksLabel": "Frameworks",
@@ -2520,6 +2520,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "footer.gatesAudited": "11 critérios de produção",
     "footer.dataSovereignty": "Soberania de Dados EU",
     "footer.corpNav": "Navegação Corporativa",
+    "nav.toggleMenu": "Abrir/fechar menu de navegação",
+    "common.closeModal": "Fechar janela",
     "footer.releaseAudit": "Auditoria de Release"
   },
   en: {
@@ -2589,7 +2591,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "projectModal.implementedLabel": "Implemented in Code: ",
     "projectModal.presentedLabel": "Public Statement: ",
     "projectModal.governanceTitle": "Technical Governance & Validation",
-    "projectModal.testSuiteLabel": "Test Suite Status:",
+    "projectModal.testSuiteLabel": "Test suite status:",
     "projectModal.ciPipelineLabel": "Continuous Integration Pipeline:",
     "projectModal.testSuiteDefault": "Automated Suite Validated",
     "projectModal.ciPipelineDefault": "Active CI Pipelines",
@@ -2668,6 +2670,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "footer.gatesAudited": "11 production criteria",
     "footer.dataSovereignty": "EU Data Sovereignty",
     "footer.corpNav": "Corporate Navigation",
+    "nav.toggleMenu": "Toggle navigation menu",
+    "common.closeModal": "Close dialog",
     "footer.releaseAudit": "Release Audit"
   },
   es: {
@@ -2675,7 +2679,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "nav.aiSystems": "Sistemas y Productos",
     "nav.engineering": "Arquitectura",
     "nav.research": "Investigación y Labs",
-    "nav.dashboard": "Engineering Dashboard",
+    "nav.dashboard": "Panel de ingeniería",
     "nav.gatesBtn": "11 Gates",
     "nav.dashboardCta": "Verificar Estado de Ingeniería",
     "nav.switchLang": "Cambiar a",
@@ -2737,11 +2741,11 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "projectModal.implementedLabel": "Implementado en Código: ",
     "projectModal.presentedLabel": "Declaración Pública: ",
     "projectModal.governanceTitle": "Validación y Gobernanza Técnica",
-    "projectModal.testSuiteLabel": "Estado del Banco de Pruebas:",
+    "projectModal.testSuiteLabel": "Estado de la suite de pruebas:",
     "projectModal.ciPipelineLabel": "Pipeline de Integración Continua:",
     "projectModal.testSuiteDefault": "Banco de Pruebas Automatizado Validado",
     "projectModal.ciPipelineDefault": "Pipelines de CI Activas",
-    "projectModal.adrLabel": "Architecture Decision Records (ADRs):",
+    "projectModal.adrLabel": "Registros de decisiones de arquitectura (ADR):",
     "projectModal.techStackTitle": "Stack de Tecnologías en Producción",
     "projectModal.languagesLabel": "Lenguajes",
     "projectModal.frameworksLabel": "Frameworks",
@@ -2816,6 +2820,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "footer.gatesAudited": "11 criterios de producción",
     "footer.dataSovereignty": "Soberanía de Datos UE",
     "footer.corpNav": "Navegación Corporativa",
+    "nav.toggleMenu": "Abrir/cerrar menú de navegación",
+    "common.closeModal": "Cerrar diálogo",
     "footer.releaseAudit": "Auditoría de Release"
   }
 };
