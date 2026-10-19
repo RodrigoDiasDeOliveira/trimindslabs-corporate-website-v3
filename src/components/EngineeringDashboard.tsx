@@ -217,7 +217,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
                     {[
                       { label: language === 'pt' ? 'Estado do Audit' : language === 'es' ? 'Estado de Audit' : 'Audit status', value: language === 'pt' ? 'Em andamento' : language === 'es' ? 'En progreso' : 'In Progress' },
-                      { label: language === 'pt' ? 'Repositórios auditados' : language === 'es' ? 'Repositorios auditados' : 'Repositories audited', value: '18 / 41' },
+                      { label: language === 'pt' ? 'Repositórios auditados' : language === 'es' ? 'Repositorios auditados' : 'Repositories audited', value: '19 / 41' },
                       { label: language === 'pt' ? 'Estado do pipeline' : language === 'es' ? 'Estado del pipeline' : 'Pipeline status', value: 'Running' },
                       { label: language === 'pt' ? 'Avaliação de segurança' : language === 'es' ? 'Evaluación de seguridad' : 'Security assessment', value: language === 'pt' ? 'Em andamento' : language === 'es' ? 'En progreso' : 'In Progress' },
                       { label: language === 'pt' ? 'Ambiente de cloud' : language === 'es' ? 'Entorno cloud' : 'Cloud environment', value: 'Running' },
