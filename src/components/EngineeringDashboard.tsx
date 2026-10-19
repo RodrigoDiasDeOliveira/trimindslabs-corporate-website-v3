@@ -217,7 +217,7 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
                     {[
                       { label: language === 'pt' ? 'Estado do Audit' : language === 'es' ? 'Estado de Audit' : 'Audit status', value: language === 'pt' ? 'Em andamento' : language === 'es' ? 'En progreso' : 'In Progress' },
-                      { label: language === 'pt' ? 'Repositórios auditados' : language === 'es' ? 'Repositorios auditados' : 'Repositories audited', value: '19 / 41' },
+                      { label: language === 'pt' ? 'Repositórios auditados' : language === 'es' ? 'Repositorios auditados' : 'Repositories audited', value: '19 / 44' },
                       { label: language === 'pt' ? 'Estado do pipeline' : language === 'es' ? 'Estado del pipeline' : 'Pipeline status', value: 'Running' },
                       { label: language === 'pt' ? 'Avaliação de segurança' : language === 'es' ? 'Evaluación de seguridad' : 'Security assessment', value: language === 'pt' ? 'Em andamento' : language === 'es' ? 'En progreso' : 'In Progress' },
                       { label: language === 'pt' ? 'Ambiente de cloud' : language === 'es' ? 'Entorno cloud' : 'Cloud environment', value: 'Running' },
@@ -231,10 +231,10 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
 
                   <div className="rounded-lg border border-[#E2E8F0] bg-[#FAF9F6] px-4 py-3 text-xs leading-relaxed text-[#555550]">
                     {language === 'pt'
-                      ? 'O progresso da auditoria e da avaliação de segurança é apresentado de forma resumida. “Running” indica estado operacional do processo/ambiente e não confirma que os commits passaram. A referência de 18 em 41 repositórios é uma contagem de progresso distinta do total de observações retornadas pela API.'
+                      ? 'O progresso da auditoria e da avaliação de segurança é apresentado de forma resumida. “Running” indica estado operacional do processo/ambiente e não confirma que os commits passaram. A referência de 19 em 44 repositórios é uma contagem de progresso distinta do total de observações retornadas pela API.'
                       : language === 'es'
-                      ? 'El progreso de la auditoría y de la evaluación de seguridad se presenta de forma resumida. “Running” indica el estado operativo del proceso/entorno y no confirma que los commits hayan pasado. La referencia de 18 de 41 repositorios es un recuento de progreso distinto del total de observaciones devueltas por la API.'
-                      : 'Audit and security-assessment progress are presented at a high level. “Running” describes process/environment activity and does not confirm that commits passed. The 18-of-41 repository figure is a progress count distinct from the total observations returned by the API.'}
+                      ? 'El progreso de la auditoría y de la evaluación de seguridad se presenta de forma resumida. “Running” indica el estado operativo del proceso/entorno y no confirma que los commits hayan pasado. La referencia de 19 de 44 repositorios es un recuento de progreso distinto del total de observaciones devueltas por la API.'
+                      : 'Audit and security-assessment progress are presented at a high level. “Running” describes process/environment activity and does not confirm that commits passed. The 19-of-44 repository figure is a progress count distinct from the total observations returned by the API.'}
                   </div>
 
                   <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
