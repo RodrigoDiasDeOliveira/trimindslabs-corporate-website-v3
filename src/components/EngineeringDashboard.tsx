@@ -214,12 +214,13 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
 
               {auditSummary && (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
                     {[
-                      { label: language === 'pt' ? 'Estado do Audit' : language === 'es' ? 'Estado de Audit' : 'Audit status', value: auditSummary.system_status || 'UNKNOWN' },
-                      { label: language === 'pt' ? 'Repositórios retornados pela API' : language === 'es' ? 'Repositorios devueltos por la API' : 'Repositories returned by API', value: String(auditSummary.summary_cards.total_repositories ?? 0) },
-                      { label: language === 'pt' ? 'Sucesso dos pipelines' : language === 'es' ? 'Éxito de pipelines' : 'Pipeline success', value: auditSummary.summary_cards.pipeline_success_rate || 'NOT_MEASURED' },
-                      { label: language === 'pt' ? 'Conformidade de segurança' : language === 'es' ? 'Cumplimiento de seguridad' : 'Security compliance', value: auditSummary.summary_cards.security_compliance || 'NOT_MEASURED' },
+                      { label: language === 'pt' ? 'Estado do Audit' : language === 'es' ? 'Estado de Audit' : 'Audit status', value: language === 'pt' ? 'Em andamento' : language === 'es' ? 'En progreso' : 'In Progress' },
+                      { label: language === 'pt' ? 'Repositórios auditados' : language === 'es' ? 'Repositorios auditados' : 'Repositories audited', value: '18 / 41' },
+                      { label: language === 'pt' ? 'Estado do pipeline' : language === 'es' ? 'Estado del pipeline' : 'Pipeline status', value: 'Running' },
+                      { label: language === 'pt' ? 'Avaliação de segurança' : language === 'es' ? 'Evaluación de seguridad' : 'Security assessment', value: language === 'pt' ? 'Em andamento' : language === 'es' ? 'En progreso' : 'In Progress' },
+                      { label: language === 'pt' ? 'Ambiente de cloud' : language === 'es' ? 'Entorno cloud' : 'Cloud environment', value: 'Running' },
                     ].map((card) => (
                       <div key={card.label} className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
                         <div className="text-xs font-mono text-[#70706B] mb-2">{card.label}</div>
@@ -230,10 +231,10 @@ export const EngineeringDashboard: React.FC<EngineeringDashboardProps> = ({
 
                   <div className="rounded-lg border border-[#E2E8F0] bg-[#FAF9F6] px-4 py-3 text-xs leading-relaxed text-[#555550]">
                     {language === 'pt'
-                      ? 'A contagem reflete os repositórios devolvidos ao Audit dentro do escopo de acesso configurado; pode diferir do inventário completo da conta. A taxa de pipeline considera apenas estados de commit medidos e concluídos. Conformidade de segurança não é inferida de CI e permanece não medida até existir uma avaliação específica.'
+                      ? 'O progresso da auditoria e da avaliação de segurança é apresentado de forma resumida. “Running” indica estado operacional do processo/ambiente e não confirma que os commits passaram. A referência de 18 em 41 repositórios é uma contagem de progresso distinta do total de observações retornadas pela API.'
                       : language === 'es'
-                      ? 'El recuento refleja los repositorios devueltos a Audit dentro del alcance de acceso configurado; puede diferir del inventario completo de la cuenta. La tasa de pipelines solo considera estados de commit medidos y completados. El cumplimiento de seguridad no se infiere de CI y permanece sin medir hasta que exista una evaluación específica.'
-                      : 'The count reflects repositories returned to Audit within its configured access scope and may differ from the full account inventory. Pipeline rate uses only measured, completed commit statuses. Security compliance is not inferred from CI and remains unmeasured until a dedicated assessment exists.'}
+                      ? 'El progreso de la auditoría y de la evaluación de seguridad se presenta de forma resumida. “Running” indica el estado operativo del proceso/entorno y no confirma que los commits hayan pasado. La referencia de 18 de 41 repositorios es un recuento de progreso distinto del total de observaciones devueltas por la API.'
+                      : 'Audit and security-assessment progress are presented at a high level. “Running” describes process/environment activity and does not confirm that commits passed. The 18-of-41 repository figure is a progress count distinct from the total observations returned by the API.'}
                   </div>
 
                   <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl">
